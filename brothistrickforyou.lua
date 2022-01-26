@@ -1,4 +1,5 @@
 -- // ADA TONG BUAHAHAHAHA \\ -- [Indonesia Bossque]
+repeat wait() until game:IsLoaded() and game:GetService("Players")
 
 for _,patung in pairs(game:GetService("Workspace").Statues:GetDescendants()) do
     if patung.Name == "CombatStyle" and patung.Value == 33 then
@@ -273,11 +274,20 @@ function addStat()
 end
 
 game:GetService("Workspace").Stalls["Black Market"].ChildAdded:Connect(function(v)
-    pesan.msg("Black Market Notification!", "Black Market Spawned", 2.5)
+    if v.Name == "Grani" then
+        pesan.msg("Black Market Notification!", "Black Market Spawned", 2.5)
+        for i,x in pairs(v:GetDescendants()) do
+            if x.ClassName == "MeshPart" and x.Name ~= "Grani" then
+                pesan.msg("Black Market Notification!", "Item Name : "..x.Name)
+            end
+        end
+    end
 end)
 
-game:GetService("Workspace").Stalls["Black Market"].ChildRemoved:Connect(function()
-    pesan.msg("Black Market Notification!", "Black Market Despawned!", 2.5)  
+game:GetService("Workspace").Stalls["Black Market"].ChildRemoved:Connect(function(v)
+    if v.Name == "Grani" then
+        pesan.msg("Black Market Notification!", "Black Market Despawned!", 2.5)
+    end 
 end)
 
 memuat()
