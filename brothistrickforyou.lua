@@ -432,9 +432,6 @@ end})
 
 teleports:AddList({text = "Statues", values = statuesTable, value = "Select Statues", flag = "statue_list", callback = function(selected)
     getgenv().statues = selected
-end})
-
-teleports:AddButton({text = "Tp To Statue", callback = function()
 
     if getgenv().statues ~= nil and getgenv().statues ~= "Select Statues" then
         for i,v in pairs(game:GetService("Workspace").Statues[getgenv().statues]:GetDescendants()) do
@@ -449,20 +446,12 @@ end})
 
 teleports:AddList({text = "Spawns", values = spawnsTable, value = "Select Spawns", flag = "spawn_list", callback = function(selected)
     getgenv().spawns = selected
-end})
-
-teleports:AddButton({text = "Tp To Spawns", callback = function()
 
     if getgenv().spawns ~= nil and getgenv().spawns ~= "Select Spawns" then
         tpto(game:GetService("Workspace").Spawns[getgenv().spawns].CFrame)
     else
         pesan.msg("Teleport Spawns Notification!", "Select Spawns Pls!", 2.5)
     end
-end})
-
-bmhop:AddList({text = "First Item", values = bmTable, value = _G.settingsTable.item1, flag = "item1_list", callback = function(selected)
-    _G.settingsTable.item1 = selected
-    menyimpan()
 end})
 
 
