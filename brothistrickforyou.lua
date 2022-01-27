@@ -175,15 +175,19 @@ function bmTp() -- Made By Opyy#????
                                 end
                             end
                         elseif _G.settingsTable.selecteditem == false and _G.settingsTable.allitem == false and _G.settingsTable.didnthave == true then
-                            for i,inv in pairs(game:GetService("Players").LocalPlayer.PlayerData.Inventory:GetChildren()) do
-                                if v.Name ~= inv.Name and _G.settingsTable.toggle == true then
-                                    pesan.msg("Black Market Hop Notification!","Found the Black Market\nItem Name : "..v.Name, 2.5)
-                                    wait(1)
-                                    tpto(v.CFrame)
-                                elseif v.Name == inv.Name and _G.settingsTable.toggle == true then
-                                    pesan.msg("Black Market Hop Notification!","Found the black market but the item you already have it\nItem Name : "..v.Name, 2.5)
-                                    wait(1)
-                                    shop()
+                            for _,z in pairs(bmTable) do
+                                for _,x in pairs(game:GetService("Players").LocalPlayer.PlayerData.Inventory:GetChildren()) do
+                                    if x.Name == z then
+                                        if x.Name == v.Name and _G.settingsTable.toggle == true then
+                                            pesan.msg("Black Market Hop Notification!","Found the black market but the item you already have it\nItem Name : "..v.Name, 2.5)
+                                            wait(1)
+                                            shop()
+                                        elseif x.Name ~= v.Name and _G.settingsTable.toggle == true then
+                                            pesan.msg("Black Market Hop Notification!","Found the Black Market\nItem Name : "..v.Name, 2.5)
+                                            wait(1)
+                                            tpto(v.CFrame)
+                                        end
+                                    end
                                 end
                             end
                         end      
