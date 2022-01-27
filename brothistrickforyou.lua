@@ -13,7 +13,9 @@ end
 --// Global Table \\--
 _G.settingsTable = {
     toggle = false,
+    selecteditem = false,
     allitem = false,
+    didnthave = false,
     item1 = "Select Items",
     item2 = "Select Items"
 }
@@ -126,8 +128,32 @@ function bmTp() -- Made By Opyy#????
 
     while wait() do
         if _G.settingsTable.toggle then
-            if _G.settingsTable.item1 ~= "Select Items" or _G.settingsTable.item2 ~= "Select Items" or _G.settingsTable.allitem == true then
-                if not game:GetService("Workspace").Stalls["Black Market"]:FindFirstChild("Grani") then
+            if _G.settingsTable.selecteditem == true or _G.settingsTable.allitem == true or _G.settingsTable.didnthave == true then
+                if _G.settingsTable.selecteditem == true and _G.settingsTable.allitem == true and _G.settingsTable.didnthave == true then
+                    pesan.msg("Black Market Hop Notification!","Just choose one mode please!",2.5)
+                    return
+                elseif _G.settingsTable.selecteditem == true and _G.settingsTable.allitem == true then
+                    pesan.msg("Black Market Hop Notification!","Just choose one mode please!",2.5)
+                    return
+                elseif _G.settingsTable.selecteditem == true and _G.settingsTable.didnthave == true then
+                    pesan.msg("Black Market Hop Notification!","Just choose one mode please!",2.5)
+                    return
+                elseif _G.settingsTable.allitem == true and _G.settingsTable.selecteditem == true then
+                    pesan.msg("Black Market Hop Notification!","Just choose one mode please!",2.5)
+                    return
+                elseif _G.settingsTable.allitem == true and _G.settingsTable.didnthave == true then
+                    pesan.msg("Black Market Hop Notification!","Just choose one mode please!",2.5)
+                    return
+                elseif _G.settingsTable.didnthave == true and _G.settingsTable.selecteditem == true then
+                    pesan.msg("Black Market Hop Notification!","Just choose one mode please!",2.5)
+                    return
+                elseif _G.settingsTable.didnthave == true and _G.settingsTable.allitem == true then
+                    pesan.msg("Black Market Hop Notification!","Just choose one mode please!",2.5)
+                    return
+                elseif _G.settingsTable.item1 == "Select Items" and _G.settingsTable.item2 == "Select Items" and _G.settingsTable.selecteditem == true then
+                    pesan.msg("Black Market Hop Notification!", "Select Items Pls!")
+                    return
+                elseif not game:GetService("Workspace").Stalls["Black Market"]:FindFirstChild("Grani") then
                     wait(1)
                     pesan.msg("Black Market Hop Notification!","Black Market Not Found", 2.5)
                     wait(1)
@@ -135,27 +161,39 @@ function bmTp() -- Made By Opyy#????
                 end
                 for i,v in pairs(game:GetService("Workspace").Stalls["Black Market"]:GetDescendants()) do
                     if v.ClassName == "MeshPart" and v.Name ~= "Grani" then
-                        if _G.settingsTable.allitem == true then
+                       if _G.settingsTable.didnthave == false and _G.settingsTable.selecteditem == false and _G.settingsTable.allitem == true and _G.settingsTable.toggle == true then
                             pesan.msg("Black Market Hop Notification!","Found the Black Market\nItem Name : "..v.Name, 2.5)
                             wait(1)
                             tpto(v.CFrame)
-                        elseif _G.settingsTable.allitem == false then
-                            if _G.settingsTable.item1 ~= "Select Items" or _G.settingsTable.item1 ~= "Select Items" then
+                        elseif _G.settingsTable.didnthave == false and _G.settingsTable.allitem == false and _G.settingsTable.selecteditem == true and _G.settingsTable.toggle == true then
+                            if _G.settingsTable.item1 ~= "Select Items" or _G.settingsTable.item2 ~= "Select Items" then
                                 if v.Name == _G.settingsTable.item1 or v.Name == _G.settingsTable.item2 then
                                     pesan.msg("Black Market Hop Notification!","Found the Black Market\nItem Name : "..v.Name, 2.5)
                                     wait(1)
                                     tpto(v.CFrame)
                                 elseif v.Name ~= _G.settingsTable.item1 and v.Name ~= _G.settingsTable.item2 then
-                                    pesan.msg("Notification!","Found the Black Market\nBut the item is not the same as the one you choose\nItem Name : "..v.Name)
+                                    pesan.msg("Notification!","Found the Black Market\nBut the item is not the same as the one you choose!!!\nItem Name : "..v.Name)
                                     wait(1)
                                     shop()
                                 end
                             end
-                        end
+                        elseif _G.settingsTable.selecteditem == false and _G.settingsTable.allitem == false and _G.settingsTable.didnthave == true then
+                            for i,inv in pairs(game:GetService("Players").LocalPlayer.PlayerData.Inventory:GetChildren()) do
+                                if v.Name ~= inv.Name and _G.settingsTable.toggle == true then
+                                    pesan.msg("Black Market Hop Notification!","Found the Black Market\nItem Name : "..v.Name, 2.5)
+                                    wait(1)
+                                    tpto(v.CFrame)
+                                elseif v.Name == inv.Name and _G.settingsTable.toggle == true then
+                                    pesan.msg("Black Market Hop Notification!","Found the black market but the item you already have it\nItem Name : "..v.Name, 2.5)
+                                    wait(1)
+                                    shop()
+                                end
+                            end
+                        end      
                     end
                 end
-            elseif _G.settingsTable.item1 == "Select Items" and _G.settingsTable.item2 == "Select Items" and _G.settingsTable.allitem == false then
-                pesan.msg("Black Market Hop Notification!", "Select Items Or Turn On All Items Pls!", 2.5)
+            elseif _G.settingsTable.selecteditem == false and _G.settingsTable.allitem == false and _G.settingsTable.didnthave == false then
+                pesan.msg("Black Market Hop Notification!", "Turn On Selected Items/All Items/Didn't have the item Pls!", 2.5)
                 return
             end
         end
@@ -274,10 +312,9 @@ end
 
 game:GetService("Workspace").Stalls["Black Market"].ChildAdded:Connect(function(v)
     if v.Name == "Grani" then
-        pesan.msg("Black Market Notification!", "Black Market Spawned", 2.5)
         for i,x in pairs(v:GetDescendants()) do
             if x.ClassName == "MeshPart" and x.Name ~= "Grani" then
-                pesan.msg("Black Market Notification!", "Item Name : "..x.Name)
+                pesan.msg("Black Market Notification!", "Black Market Spawned!\nItem Name : "..x.Name)
             end
         end
     end
@@ -415,17 +452,10 @@ misc:AddButton({text = "Destroy UI", callback = function()
 end})
 
 teleports:AddButton({text = "Tp To Black Market", callback = function()
-    for i,v in pairs(game:GetService("Workspace").Stalls:GetChildren()) do
-        if v:FindFirstChild("Grani") then
-            for _,bm in pairs(v:GetDescendants()) do
-                if bm.ClassName == "MeshPart" then
-                    tpto(bm.CFrame)
-                end
-            end
-        else
-            pesan.msg("Black Market Notification!", "Black Market Not Found!!!", 2.5)
-            return
-        end
+    if game:GetService("Workspace").Stalls["Black Market"]:FindFirstChild("Grani") then
+        tpto(game:GetService("Workspace").Stalls["Black Market"].Grani.ScriptsandParts.Grani.CFrame)
+    elseif not game:GetService("Workspace").Stalls["Black Market"]:FindFirstChild("Grani") then
+        pesan.msg("Black Market Notification!", "Black Market Not Found!")
     end
 end})
 
@@ -453,19 +483,40 @@ teleports:AddList({text = "Spawns", values = spawnsTable, value = "Select Spawns
     end
 end})
 
+bmhop:AddList({text = "First Item", values = bmTable, value = _G.settingsTable.item1, flag = "item1_list", callback = function(selected)
+    _G.settingsTable.item1 = selected
+    menyimpan()
+    if _G.settingsTable.item1 ~= "Select Items" then
+        pesan.msg("Black Market Hop Notification!","Turn on Selected Item!",2.5)
+    end
+end})
 
 bmhop:AddList({text = "Second Item", values = bmTable, value = _G.settingsTable.item2, flag = "item2_list", callback = function(selected)
     _G.settingsTable.item2 = selected
+    menyimpan()
+    if _G.settingsTable.item2 ~= "Select Items" then
+        pesan.msg("Black Market Hop Notification!","Turn on Selected Item!",2.5)
+    end
+end})
+
+bmhop:AddLabel({text = "~~Mode"})
+
+bmhop:AddToggle({text = "Selected Item", state = _G.settingsTable.selecteditem, flag = "didnt_item", callback = function(bool)
+    _G.settingsTable.selecteditem = bool
+    menyimpan()
+end})
+
+bmhop:AddToggle({text = "Didn't Have The Item", state = _G.settingsTable.didnthave, flag = "didnt_item", callback = function(bool)
+    _G.settingsTable.didnthave = bool
     menyimpan()
 end})
 
 bmhop:AddToggle({text = "All Items", state = _G.settingsTable.allitem, flag = "all_item", callback = function(bool)
     _G.settingsTable.allitem = bool
     menyimpan()
-    if bool then
-        pesan.msg("Black Market Hop Notification!", "If All Items is true then the items you selected does not work", 2.5)
-    end
 end})
+
+bmhop:AddLabel({text = "~~Toggle"})
 
 bmhop:AddToggle({text = "Enabled", state = _G.settingsTable.toggle, flag = "enabled_x", callback = function(bool)
     _G.settingsTable.toggle = bool
@@ -474,6 +525,8 @@ bmhop:AddToggle({text = "Enabled", state = _G.settingsTable.toggle, flag = "enab
         bmTp()
     end
 end})
+
+bmhop:AddLabel({text = "~~Place Teleport"})
 
 bmhop:AddButton({text = "Server Hop", callback = function() shop() end})
 
