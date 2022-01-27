@@ -39,7 +39,7 @@ local Curr_Weapon = nil
 local pesan = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Rykyy/roblox/scripts/pesan.lua"),true))()
 
 -- // Table \\ --
-local bmTable = {"DIO's Bone", "Mana Water", "Mana Knife", "Wind Boots", "Holy Cross", "HP", "Crimson Heart", "Ring of Darkness", "Fighter Spirit", "Chop", "Icy Disable Scroll", "Shield Breaker", "Event Upgrade Ticket", "Crown of the King", "Ichor Torch", "Raging Storm Scroll", "Blood Thirst", "Floral Entrapment Scroll", "Health Drink", "Radis Diary", "Book of the Coven", "Lucky Gold Ticket"}
+local bmTable = {"DIOs' Bone", "Mana Water", "Mana Knife", "Wind Boots", "Holy Cross", "HP", "Crimson Heart", "Ring of Darkness", "Fighter Spirit", "Chop", "Icy Disable Scroll", "Shield Breaker", "Event Upgrade Ticket", "Crown of the King", "Ichor Torch", "Raging Storm Scroll", "Blood Thirst", "Floral Entrapment Scroll", "Health Drink", "Radis Diary", "Book of the Coven", "Lucky Gold Ticket"}
 local itemTable = {}
 local mobTable = {}
 local materialTable = {}
