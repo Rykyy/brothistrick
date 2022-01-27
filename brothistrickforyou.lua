@@ -414,9 +414,9 @@ end})
 
 misc:AddButton({text = "Active Inf Passive Items", callback = function()
     if getgenv().passitem ~= nil and getgenv().passitem ~= "Select Passive Items" then
-        pesan.msg("Inf Passive Items Notification!", "This function aims not to raise your level and your stat so that your infinity passive items can be used for a long time\n ", 5)
-        pesan.msg("Inf Passive Items Notification!", "If you want to level up, please exit the game and re-enter the game, then kill any mobs", 5)
-        pesan.msg("Inf Passive Items Notification!", "if you want to raise your stat, please exit the game and re-enter the game, then add your stat", 5)
+        pesan.msg("Inf Passive Items Notification!", "This function aims not to raise your level and your stat so that your infinity passive items can be used for a long time\n ", 10)
+        pesan.msg("Inf Passive Items Notification!", "If you want to level up, please exit the game and re-enter the game, then kill any mobs", 10)
+        pesan.msg("Inf Passive Items Notification!", "if you want to raise your stat, please exit the game and re-enter the game, then add your stat", 10)
 
         local old
         old = hookmetamethod(game,"__namecall",function(self,...)
