@@ -317,7 +317,7 @@ farm:AddToggle({text = "Enabled", state = false, flag = "enabled_f", callback = 
     end
 end})
 
-farm:AddButton({text = "Collect Chest", callback = function()
+farm:AddButton({text = "Collect All Chest", callback = function()
     local chests = game.Workspace.Chests:GetChildren()
     for i,v in pairs(chests) do
         if not v:FindFirstChild("Open") then
