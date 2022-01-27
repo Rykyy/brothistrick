@@ -6,9 +6,6 @@ for _,patung in pairs(game:GetService("Workspace").Statues:GetDescendants()) do
     end
 end
 
-for _,suara in pairs(game:GetService("Workspace").Sounds:GetChildren()) do
-    suara.Volume = 0.2
-end
 
 --// Global Table \\--
 _G.settingsTable = {
