@@ -1,5 +1,4 @@
 -- // ADA TONG BUAHAHAHAHA \\ -- [Indonesia Bossque]
-repeat wait() until game:IsLoaded() and game:GetService("Players")
 
 for _,patung in pairs(game:GetService("Workspace").Statues:GetDescendants()) do
     if patung.Name == "CombatStyle" and patung.Value == 33 then
