@@ -414,15 +414,16 @@ end})
 
 misc:AddButton({text = "Active Inf Passive Items", callback = function()
     if getgenv().passitem ~= nil and getgenv().passitem ~= "Select Passive Items" then
-        pesan.msg("Inf Passive Items Notification!", "This function aims not to raise your level so that your infinity passive items can be used for a long time", 5)
+        pesan.msg("Inf Passive Items Notification!", "This function aims not to raise your level and your stat so that your infinity passive items can be used for a long time\n ", 5)
         pesan.msg("Inf Passive Items Notification!", "If you want to level up, please exit the game and re-enter the game, then kill any mobs", 5)
+        pesan.msg("Inf Passive Items Notification!", "if you want to raise your stat, please exit the game and re-enter the game, then add your stat", 5)
 
         local old
         old = hookmetamethod(game,"__namecall",function(self,...)
             local method = getnamecallmethod()
             if method:lower() == "fireserver" and not checkcaller() then
                 local args = {...}
-                if (tostring(self) == "StatsChange" and args[1] == "Level") then
+                if (tostring(self) == "StatsChange" and args[1] == "Level" or args[1] == "Damage" or args[1] == "Shield" or args[1] == "Health" or args[1] == "Mana" or args[1] == "Magic") then
                     return nil
                 end
             end
@@ -506,7 +507,7 @@ bmhop:AddToggle({text = "Selected Item", state = _G.settingsTable.selecteditem, 
     menyimpan()
 end})
 
-bmhop:AddToggle({text = "Didn't Have The Item", state = _G.settingsTable.didnthave, flag = "didnt_item", callback = function(bool)
+bmhop:AddToggle({text = "Items you don't have", state = _G.settingsTable.didnthave, flag = "didnt_item", callback = function(bool)
     _G.settingsTable.didnthave = bool
     menyimpan()
 end})
