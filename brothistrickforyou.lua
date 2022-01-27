@@ -405,7 +405,7 @@ misc:AddToggle({text = "Enabled", state = false, flag = "enabled_p", callback = 
     getgenv().infpass = bool
 
     if getgenv().infpass and getgenv().passitem ~= nil and getgenv().passitem ~= "Select Passive Items" then
-        pesan.msg("Infinity PassiveItem Notification!", "If you feel your stats are enough. Please Press Active Infinity Passive!", 30)
+        pesan.msg("Inf Passive Items Notification!", "If you feel your stats are enough. Please Press Active Infinity Passive!", 30)
     end
 
     if bool then
