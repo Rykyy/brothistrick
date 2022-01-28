@@ -475,7 +475,7 @@ teleports:AddButton({text = "Tp To Black Market", callback = function()
     if game:GetService("Workspace").Stalls["Black Market"]:FindFirstChild("Grani") then
         tpto(game:GetService("Workspace").Stalls["Black Market"].Grani.ScriptsandParts.Grani.CFrame)
     elseif not game:GetService("Workspace").Stalls["Black Market"]:FindFirstChild("Grani") then
-        pesan.msg("Black Market Notification!", "Black Market Not Found!")
+        pesan.msg("Black Market Notification!", "Black Market Not Found!", 2.5)
     end
 end})
 
