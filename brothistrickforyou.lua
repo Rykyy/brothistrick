@@ -179,7 +179,7 @@ function bmTp() -- Made By Opyy#????
                                     wait(1)
                                     tpto(v.CFrame)
                                 elseif v.Name ~= _G.settingsTable.item1 and v.Name ~= _G.settingsTable.item2 then
-                                    pesan.msg("Notification!","Found the Black Market\nBut the item is not the same as the one you choose!!!\nItem Name : "..v.Name)
+                                    pesan.msg("Black Market Hop Notification!","Found the Black Market\nBut the item is not the same as the one you choose!!!\nItem Name : "..v.Name)
                                     wait(1)
                                     shop()
                                 end
