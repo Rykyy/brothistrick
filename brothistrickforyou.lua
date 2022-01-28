@@ -194,7 +194,7 @@ function bmTp() -- Made By Opyy#????
                     end
                 end
             elseif _G.settingsTable.selecteditem == false and _G.settingsTable.allitem == false and _G.settingsTable.didnthave == false then
-                pesan.msg("Black Market Hop Notification!", "Turn On Selected Items/All Items/Didn't have the item Pls!", 2.5)
+                pesan.msg("Black Market Hop Notification!", "Turn On Selected Items/All Items/Item you dont have Pls!", 2.5)
                 return
             end
         end
@@ -405,7 +405,7 @@ misc:AddToggle({text = "Enabled", state = false, flag = "enabled_p", callback = 
     getgenv().infpass = bool
 
     if getgenv().infpass and getgenv().passitem ~= nil and getgenv().passitem ~= "Select Passive Items" then
-        pesan.msg("Inf Passive Items Notification!", "If you feel your stats are enough. Please Press Active Infinity Passive!", 30)
+        pesan.msg("Inf Passive Items Notification!", "If you feel your stats are enough. Please Press Active Inf Passive Items!", 30)
     end
 
     if bool then
