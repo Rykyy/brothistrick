@@ -1,11 +1,5 @@
 -- // ADA TONG BUAHAHAHAHA \\ -- [Indonesia Bossque]
 
-for _,patung in pairs(game:GetService("Workspace").Statues:GetDescendants()) do
-    if patung.Name == "CombatStyle" and patung.Value == 33 then
-        patung.Parent.Name = "StatueSolOfEclipseWarrior"
-    end
-end
-
 local guiName;
 
 for _,z in pairs(game:GetService("CoreGui"):GetDescendants()) do
