@@ -316,27 +316,19 @@ function addStat()
 end
 
 game:GetService("Workspace").Stalls["Black Market"].ChildAdded:Connect(function(v)
-    if game:GetService("CoreGui"):FindFirstChild(tostring(guiName)) then
-        if v.Name == "Grani" then
-            for i,x in pairs(v:GetDescendants()) do
-                if x.ClassName == "MeshPart" and x.Name ~= "Grani" then
-                    pesan.msg("Black Market Notification!", "Black Market Spawned!\nItem Name : "..x.Name)
-                end
+    if v.Name == "Grani" then
+        for i,x in pairs(v:GetDescendants()) do
+            if x.ClassName == "MeshPart" and x.Name ~= "Grani" then
+                pesan.msg("Black Market Notification!", "Black Market Spawned!\nItem Name : "..x.Name)
             end
         end
-    else
-        print("This Function[1] Already Running.")
     end
 end)
 
 game:GetService("Workspace").Stalls["Black Market"].ChildRemoved:Connect(function(v)
-    if game:GetService("CoreGui"):FindFirstChild(tostring(guiName)) then
-        if v.Name == "Grani" then
-            pesan.msg("Black Market Notification!", "Black Market Despawned!", 2.5)
-        end 
-    else
-        print("This Function[2] Already Running.")
-    end
+    if v.Name == "Grani" then
+        pesan.msg("Black Market Notification!", "Black Market Despawned!", 2.5)
+    end   
 end)
 
 memuat()
