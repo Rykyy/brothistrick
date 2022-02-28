@@ -22,8 +22,6 @@ _G.settingsTable = {
 }
 
 --// Global \\ --
-getgenv().infpass = nil
-getgenv().passitem = nil
 getgenv().farm = nil
 getgenv().zone = nil
 getgenv().material = nil
@@ -43,21 +41,11 @@ local Curr_Weapon = nil
 local pesan = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Rykyy/roblox/scripts/pesan.lua"),true))()
 
 -- // Table \\ --
-local bmTable = {"DIOs' Bone", "Mana Water", "Mana Knife", "Wind Boots", "Holy Cross", "HP", "Crimson Heart", "Ring of Darkness", "Fighter Spirit", "Chop", "Icy Disable Scroll", "Shield Breaker", "Event Upgrade Ticket", "Crown of the King", "Ichor Torch", "Raging Storm Scroll", "Blood Thirst", "Floral Entrapment Scroll", "Health Drink", "Radis Diary", "Book of the Coven", "Lucky Gold Ticket"}
-local itemTable = {}
+local bmTable = {"DIOs' Bone", "Mana Water", "Mana Knife", "Wind Boots", "Holy Cross", "HP", "Crimson Heart", "Ring of Darkness", "Fighter Spirit", "Dying Star", "Strength Saga", "Chop", "Icy Disable Scroll", "Shield Breaker", "Event Upgrade Ticket", "Crown of the King", "Ichor Torch", "Raging Storm Scroll", "Blood Thirst", "Floral Entrapment Scroll", "Health Drink", "Gravity Shift", "Radis Diary", "Book of the Coven", "Lucky Gold Ticket"}
 local mobTable = {}
 local materialTable = {}
 local statuesTable = {}
 local spawnsTable = {}
-
-
-for _,o in pairs(game:GetService("ReplicatedStorage").Items.PassiveItems:GetChildren()) do
-    for _,v in pairs(game:GetService("Players").LocalPlayer.PlayerData.Inventory:GetChildren()) do
-        insert = true
-        for _,v2 in pairs(itemTable) do if v2 == v.Name then insert = false end end
-        if insert and v.Name == o.Name then table.insert(itemTable, v.Name) end
-    end
-end
 
 for _,v in pairs(game:GetService("Workspace").Enemies:GetDescendants()) do
     if v.Name == "Model" then
@@ -81,7 +69,6 @@ for _,v in pairs(game:GetService("Workspace").Spawns:GetChildren()) do
     table.insert(spawnsTable, v.Name);
 end
 
-table.sort(itemTable)
 table.sort(bmTable)
 table.sort(materialTable)
 
@@ -205,25 +192,6 @@ function bmTp() -- Made By Opyy#????
     end 
 end
 
-function infPass() -- Made By Idk Who??
-    while wait() do
-        if getgenv().infpass then
-            if getgenv().passitem ~= nil and getgenv().passitem ~= "Select Passive Items" then
-                for i,v in pairs(plyr.Character.PassiveItems:GetChildren()) do
-                    if v.ClassName == "Script" then
-                        v:Destroy()
-                    end
-                end
-                tpto(game:GetService("Workspace").Arsenals["Trading Sky"].Base.CFrame)
-                game:GetService("ReplicatedStorage").Remotes.ItemSetup:FireServer(getgenv().passitem)
-            else
-                pesan.msg("Inf Passive Items Notification!", "Select Passive Items Pls!", 2.5)
-                return
-            end
-        end
-    end
-end
-
 function farmMob()
     local gOdMoDe
     gOdMoDe = hookmetamethod(game, "__namecall", function(self, ...)
@@ -309,7 +277,7 @@ function addStat()
                 game:GetService("ReplicatedStorage").Remotes.StatsChange:FireServer(getgenv().statlist)
             else
                 pesan.msg("Stats Notification!", "Select Stats Pls", 2.5)
-                return
+                return    
             end
         end
     end
@@ -360,11 +328,10 @@ farm:AddToggle({text = "Enabled", state = false, flag = "enabled_f", callback = 
 end})
 
 farm:AddButton({text = "Collect All Chest", callback = function()
-    local chests = game.Workspace.Chests:GetChildren()
-    for i,v in pairs(chests) do
-        if not v:FindFirstChild("Open") then
-            firetouchinterest(plyr.Character.HumanoidRootPart, v.Giver, 0)
-            firetouchinterest(plyr.Character.HumanoidRootPart, v.Giver, 1)
+    for i,v in pairs(game:GetService("Workspace").Chests:GetDescendants()) do    
+        if v.ClassName == "TouchTransmitter" then
+            firetouchinterest(plyr.Character.HumanoidRootPart, v.Parent, 0)
+            firetouchinterest(plyr.Character.HumanoidRootPart, v.Parent, 1)
         end
     end
 end})
@@ -394,49 +361,6 @@ stats:AddToggle({text = "Enabled", state = false, flag = "enabled_s", callback =
     end
 end})
 
-misc:AddLabel({text = "~~Inf Passive Items"})
-
-misc:AddList({text = "List of passive items you have", values = itemTable, value = "Select Passive Items", flag = "passiveitem_list", callback = function(selected)
-    getgenv().passitem = selected
-
-    if getgenv().passitem ~= "Shadow Fruit" and getgenv().passitem ~= "Heart Fruit" and getgenv().passitem ~= "Select Passive Items" then
-        pesan.msg("Inf Passive Items Notification!", "It is recommended that you choose Shadow Fruit for damage and magic or heart fruit for health and mana", 5)
-        pesan.msg("Inf Passive Items Notification!", "You Can Get Shadow Fruit And Heart Fruit On Chest\nDIO's Bone Not Recommended because it causes bugs", 5.5)
-    end
-end})
-
-misc:AddToggle({text = "Enabled", state = false, flag = "enabled_p", callback = function(bool)
-    getgenv().infpass = bool
-
-    if getgenv().infpass and getgenv().passitem ~= nil and getgenv().passitem ~= "Select Passive Items" then
-        pesan.msg("Inf Passive Items Notification!", "If you feel your stats are enough. Please Press Active Inf Passive Items!", 30)
-    end
-
-    if bool then
-        infPass()
-    end    
-end})
-
-misc:AddButton({text = "Active Inf Passive Items", callback = function()
-    if getgenv().passitem ~= nil and getgenv().passitem ~= "Select Passive Items" then
-        pesan.msg("Inf Passive Items Notification!", "This function aims not to raise your level and your stat so that your infinity passive items can be used for a long time\n ", 10)
-        pesan.msg("Inf Passive Items Notification!", "If you want to level up, please exit the game and re-enter the game, then kill any mobs", 10)
-        pesan.msg("Inf Passive Items Notification!", "if you want to raise your stat, please exit the game and re-enter the game, then add your stat", 10)
-
-        local old
-        old = hookmetamethod(game,"__namecall",function(self,...)
-            local method = getnamecallmethod()
-            if method:lower() == "fireserver" and not checkcaller() then
-                local args = {...}
-                if (tostring(self) == "StatsChange" and args[1] == "Level" or args[1] == "Damage" or args[1] == "Shield" or args[1] == "Health" or args[1] == "Mana" or args[1] == "Magic") then
-                    return nil
-                end
-            end
-            return old(self,...)
-        end)
-    end
-end})
-
 misc:AddLabel({text = "~~Players"})
 
 misc:AddSlider({text = "WalkSpeed", min = 16, max = 250, value = 16, callback = function(s)
@@ -446,7 +370,8 @@ end})
 misc:AddSlider({text = "JumpPower", min = 50, max = 250, value = 50, callback = function(s)
     plyr.Character.Humanoid.JumpPower = s
 end})
-
+misc:AddLabel({text = "~~Inf Passive Item"})
+misc:AddLabel({text = "PATHCED"})
 misc:AddLabel({text = "~~Ui Settings"})
 
 misc:AddBind({text = "Ui Toggle", key = Enum.KeyCode.RightAlt, callback = function()
