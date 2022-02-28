@@ -371,7 +371,7 @@ misc:AddSlider({text = "JumpPower", min = 50, max = 250, value = 50, callback = 
     plyr.Character.Humanoid.JumpPower = s
 end})
 misc:AddLabel({text = "~~Inf Passive Item"})
-misc:AddLabel({text = "PATHCED"})
+misc:AddLabel({text = "PATCHED"})
 misc:AddLabel({text = "~~Ui Settings"})
 
 misc:AddBind({text = "Ui Toggle", key = Enum.KeyCode.RightAlt, callback = function()
