@@ -23,7 +23,7 @@ local pesan = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Rykyy/
 
 local window = library:CreateWindow("Thief Simulator")
 
-local farm = window:AddFolder("Farms")
+local farm = window:AddFolder("Farm")
 local buy = window:AddFolder("Buys")
 local teleports = window:AddFolder("Teleports")
 local misc = window:AddFolder("Misc")
@@ -69,6 +69,24 @@ farm:AddToggle({text = "Sell", callback =  function(bool)
         if getgenv().sell then
             firetouchinterest(humpart ,game:GetService("Workspace").Sells.World1.Sell, 0)
             firetouchinterest(humpart ,game:GetService("Workspace").Sells.World1.Sell, 1)
+        end
+    end
+end})
+
+farm:AddToggle({text = "Quest", callback = function(bool)
+    getgenv().quest = bool
+
+    while wait() do
+        if getgenv().quest == true then
+            for i,v in pairs(plyr.PlayerGui.Menu.SideTasks:GetChildren()) do
+                if v.Name ~= "Task" then
+                    if v:FindFirstChild("Reward") then
+                        if v.Reward.Text == "Completed" then
+                            humpart.CFrame = game:GetService("Workspace").Jobs.World1.Jobs.CFrame
+                        end
+                    end
+                end
+            end
         end
     end
 end})
