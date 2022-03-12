@@ -2,6 +2,7 @@
 local plyr = game:GetService("Players").LocalPlayer
 local humpart = plyr.Character.HumanoidRootPart
 local gameName = game:GetService('MarketplaceService'):GetProductInfo(game.PlaceId).Name
+local remote = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams
 
 
 -- Table
@@ -78,7 +79,11 @@ farm:AddToggle({text = "Farm", callback = function(bool)
                 if atm:FindFirstChild("Part") and atm:FindFirstChild("HealthValue") then
                     humpart.CFrame = atm.Part.CFrame
                     local args = {[1] = atm}
-                    game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("GameTaskCompleted_Functionv.07"):InvokeServer(unpack(args))
+                    if remote:FindFirstChild("GameTaskCompleted_Functionv.08") then
+                        remote:FindFirstChild("GameTaskCompleted_Functionv.08"):InvokeServer(unpack(args))
+                    else
+                        remote:FindFirstChild("GameTaskCompleted_Functionv.07"):InvokeServer(unpack(args))
+                    end
                 else
                     for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
                         if v:FindFirstChild("HumanoidRootPart") then
@@ -111,6 +116,25 @@ farm:AddToggle({text = "Sell", callback =  function(bool)
     end
 end})
 
+farm:AddToggle({text = "Cash/Xp Making", callback = function(bool)
+    getgenv().moneyxp = bool
+
+    if bool then
+        pesan.msg("Notification!", "This function aims to increase the amount of cash/xp you get from robbing NPC[Upgrade Intimidation Stat!]", 10)
+    end
+
+    while wait() do
+        if getgenv().moneyxp == true then
+            local A_1 = "Intimidation"
+            if remote:FindFirstChild("UpgradeStats_Functionv.08") then
+                remote:FindFirstChild("UpgradeStats_Functionv.08"):InvokeServer(A_1)
+            else
+                remote:FindFirstChild("UpgradeStats_Functionv.07"):InvokeServer(A_1)
+            end
+        end
+    end
+end})
+
 farm:AddToggle({text = "Quest", callback = function(bool)
     getgenv().quest = bool
 
@@ -128,29 +152,42 @@ end})
 buy:AddList({text = "Tool", values = toolTable, callback = function(selected)
     local A_1 = "Tool"
     local A_2 = selected
-    local Event = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams["RequestPurchase_Functionv.07"]
-    Event:InvokeServer(A_1, A_2)
+    if remote:FindFirstChild("RequestPurchase_Functionv.08") then
+        remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
+    else
+        remote:FindFirstChild("RequestPurchase_Functionv.07"):InvokeServer(A_1,A_2)
+    end
+    
 end})
 
 buy:AddList({text = "Backpack", values = backpackTable, callback = function(selected)
     local A_1 = "Backpack"
     local A_2 = selected
-    local Event = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams["RequestPurchase_Functionv.07"]
-    Event:InvokeServer(A_1, A_2)
+    if remote:FindFirstChild("RequestPurchase_Functionv.08") then
+        remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
+    else
+        remote:FindFirstChild("RequestPurchase_Functionv.07"):InvokeServer(A_1,A_2)
+    end
 end})
 
 
 buy:AddList({text = "Upgrades", values = statsTable, callback = function(selected)
     local A_1 = selected
-    local Event = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams["UpgradeStats_Functionv.07"]
-    Event:InvokeServer(A_1)
+    if remote:FindFirstChild("UpgradeStats_Functionv.08") then
+        remote:FindFirstChild("UpgradeStats_Functionv.08"):InvokeServer(A_1)
+    else
+        remote:FindFirstChild("UpgradeStats_Functionv.07"):InvokeServer(A_1)
+    end
 end})
 
 buy:AddList({text = "Blueprints", values = blueprintTable, callback = function(selected)
     local A_1 = "Blueprint"
     local A_2 = selected
-    local Event = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams["RequestPurchase_Functionv.07"]
-    Event:InvokeServer(A_1, A_2)
+    if remote:FindFirstChild("RequestPurchase_Functionv.08") then
+        remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
+    else
+        remote:FindFirstChild("RequestPurchase_Functionv.07"):InvokeServer(A_1,A_2)
+    end
 end})
 
 teleports:AddButton({text = "Quest", callback = function()
