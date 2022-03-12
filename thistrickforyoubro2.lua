@@ -5,15 +5,45 @@ local gameName = game:GetService('MarketplaceService'):GetProductInfo(game.Place
 
 
 -- Table
-local backpackTable = {}
-local statsTable = {"Stealth", "Swipe Speed", "Intimidation", "Sprint Speed", "Strength"}
-local toolTable = {"Crowbar", "Lockpick", "Hammer", "Hacking Device", "Dynamite", "Thermite"}
+local toolTable = {
+    "Crowbar",
+    "Lockpick",
+    "Hammer",
+    "Hacking Device",
+    "Dynamite",
+    "Thermite"
+}
 
-for i,v in pairs(game:GetService("ReplicatedStorage").FrameworkReplicated.Metadata.Backpacks:GetChildren()) do
-    if v.Name ~= "Bag" then
-        table.insert(backpackTable, v.Name)
-    end
-end
+local backpackTable = {
+    "Bag",
+    "Basic bag",
+    "Briefcase",
+    "Duffel bag",
+    "Laptop bag",
+    "Large Backpack",
+    "Office Bag",
+    "Sports Bag",
+    "Hiking Bag",
+    "Suitcase",
+    "Gym Bag"
+}
+
+local statsTable = {
+    "Stealth",
+    "Swipe Speed",
+    "Intimidation",
+    "Sprint Speed",
+    "Strength"
+}
+
+local blueprintTable = {
+    "Zone 2 Blueprint",
+    "Zone 3 Blueprint",
+    "Betting Store Blueprint",
+    "Tech Store Blueprint",
+    "Jewelry Store Blueprint",
+    "Bank Blueprint"
+}
 
 
 -- UI Library
@@ -34,8 +64,12 @@ farm:AddToggle({text = "Farm", callback = function(bool)
     getgenv().thieffarm = bool
 
     if bool then
-        pesan.msg("Farm Notification!", "Rob People & Rob Atm", 2.5)
+        pesan.msg("Farm Notification!", "Rob People & Rob Atm With Invisible", 2.5)
     end
+
+    humpart.CFrame = CFrame.new(-116.546936, 190.212708, 573.527466, 0.998758256, -6.5053013e-10, -0.0498191454, -3.56683599e-10, 1, -2.02085122e-08, 0.0498191454, 2.02011883e-08, 0.998758256)
+    humpart.Parent.LowerTorso.Root:Destroy()
+
     
     while wait() do
         if getgenv().thieffarm == true then 
@@ -78,21 +112,16 @@ farm:AddToggle({text = "Quest", callback = function(bool)
 
     while wait() do
         if getgenv().quest == true then
-            for i,v in pairs(plyr.PlayerGui.Menu.SideTasks:GetChildren()) do
-                if v.Name ~= "Task" then
-                    if v:FindFirstChild("Reward") then
-                        if v.Reward.Text == "Completed" then
-                            humpart.CFrame = game:GetService("Workspace").Jobs.World1.Jobs.CFrame
-                        end
-                    end
-                end
+            if game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.08") then
+                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.08"):FireServer()
+            else
+                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.07"):FireServer()
             end
         end
     end
 end})
 
 buy:AddList({text = "Tool", values = toolTable, callback = function(selected)
-
     local A_1 = "Tool"
     local A_2 = selected
     local Event = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams["RequestPurchase_Functionv.07"]
@@ -101,15 +130,23 @@ end})
 
 buy:AddList({text = "Backpack", values = backpackTable, callback = function(selected)
     local A_1 = "Backpack"
-    local A_2 = getgenv().selected
+    local A_2 = selected
     local Event = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams["RequestPurchase_Functionv.07"]
     Event:InvokeServer(A_1, A_2)
 end})
+
 
 buy:AddList({text = "Upgrades", values = statsTable, callback = function(selected)
     local A_1 = selected
     local Event = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams["UpgradeStats_Functionv.07"]
     Event:InvokeServer(A_1)
+end})
+
+buy:AddList({text = "Blueprints", values = blueprintTable, callback = function(selected)
+    local A_1 = "Blueprint"
+    local A_2 = selected
+    local Event = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams["RequestPurchase_Functionv.07"]
+    Event:InvokeServer(A_1, A_2)
 end})
 
 teleports:AddButton({text = "Quest", callback = function()
