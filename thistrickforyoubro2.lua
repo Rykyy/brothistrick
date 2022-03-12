@@ -102,8 +102,11 @@ farm:AddToggle({text = "Sell", callback =  function(bool)
 
     while wait() do
         if getgenv().sell then
-            firetouchinterest(humpart ,game:GetService("Workspace").Sells.World1.Sell, 0)
-            firetouchinterest(humpart ,game:GetService("Workspace").Sells.World1.Sell, 1)
+            if game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.08"):InvokeServer() then
+                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.08"):InvokeServer()
+            else
+                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.07"):InvokeServer()
+            end
         end
     end
 end})
