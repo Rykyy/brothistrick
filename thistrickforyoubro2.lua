@@ -65,7 +65,7 @@ farm:AddToggle({text = "Farm", callback = function(bool)
     getgenv().thieffarm = bool
 
     if bool then
-        pesan.msg("Farm Notification!", "Rob People & Rob Atm With Invisible", 2.5)
+        pesan.msg("Farm Notification!", "Rob NPC & Rob ATM With Invisible", 2.5)
     end
 
     humpart.CFrame = CFrame.new(-116.546936, 190.212708, 573.527466, 0.998758256, -6.5053013e-10, -0.0498191454, -3.56683599e-10, 1, -2.02085122e-08, 0.0498191454, 2.02011883e-08, 0.998758256)
@@ -120,7 +120,7 @@ farm:AddToggle({text = "Cash/Xp Making", callback = function(bool)
     getgenv().moneyxp = bool
 
     if bool then
-        pesan.msg("Notification!", "This function aims to increase the amount of cash/xp you get from robbing NPC[Upgrade Intimidation Stat!]", 10)
+        pesan.msg("Cash/Xp Making Notification!", "This function aims to increase the amount of cash/xp you get from robbing NPC[Upgrade Intimidation Stat!]", 10)
     end
 
     while wait() do
