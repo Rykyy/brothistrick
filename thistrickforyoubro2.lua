@@ -68,6 +68,7 @@ farm:AddToggle({text = "Farm", callback = function(bool)
     end
 
     humpart.CFrame = CFrame.new(-116.546936, 190.212708, 573.527466, 0.998758256, -6.5053013e-10, -0.0498191454, -3.56683599e-10, 1, -2.02085122e-08, 0.0498191454, 2.02011883e-08, 0.998758256)
+    wait(0.3)
     humpart.Parent.LowerTorso.Root:Destroy()
 
     
