@@ -1,6 +1,5 @@
 -- Variable
-local plyr = game:GetService("Players").LocalPlayer
-local humpart = plyr.Character.HumanoidRootPart
+local plyr = game.Players.LocalPlayer
 local gameName = game:GetService('MarketplaceService'):GetProductInfo(game.PlaceId).Name
 local remote = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams
 
@@ -61,23 +60,23 @@ local misc = window:AddFolder("Misc")
 
 pesan.msg(gameName, "This Script Made By Rykyy#0001\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
 
-farm:AddToggle({text = "Farm", callback = function(bool)
+farm:AddToggle({text = "Auto Farm", callback = function(bool)
     getgenv().thieffarm = bool
 
     if bool then
         pesan.msg("Farm Notification!", "Rob NPC & Rob ATM With Invisible", 2.5)
     end
-
-    humpart.CFrame = CFrame.new(-116.546936, 190.212708, 573.527466, 0.998758256, -6.5053013e-10, -0.0498191454, -3.56683599e-10, 1, -2.02085122e-08, 0.0498191454, 2.02011883e-08, 0.998758256)
-    wait(0.3)
-    humpart.Parent.LowerTorso.Root:Destroy()
-
     
     while wait() do
         if getgenv().thieffarm == true then 
+            if plyr.Character.LowerTorso:FindFirstChild("Root") then
+                plyr.Character.HumanoidRootPart.CFrame = CFrame.new(-116.546936, 190.212708, 573.527466, 0.998758256, -6.5053013e-10, -0.0498191454, -3.56683599e-10, 1, -2.02085122e-08, 0.0498191454, 2.02011883e-08, 0.998758256)
+                plyr.Character.LowerTorso.Root:Destroy()
+            end
+            wait(0.2)
             for i,atm in pairs(game:GetService("Workspace").Map.ATMs:GetChildren()) do
                 if atm:FindFirstChild("Part") and atm:FindFirstChild("HealthValue") then
-                    humpart.CFrame = atm.Part.CFrame
+                    plyr.Character.HumanoidRootPart.CFrame = atm.Part.CFrame
                     local args = {[1] = atm}
                     if remote:FindFirstChild("GameTaskCompleted_Functionv.08") then
                         remote:FindFirstChild("GameTaskCompleted_Functionv.08"):InvokeServer(unpack(args))
@@ -89,7 +88,7 @@ farm:AddToggle({text = "Farm", callback = function(bool)
                         if v:FindFirstChild("HumanoidRootPart") then
                             if v.HumanoidRootPart:FindFirstChild("ProximityPrompt") and getgenv().thieffarm == true then
                                 repeat
-                                    humpart.CFrame = v.HumanoidRootPart.CFrame
+                                    plyr.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
                                     fireproximityprompt(v.HumanoidRootPart.ProximityPrompt)
                                     wait()
                                 until getgenv().thieffarm == false or not v:FindFirstChild("HumanoidRootPart") or not v.HumanoidRootPart:FindFirstChild("ProximityPrompt")
@@ -102,15 +101,26 @@ farm:AddToggle({text = "Farm", callback = function(bool)
     end
 end})
 
-farm:AddToggle({text = "Sell", callback =  function(bool)
+farm:AddToggle({text = "Auto Sell", callback =  function(bool)
     getgenv().sell = bool
 
     while wait() do
         if getgenv().sell then
-            if game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.08") then
-                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.08"):InvokeServer()
+            firetouchinterest(plyr.Character.HumanoidRootPart, game:GetService("Workspace").Sells.World1.Sell, 0)
+            firetouchinterest(plyr.Character.HumanoidRootPart, game:GetService("Workspace").Sells.World1.Sell, 1)
+        end
+    end
+end})
+
+farm:AddToggle({text = "Auto Quest", callback = function(bool)
+    getgenv().quest = bool
+
+    while wait() do
+        if getgenv().quest == true then
+            if game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.08") then
+                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.08"):FireServer()
             else
-                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.07"):InvokeServer()
+                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.07"):FireServer()
             end
         end
     end
@@ -120,7 +130,7 @@ farm:AddToggle({text = "Cash/Xp Making", callback = function(bool)
     getgenv().moneyxp = bool
 
     if bool then
-        pesan.msg("Cash/Xp Making Notification!", "This function aims to increase the amount of cash/xp you get from robbing NPC[Upgrade Intimidation Stat!]", 10)
+        pesan.msg("Cash/Xp Making Notification!", "This function aims to increase the amount of cash/xp you get from robbing NPC [Upgrade Intimidation Stat!]", 10)
     end
 
     while wait() do
@@ -130,20 +140,6 @@ farm:AddToggle({text = "Cash/Xp Making", callback = function(bool)
                 remote:FindFirstChild("UpgradeStats_Functionv.08"):InvokeServer(A_1)
             else
                 remote:FindFirstChild("UpgradeStats_Functionv.07"):InvokeServer(A_1)
-            end
-        end
-    end
-end})
-
-farm:AddToggle({text = "Quest", callback = function(bool)
-    getgenv().quest = bool
-
-    while wait() do
-        if getgenv().quest == true then
-            if game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.08") then
-                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.08"):FireServer()
-            else
-                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.07"):FireServer()
             end
         end
     end
@@ -191,23 +187,23 @@ buy:AddList({text = "Blueprints", values = blueprintTable, callback = function(s
 end})
 
 teleports:AddButton({text = "Quest", callback = function()
-    humpart.CFrame = game:GetService("Workspace").Jobs.World1.Jobs.CFrame
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Jobs.World1.Jobs.CFrame
 end})
 
 teleports:AddButton({text = "Sell", callback = function()
-    humpart.CFrame = game:GetService("Workspace").Sells.World1.Sell.CFrame
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Sells.World1.Sell.CFrame
 end})
 
 teleports:AddButton({text = "Shop", callback = function()
-    humpart.CFrame = game:GetService("Workspace").Shops.Spawn.Shop.CFrame
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Shops.Spawn.Shop.CFrame
 end})
 
 teleports:AddButton({text = "Group And Vip Chest", callback = function()
-    humpart.CFrame = game:GetService("Workspace").Chests["Group Reward"].Ring.CFrame * CFrame.new(-2,0,0)
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Chests["Group Reward"].Ring.CFrame * CFrame.new(-2,0,0)
 end})
 
 teleports:AddButton({text = "Skins", callback = function()
-    humpart.CFrame = game:GetService("Workspace").Skins.Spawn.Skins.CFrame 
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Skins.Spawn.Skins.CFrame 
 end})            
 
 misc:AddLabel({text = "~~Players"})
