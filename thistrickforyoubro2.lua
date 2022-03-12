@@ -107,7 +107,7 @@ farm:AddToggle({text = "Sell", callback =  function(bool)
 
     while wait() do
         if getgenv().sell then
-            if game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.08"):InvokeServer() then
+            if game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.08") then
                 game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.08"):InvokeServer()
             else
                 game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("RequestSell_Functionv.07"):InvokeServer()
