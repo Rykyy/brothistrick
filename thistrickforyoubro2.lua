@@ -140,7 +140,7 @@ farm:AddToggle({text = "Upgrade Cash Making", callback = function(bool)
     getgenv().moneyxp = bool
 
     if bool then
-        pesan.msg("Cash/Xp Making Notification!", "This function aims to increase the amount of cash/xp you get from robbing NPC [Upgrade Intimidation Stat!]", 10)
+        pesan.msg("Upgrade Cash Making Notification!", "This function aims to increase the amount of cash/xp you get from robbing NPC [Upgrade Intimidation Stat!]", 10)
     end
 
     while wait() do
