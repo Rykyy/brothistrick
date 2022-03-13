@@ -68,30 +68,35 @@ farm:AddToggle({text = "Auto Farm", callback = function(bool)
     end
     
     while wait() do
-        if getgenv().thieffarm == true then 
-            if plyr.Character.LowerTorso:FindFirstChild("Root") then
-                plyr.Character.HumanoidRootPart.CFrame = CFrame.new(-116.546936, 190.212708, 573.527466, 0.998758256, -6.5053013e-10, -0.0498191454, -3.56683599e-10, 1, -2.02085122e-08, 0.0498191454, 2.02011883e-08, 0.998758256)
-                plyr.Character.LowerTorso.Root:Destroy()
-            end
-            wait(0.2)
-            for i,atm in pairs(game:GetService("Workspace").Map.ATMs:GetChildren()) do
-                if atm:FindFirstChild("Part") and atm:FindFirstChild("HealthValue") then
-                    plyr.Character.HumanoidRootPart.CFrame = atm.Part.CFrame
-                    local args = {[1] = atm}
-                    if remote:FindFirstChild("GameTaskCompleted_Functionv.08") then
-                        remote:FindFirstChild("GameTaskCompleted_Functionv.08"):InvokeServer(unpack(args))
+        if getgenv().thieffarm then 
+            if not plyr.Character:FindFirstChild("ForceField") then
+                if plyr.Character:FindFirstChild("LowerTorso") and plyr.Character:FindFirstChild("HumanoidRootPart") then
+                    if plyr.Character.LowerTorso:FindFirstChild("Root") then
+                        plyr.Character.HumanoidRootPart.CFrame = CFrame.new(-116.546936, 190.212708, 573.527466)
+                        wait(0.3)
+                        plyr.Character.LowerTorso.Root:Destroy()
                     else
-                        remote:FindFirstChild("GameTaskCompleted_Functionv.07"):InvokeServer(unpack(args))
-                    end
-                else
-                    for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
-                        if v:FindFirstChild("HumanoidRootPart") then
-                            if v.HumanoidRootPart:FindFirstChild("ProximityPrompt") and getgenv().thieffarm == true then
-                                repeat
-                                    plyr.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
-                                    fireproximityprompt(v.HumanoidRootPart.ProximityPrompt)
-                                    wait()
-                                until getgenv().thieffarm == false or not v:FindFirstChild("HumanoidRootPart") or not v.HumanoidRootPart:FindFirstChild("ProximityPrompt")
+                        for i,atm in pairs(game:GetService("Workspace").Map.ATMs:GetChildren()) do
+                            if atm:FindFirstChild("Part") and atm:FindFirstChild("HealthValue") and getgenv().thieffarm then
+                                plyr.Character.HumanoidRootPart.CFrame = atm.Part.CFrame
+                                local args = {[1] = atm}
+                                if remote:FindFirstChild("GameTaskCompleted_Functionv.08") then
+                                    remote:FindFirstChild("GameTaskCompleted_Functionv.08"):InvokeServer(unpack(args))
+                                else
+                                    remote:FindFirstChild("GameTaskCompleted_Functionv.07"):InvokeServer(unpack(args))
+                                end
+                            else
+                                for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
+                                    if v:FindFirstChild("HumanoidRootPart") then
+                                        if v.HumanoidRootPart:FindFirstChild("ProximityPrompt") and getgenv().thieffarm then
+                                            repeat
+                                                plyr.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
+                                                fireproximityprompt(v.HumanoidRootPart.ProximityPrompt)
+                                                wait()
+                                            until getgenv().thieffarm == false or not v:FindFirstChild("HumanoidRootPart") or not v.HumanoidRootPart:FindFirstChild("ProximityPrompt")
+                                        end
+                                    end
+                                end
                             end
                         end
                     end
@@ -126,7 +131,7 @@ farm:AddToggle({text = "Auto Quest", callback = function(bool)
     end
 end})
 
-farm:AddToggle({text = "Cash/Xp Making", callback = function(bool)
+farm:AddToggle({text = "Upgrade Cash Making", callback = function(bool)
     getgenv().moneyxp = bool
 
     if bool then
