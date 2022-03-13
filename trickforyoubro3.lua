@@ -29,6 +29,7 @@ getgenv().zone = "Suburb"
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/roblox/scripts/uilibrary.lua"))()
 local pesan = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Rykyy/roblox/scripts/pesan.lua"),true))()
 
+pesan.msg(gameName, "This Script Made By Rykyy#0001\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
 
 local window = library:CreateWindow("Fire Fighter Simulator")
 
@@ -64,6 +65,8 @@ end})
 
 farm:AddToggle({text = "Auto Fuel", callback = function(bool)
     getgenv().fuel = bool
+    
+    
 
     while wait() do
         if getgenv().fuel then
@@ -80,8 +83,11 @@ farm:AddToggle({text = "Auto Fuel", callback = function(bool)
                     end
                 end
             end
-            plyr.Character.HumanoidRootPart.CFrame = ssrn.CFrame * CFrame.new(0,5,0)
+            plyr.Character.HumanoidRootPart.CFrame = ssrn.CFrame 
             game:GetService('VirtualInputManager'):SendKeyEvent(true,"E",false,uwu)
+        elseif not getgenv().fuel then
+            plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").TeleportParts[getgenv().zone].CFrame
+            break;
         end
     end
 end})
