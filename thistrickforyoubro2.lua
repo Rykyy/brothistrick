@@ -43,6 +43,16 @@ local blueprintTable = {
     "Jewelry Store Blueprint",
     "Bank Blueprint"
 }
+
+local plyrTable = {}
+
+for i,v in pairs(game:GetService("Players"):GetChildren()) do
+    if v.Name ~= plyr.Name then
+        table.insert(plyrTable, v.Name)
+    end
+end
+
+
 -- Global
 
 getgenv().buytool = "Crowbar"
@@ -155,27 +165,20 @@ farm:AddToggle({text = "Upgrade Cash Making", callback = function(bool)
     end
 end})
 
-buy:AddList({text = "Tools", values = toolTable, callback = function(selected)
-    getgenv().buytool = selected
-end})
-
-buy:AddButton({text = "Buy Tool", callback = function()
+buy:AddList({text = "Tool", values = toolTable, callback = function(selected)
     local A_1 = "Tool"
-    local A_2 = getgenv().buytool
+    local A_2 = selected
     if remote:FindFirstChild("RequestPurchase_Functionv.08") then
         remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
     else
         remote:FindFirstChild("RequestPurchase_Functionv.07"):InvokeServer(A_1,A_2)
     end
+    
 end})
 
-buy:AddList({text = "Backpacks", values = backpackTable, callback = function(selected)
-    getgenv().buybackpack = selected
-end})
-
-buy:AddButton({text = "Buy Backpack", callback = function()
+buy:AddList({text = "Backpack", values = backpackTable, callback = function(selected)
     local A_1 = "Backpack"
-    local A_2 = getgenv().buybackpack
+    local A_2 = selected
     if remote:FindFirstChild("RequestPurchase_Functionv.08") then
         remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
     else
@@ -185,11 +188,7 @@ end})
 
 
 buy:AddList({text = "Upgrades", values = statsTable, callback = function(selected)
-    getgenv().buystat = selected
-end})
-
-buy:AddButton({text = "Upgrade Stat", callback = function()
-    local A_1 = getgenv().buystat
+    local A_1 = selected
     if remote:FindFirstChild("UpgradeStats_Functionv.08") then
         remote:FindFirstChild("UpgradeStats_Functionv.08"):InvokeServer(A_1)
     else
@@ -197,14 +196,9 @@ buy:AddButton({text = "Upgrade Stat", callback = function()
     end
 end})
 
-
 buy:AddList({text = "Blueprints", values = blueprintTable, callback = function(selected)
-    getgenv().buyblueprint = selected
-end})
-
-buy:AddButton({text = "Buy Blueprint", callback = function()
     local A_1 = "Blueprint"
-    local A_2 = getgenv().buyblueprint
+    local A_2 = selected
     if remote:FindFirstChild("RequestPurchase_Functionv.08") then
         remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
     else
@@ -234,6 +228,13 @@ end})
 
 misc:AddLabel({text = "~~Players"})
 
+local plyrList = misc:AddList({text = "Teleport To Players", values = plyrTable, callback = function(selected)
+    if selected ~= "Refreshed!!!" then
+        plyr.Character.HumanoidRootPart.CFrame = game:GetService("Players")[selected].Character:FindFirstChild("HumanoidRootPart").CFrame
+    end
+end})
+
+
 misc:AddSlider({text = "WalkSpeed", min = 16, max = 250, value = 16, callback = function(s)
     plyr.Character.Humanoid.WalkSpeed = s
 end})
@@ -262,5 +263,29 @@ misc:AddButton({text = "Destroy UI", callback = function()
     end
 end})
 
+game:GetService("Players").ChildAdded:Connect(function()
+    for _,v2 in pairs(plyrTable) do table.remove(plyrTable, _) end 
+    for _,v in pairs(game:GetService("Players"):GetChildren()) do 
+        if v.Name ~= plyr.Name then
+            insert = true
+            for _,v2 in pairs(plyrTable) do if v2 == v.Name then insert = false end end
+            if insert then table.insert(plyrTable, v.Name) end
+        end 
+    end
+    plyrList:Refresh(plyrTable)
+end)
+ 
+game:GetService("Players").ChildRemoved:Connect(function() 
+    for _,v2 in pairs(plyrTable) do table.remove(plyrTable, _) end 
+    for _,v in pairs(game:GetService("Players"):GetChildren()) do
+        if v.Name ~= plyr.Name then 
+            insert = true
+            for _,v2 in pairs(plyrTable) do if v2 == v.Name then insert = false end end 
+            if insert then table.insert(plyrTable, v.Name) end
+        end
+    end
+    plyrList:Refresh(plyrTable)
+end)
 
 library:Init()
+
