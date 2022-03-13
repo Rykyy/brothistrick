@@ -15,7 +15,6 @@ local toolTable = {
 }
 
 local backpackTable = {
-    "Bag",
     "Basic bag",
     "Briefcase",
     "Duffel bag",
@@ -44,6 +43,12 @@ local blueprintTable = {
     "Jewelry Store Blueprint",
     "Bank Blueprint"
 }
+-- Global
+
+getgenv().buytool = "Crowbar"
+getgenv().buybackpack = "Basic bag"
+getgenv().buystat = "Stealth"
+getgenv().buyblueprint = "Zone 2 Blueprint"
 
 
 -- UI Library
@@ -150,20 +155,27 @@ farm:AddToggle({text = "Upgrade Cash Making", callback = function(bool)
     end
 end})
 
-buy:AddList({text = "Tool", values = toolTable, callback = function(selected)
+buy:AddList({text = "Tools", values = toolTable, callback = function(selected)
+    getgenv().buytool = selected
+end})
+
+buy:AddButton({text = "Buy Tool", callback = function()
     local A_1 = "Tool"
-    local A_2 = selected
+    local A_2 = getgenv().buytool
     if remote:FindFirstChild("RequestPurchase_Functionv.08") then
         remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
     else
         remote:FindFirstChild("RequestPurchase_Functionv.07"):InvokeServer(A_1,A_2)
     end
-    
 end})
 
-buy:AddList({text = "Backpack", values = backpackTable, callback = function(selected)
+buy:AddList({text = "Backpacks", values = backpackTable, callback = function(selected)
+    getgenv().buybackpack = selected
+end})
+
+buy:AddButton({text = "Buy Backpack", callback = function()
     local A_1 = "Backpack"
-    local A_2 = selected
+    local A_2 = getgenv().buybackpack
     if remote:FindFirstChild("RequestPurchase_Functionv.08") then
         remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
     else
@@ -173,7 +185,11 @@ end})
 
 
 buy:AddList({text = "Upgrades", values = statsTable, callback = function(selected)
-    local A_1 = selected
+    getgenv().buystat = selected
+end})
+
+buy:AddButton({text = "Upgrade Stat", callback = function()
+    local A_1 = getgenv().buystat
     if remote:FindFirstChild("UpgradeStats_Functionv.08") then
         remote:FindFirstChild("UpgradeStats_Functionv.08"):InvokeServer(A_1)
     else
@@ -181,9 +197,14 @@ buy:AddList({text = "Upgrades", values = statsTable, callback = function(selecte
     end
 end})
 
+
 buy:AddList({text = "Blueprints", values = blueprintTable, callback = function(selected)
+    getgenv().buyblueprint = selected
+end})
+
+buy:AddButton({text = "Buy Blueprint", callback = function()
     local A_1 = "Blueprint"
-    local A_2 = selected
+    local A_2 = getgenv().buyblueprint
     if remote:FindFirstChild("RequestPurchase_Functionv.08") then
         remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
     else
