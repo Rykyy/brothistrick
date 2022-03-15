@@ -2,7 +2,7 @@
 local plyr = game.Players.LocalPlayer
 local gameName = game:GetService('MarketplaceService'):GetProductInfo(game.PlaceId).Name
 local remote = game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams
-
+local verGame = "01"
 
 -- Table
 local toolTable = {
@@ -14,18 +14,13 @@ local toolTable = {
     "Thermite"
 }
 
-local backpackTable = {
-    "Basic bag",
-    "Briefcase",
-    "Duffel bag",
-    "Laptop bag",
-    "Large Backpack",
-    "Office Bag",
-    "Sports Bag",
-    "Hiking Bag",
-    "Suitcase",
-    "Gym Bag"
-}
+local backpackTable = {}
+
+for i,v in pairs(remote.Parent.Metadata.Backpacks:GetChildren()) do
+    if v.ClassName == "ModuleScript" then
+        table.insert(backpackTable, v.Name)
+    end
+end
 
 local statsTable = {
     "Stealth",
@@ -95,11 +90,7 @@ farm:AddToggle({text = "Auto Farm", callback = function(bool)
                             if atm:FindFirstChild("Part") and atm:FindFirstChild("HealthValue") and getgenv().thieffarm then
                                 plyr.Character.HumanoidRootPart.CFrame = atm.Part.CFrame
                                 local args = {[1] = atm}
-                                if remote:FindFirstChild("GameTaskCompleted_Functionv.08") then
-                                    remote:FindFirstChild("GameTaskCompleted_Functionv.08"):InvokeServer(unpack(args))
-                                else
-                                    remote:FindFirstChild("GameTaskCompleted_Functionv.07"):InvokeServer(unpack(args))
-                                end
+                                remote:FindFirstChild("GameTaskCompleted_Functionv."..verGame):InvokeServer(unpack(args))
                             else
                                 for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
                                     if v:FindFirstChild("HumanoidRootPart") then
@@ -121,6 +112,7 @@ farm:AddToggle({text = "Auto Farm", callback = function(bool)
     end
 end})
 
+
 farm:AddToggle({text = "Auto Sell", callback =  function(bool)
     getgenv().sell = bool
 
@@ -137,11 +129,7 @@ farm:AddToggle({text = "Auto Quest", callback = function(bool)
 
     while wait() do
         if getgenv().quest == true then
-            if game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.08") then
-                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.08"):FireServer()
-            else
-                game:GetService("ReplicatedStorage").FrameworkReplicated.DataStreams:FindFirstChild("UpdateQuests_Eventv.07"):FireServer()
-            end
+            remote:FindFirstChild("UpdateQuests_Eventv."..verGame):FireServer()
         end
     end
 end})
@@ -156,11 +144,7 @@ farm:AddToggle({text = "Upgrade Cash Making", callback = function(bool)
     while wait() do
         if getgenv().moneyxp == true then
             local A_1 = "Intimidation"
-            if remote:FindFirstChild("UpgradeStats_Functionv.08") then
-                remote:FindFirstChild("UpgradeStats_Functionv.08"):InvokeServer(A_1)
-            else
-                remote:FindFirstChild("UpgradeStats_Functionv.07"):InvokeServer(A_1)
-            end
+            remote:FindFirstChild("UpgradeStats_Functionv."..verGame):InvokeServer(A_1)
         end
     end
 end})
@@ -168,46 +152,35 @@ end})
 buy:AddList({text = "Tool", values = toolTable, callback = function(selected)
     local A_1 = "Tool"
     local A_2 = selected
-    if remote:FindFirstChild("RequestPurchase_Functionv.08") then
-        remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
-    else
-        remote:FindFirstChild("RequestPurchase_Functionv.07"):InvokeServer(A_1,A_2)
-    end
-    
+    remote:FindFirstChild("RequestPurchase_Functionv."..verGame):InvokeServer(A_1,A_2)
 end})
 
 buy:AddList({text = "Backpack", values = backpackTable, callback = function(selected)
     local A_1 = "Backpack"
     local A_2 = selected
-    if remote:FindFirstChild("RequestPurchase_Functionv.08") then
-        remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
-    else
-        remote:FindFirstChild("RequestPurchase_Functionv.07"):InvokeServer(A_1,A_2)
-    end
+    remote:FindFirstChild("RequestPurchase_Functionv."..verGame):InvokeServer(A_1,A_2)
 end})
 
 
 buy:AddList({text = "Upgrades", values = statsTable, callback = function(selected)
     local A_1 = selected
-    if remote:FindFirstChild("UpgradeStats_Functionv.08") then
-        remote:FindFirstChild("UpgradeStats_Functionv.08"):InvokeServer(A_1)
-    else
-        remote:FindFirstChild("UpgradeStats_Functionv.07"):InvokeServer(A_1)
-    end
+    remote:FindFirstChild("UpgradeStats_Functionv."..verGame):InvokeServer(A_1)
 end})
 
 buy:AddList({text = "Blueprints", values = blueprintTable, callback = function(selected)
     local A_1 = "Blueprint"
     local A_2 = selected
-    if remote:FindFirstChild("RequestPurchase_Functionv.08") then
-        remote:FindFirstChild("RequestPurchase_Functionv.08"):InvokeServer(A_1,A_2)
-    else
-        remote:FindFirstChild("RequestPurchase_Functionv.07"):InvokeServer(A_1,A_2)
-    end
+    remote:FindFirstChild("RequestPurchase_Functionv."..verGame):InvokeServer(A_1,A_2)
 end})
+
+teleports:AddLabel({text = "~~~Spawn Teleport"})
 
 teleports:AddButton({text = "Quest", callback = function()
     plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Jobs.World1.Jobs.CFrame
+end})
+
+teleports:AddButton({text = "Worlds!", callback = function()
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Travels.Model.Touch.CFrame
 end})
 
 teleports:AddButton({text = "Sell", callback = function()
@@ -224,7 +197,26 @@ end})
 
 teleports:AddButton({text = "Skins", callback = function()
     plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Skins.Spawn.Skins.CFrame 
-end})            
+end})
+
+teleports:AddLabel({text = "~~~Stores Teleport"})
+
+teleports:AddButton({text = "Bank", callback = function()
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Stores.Banks.Bank.BuildingModel.Entries.Door1.Part.CFrame 
+end})
+
+teleports:AddButton({text = "Betting Store", callback = function()
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Stores["Betting Stores"]["Betting Store"].BuildingModel.Entries.Door1.Doors.Door.HingeOpen.CFrame
+end})
+
+teleports:AddButton({text = "Jewelry Store", callback = function()
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Stores["Jewelry Stores"].JewelryStore.BuildingModel.Entries.Door.Doors.Door.Part.CFrame 
+end})
+
+teleports:AddButton({text = "Tech Store", callback = function()
+    plyr.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Stores["Tech Stores"].TechStore.BuildingModel.Entries.Door.Part.CFrame 
+end})
+
 
 misc:AddLabel({text = "~~Players"})
 
@@ -288,4 +280,3 @@ game:GetService("Players").ChildRemoved:Connect(function()
 end)
 
 library:Init()
-
