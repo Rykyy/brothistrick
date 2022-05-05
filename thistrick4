@@ -1,7 +1,7 @@
 -- Variable
 local plyr = game.Players.LocalPlayer
 local gameName = "⚔️MeloBlox RPG"
-local beat;
+local beat
 local moblist;
 
 -- Global
@@ -254,16 +254,18 @@ end})
 misc:AddToggle({text = "Enabled", callback = function(bool)
     getgenv().wsjp =  bool
 
-    while wait() do
+    local beat2
+
+    beat2 = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().wsjp == true then
             plyr.Character.Humanoid.WalkSpeed = getgenv().ws
             plyr.Character.Humanoid.JumpPower = getgenv().jp
         else
             plyr.Character.Humanoid.WalkSpeed = 19
             plyr.Character.Humanoid.JumpPower = 50
-            break;
+            beat2:Disconnect()  
         end
-    end
+    end)
 end})
 
 misc:AddLabel({text = "~~Admin Gui"})
