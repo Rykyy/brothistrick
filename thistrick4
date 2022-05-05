@@ -1,0 +1,295 @@
+-- Variable
+local plyr = game.Players.LocalPlayer
+local gameName = "⚔️MeloBlox RPG"
+local beat;
+local moblist;
+
+-- Global
+getgenv().area = "Tutorial"
+getgenv().areatp = "SunnyForest"
+getgenv().stat = "Strength"
+getgenv().mobname = "Blob"
+getgenv().ws = 19
+getgenv().jp = 50
+getgenv().distance = 5
+
+
+-- Table
+local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh"}
+local mobTable = {}
+local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
+local areatpTable = {"SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh"}
+
+for _,v in pairs(game:GetService("Workspace").RunTime[getgenv().area]:GetDescendants()) do
+    if v.Name == "CreatureName" then
+        insert = true
+        for _,v2 in pairs(mobTable) do if v2 == tostring(v.Text) then insert = false end end
+        if insert then table.insert(mobTable, tostring(v.Text)) end
+    end
+end
+
+-- Function
+function autoFarm()
+    beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().enabled == true then 
+            for i,v in next, game:GetService("Workspace").RunTime[getgenv().area]:GetDescendants() do
+                if v.ClassName == "Model" then
+                    if v:FindFirstChild("HumanoidRootPart") then
+                        if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
+                            repeat
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, getgenv().distance, 0) * CFrame.Angles(math.rad(-90), 0, 0)
+                                local args = {
+                                    [1] = "Action2",
+                                    [2] = "Down"
+                                }
+                                                                                
+                                game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
+                                local args = {
+                                    [1] = "Action3",
+                                    [2] = "Down"
+                                }
+                                wait()
+                            until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
+                        end
+                    end
+                end
+            end
+        elseif getgenv().enabled == false then
+            local dist = math.huge
+            local dekat = nil
+            for i,v in next, game:GetService("Workspace").RunTime[getgenv().area]:GetDescendants() do
+                if v.ClassName == "Model" then
+                    if v:FindFirstChild("HumanoidRootPart") then
+                        local magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+                        if magnitude < dist then
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
+                        end
+                    end 
+                end
+            end
+            beat:Disconnect()
+            print("Disconnected")
+        end       
+    end)        
+end
+
+
+
+-- Library
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/roblox/scripts/uilibrary.lua"))()
+local pesan = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Rykyy/roblox/scripts/pesan.lua"),true))()
+
+local window = library:CreateWindow(gameName)
+
+local main = window:AddFolder("Main")
+local misc = window:AddFolder("Misc")
+
+pesan.msg(gameName, "This Script Made By Rykyy#0001\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
+
+-- Main Section
+
+local autofarm = main:AddFolder("Auto Farm")
+local autostats = main:AddFolder("Auto Stats")
+local teleports = main:AddFolder("Teleports")
+
+autofarm:AddLabel({text = "~~Mob Settings"})
+
+autofarm:AddList({text = "Areas List", values = areaTable, callback = function(selected)
+    getgenv().area = selected
+
+    for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
+    for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
+
+    for _,v in pairs(game:GetService("Workspace").RunTime[selected].Creatures:GetChildren()) do
+        if v:FindFirstChild("HumanoidRootPart") then
+            insert = true
+            for _,v2 in pairs(mobTable) do if v2 == tostring(v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text) then insert = false end end
+            if insert then table.insert(mobTable, tostring(v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)) end
+        end 
+    end
+    moblist:Refresh(mobTable)
+end})
+
+moblist = autofarm:AddList({text = "Mob List", values = mobTable, callback = function(selected)
+    getgenv().mobname = selected
+end})
+
+autofarm:AddSlider({text = "Distance", min = 0, max = 7, value = 5.5, callback = function(s)
+    getgenv().distance = s
+end})
+
+autofarm:AddLabel({text = "~~Attack Action Settings"})
+
+autofarm:AddToggle({text = "Attack 1 [Basic]", callback = function(bool)
+    getgenv().a1 = bool
+
+    while wait() do
+        if getgenv().a1 == true then
+            local args = {
+                [1] = "Action1",
+                [2] = "Down"
+            }
+                                                            
+            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
+        end
+    end
+end})  
+autofarm:AddToggle({text = "Attack 2 [Skill 1]", callback = function(bool)
+    getgenv().a2 = bool
+
+    while wait() do
+        if getgenv().a2 == true then
+            local args = {
+                [1] = "Action1",
+                [2] = "Down"
+            }
+                                                            
+            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
+        end
+    end
+end})
+
+autofarm:AddToggle({text = "Attack 3 [Skill 2]", callback = function(bool)
+    getgenv().a3 = bool
+
+    while wait() do
+        if getgenv().a3 == true then
+            local args = {
+                [1] = "Action1",
+                [2] = "Down"
+            }
+                                                            
+            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
+        end
+    end
+end})
+
+autofarm:AddLabel({text = "~~ Farm"})
+
+autofarm:AddToggle({text = "Auto Farm", callback = function(bool)
+    getgenv().enabled = bool
+
+    if bool then
+        autoFarm()
+    end
+end})
+
+autofarm:AddToggle({text = "Auto Loot", callback = function(bool)
+    getgenv().loot = bool
+
+    while wait() do
+        if getgenv().loot == true then
+            local lootfile = game:GetService("Workspace").RunTime.GroundLoot
+            for i,v in pairs(lootfile:GetChildren()) do
+                local dist = math.huge
+                local items = tostring(v.Name)
+                local itemsgsubed = items:gsub('[%a]-[%p][%a][%x][%p]','','1')
+                wait()
+                local TargetFunc = game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem;
+                TargetFunc:InvokeServer(itemsgsubed);
+            end
+        end
+    end
+end})
+
+autostats:AddList({text = "Stats List", values = statsTable, callback = function(selected)
+    getgenv().stat = selected
+end})
+
+autostats:AddToggle({text = "Enabled", callback = function(bool)
+    getgenv().enabled1 = bool
+
+    while wait() do
+        if getgenv().enabled1 == true then
+            local args = {
+                [1] = getgenv().stat
+            }
+            
+            game:GetService("ReplicatedStorage").Knit.Services.PrimaryStatsService.RF.AttributeStatPoint:InvokeServer(unpack(args))
+        end
+    end
+end})
+
+teleports:AddLabel({text = "~~City"})
+
+teleports:AddButton({text = "Shop", callback = function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(277, 4, -0)
+end})
+
+teleports:AddButton({text = "Bank", callback = function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(274, 4, 131)
+end})
+
+teleports:AddLabel({text = "~~Zone"})
+
+teleports:AddList({text = "Areas List", values = areatpTable, callback = function(selected)
+    getgenv().areatp = selected
+
+    if selected then
+        pesan.msg("Teleport Notification", "Make sure the zone you teleport is open because otherwise you will get banned", 2.5)
+    end
+end})
+
+teleports:AddButton({text = "Teleport", callback = function()
+    for i,v in pairs(game:GetService("Workspace").RegionsAssets[getgenv().areatp].Environment:GetChildren()) do
+        if string.find(v.Name, "Zone") then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,3,0)
+        end
+    end
+end})
+
+
+-- Misc Section
+
+misc:AddLabel({text = "~~Character"})
+
+misc:AddSlider({text = "WalkSpeed", min = 19, max = 125, value = 16, callback = function(s)
+    getgenv().ws = s
+end})
+
+misc:AddSlider({text = "JumpPower", min = 50, max = 100, value = 50, callback = function(s)
+    getgenv().jp = s
+end})
+
+misc:AddToggle({text = "Enabled", callback = function(bool)
+    getgenv().wsjp =  bool
+
+    while wait() do
+        if getgenv().wsjp == true then
+            plyr.Character.Humanoid.WalkSpeed = getgenv().ws
+            plyr.Character.Humanoid.JumpPower = getgenv().jp
+        else
+            plyr.Character.Humanoid.WalkSpeed = 19
+            plyr.Character.Humanoid.JumpPower = 50
+            break;
+        end
+    end
+end})
+
+misc:AddLabel({text = "~~Admin Gui"})
+
+misc:AddButton({text = "Infinite Yield", callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()  
+end})
+
+misc:AddLabel({text = "~~UI Settings"})
+
+misc:AddBind({text = "Ui Toggle", key = Enum.KeyCode.RightAlt, callback = function()
+    library:ToggleUi()
+end})
+
+misc:AddButton({text = "Destroy UI", callback = function()
+    for i,v in pairs(game:GetService("CoreGui"):GetDescendants()) do
+        if v.ClassName == "TextLabel" and v.Text == gameName then
+            v.Parent:Destroy()
+        end
+    end
+end})
+
+library:Init()
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("PlayerInfo") then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.PlayerInfo:Destroy()
+    end
+end)    
