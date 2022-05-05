@@ -38,16 +38,6 @@ function autoFarm()
                         if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
                             repeat
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, getgenv().distance, 0) * CFrame.Angles(math.rad(-90), 0, 0)
-                                local args = {
-                                    [1] = "Action2",
-                                    [2] = "Down"
-                                }
-                                                                                
-                                game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
-                                local args = {
-                                    [1] = "Action3",
-                                    [2] = "Down"
-                                }
                                 wait()
                             until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
                         end
