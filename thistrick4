@@ -168,7 +168,7 @@ local window = library:CreateWindow(gameName)
 local main = window:AddFolder("Main")
 local misc = window:AddFolder("Misc")
 
-pesan.msg(gameName, "This Script Made By Rykyy#0001\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
+pesan.msg(gameName, "This Script Made By Rykyy#8337\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
 
 -- Main Section
 
