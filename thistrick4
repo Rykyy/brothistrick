@@ -1,7 +1,7 @@
 -- Variable
 local pesan = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Rykyy/roblox/scripts/pesan.lua"),true))()
 local plyr = game.Players.LocalPlayer
-local gameName = "⚔️MeloBlox RPG"
+local gameName = "MeloBlox RPG"
 local moblist;
 local tplist;
 local beat;
@@ -358,13 +358,14 @@ end})]]
 
 autostats:AddList({text = "Stats List", values = statsTable, callback = function(selected)
     getgenv().stat = selected
-    wait(0.5)
+    
+    print(selected.."1 Point")
 end})
 
 autostats:AddToggle({text = "Enabled", callback = function(bool)
     getgenv().enabled1 = bool
 
-    while wait() do
+    game:GetService("RunService").RenderStepped:Connect(function()
         if getgenv().enabled1 == true then
             local args = {
                 [1] = getgenv().stat
@@ -372,7 +373,7 @@ autostats:AddToggle({text = "Enabled", callback = function(bool)
             
             game:GetService("ReplicatedStorage").Knit.Services.PrimaryStatsService.RF.AttributeStatPoint:InvokeServer(unpack(args))
         end
-    end
+    end)
 end})
 
 teleports:AddLabel({text = "~~City"})
