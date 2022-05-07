@@ -1,7 +1,7 @@
 -- Variable
 local pesan = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Rykyy/roblox/scripts/pesan.lua"),true))()
 local plyr = game.Players.LocalPlayer
-local gameName = "MeloBlox RPG"
+local gameName = "⚔️MeloBlox RPG"
 local moblist;
 local tplist;
 local beat;
@@ -57,6 +57,22 @@ local function nearestItem()
     return dekat
 end
 
+local function shop()
+    local x = {}
+    for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
+        if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
+           x[#x + 1] = v.id
+        end
+    end
+    if #x > 0 then
+       game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
+       wait(5)
+       game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
+	else
+        print("....")
+	end
+end
+
 game:GetService("RunService").Heartbeat:Connect(function()
     if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("PlayerInfo") then
         game.Players.LocalPlayer.Character.HumanoidRootPart.PlayerInfo:Destroy()
@@ -69,11 +85,10 @@ game:GetService("RunService").Heartbeat:Connect(function()
     end
 end)
 
-game:GetService("Workspace").RunTime.SunnyForest.Creatures.ChildAdded:Connect(function(v)
-    if v:FindFirstChild("HumanoidRootPart") then
-        if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Blob King" or v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "BlobKing" then
+game:GetService("Workspace").RunTime.SunnyForest.Creatures.ChildAdded:Connect(function(sp)
+    if sp:FindFirstChild("HumanoidRootPart") then
+        if sp.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Blob King" or sp.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "BlobKing" then
             if getgenv().area == "SunnyForest" then
-                pesan.msg("SunnyForest Notification!!", "Blob King Has Been Spawned!", 2.5)
                 for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
                 for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
 
@@ -84,16 +99,16 @@ game:GetService("Workspace").RunTime.SunnyForest.Creatures.ChildAdded:Connect(fu
                         if insert then table.insert(mobTable, tostring(v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)) end
                     end 
                 end
-                moblist:Refresh(mobTable, "Boss Has Been Spawned!")
+                moblist:Refresh(mobTable, "Boss Has Been Despawned!")
             end
+            pesan.msg("SunnyForest Notification!!", "Blob King Has Been Spawned!", 2.5)
         end
     end
 end)
 
-game:GetService("Workspace").RunTime.SunnyForest.Creatures.ChildRemoved:Connect(function(v)
-    if v:FindFirstChild("HumanoidRootPart") then
-        if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Blob King" or v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "BlobKing" then
-            pesan.msg("SunnyForest Notification!!", "Blob King Has Been Despawned!", 2.5)
+game:GetService("Workspace").RunTime.SunnyForest.Creatures.ChildRemoved:Connect(function(dp)
+    if dp:FindFirstChild("HumanoidRootPart") then
+        if dp.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Blob King" or dp.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "BlobKing" then
             if getgenv().area == "SunnyForest" then
                 for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
                 for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
@@ -109,14 +124,14 @@ game:GetService("Workspace").RunTime.SunnyForest.Creatures.ChildRemoved:Connect(
                 getgenv().mob = "Blob"
                 moblist:SetValue("Blob")
             end
+            pesan.msg("SunnyForest Notification!!", "Blob King Has Been Despawned!", 2.5)
         end
     end
 end)
 
-game:GetService("Workspace").RunTime.ToadstoolGorge.Creatures.ChildAdded:Connect(function(v)
-    if v:FindFirstChild("HumanoidRootPart") then
-        if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Fungi King" or v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "FungiKing" then
-            pesan.msg("ToadstoolGorge Notification!!", "Fungi King Has Been Spawned!", 2.5)
+game:GetService("Workspace").RunTime.ToadstoolGorge.Creatures.ChildAdded:Connect(function(sp1)
+    if sp1:FindFirstChild("HumanoidRootPart") then
+        if sp1.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Fungi King" or sp1.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "FungiKing" then
             if getgenv().area == "ToadstoolGorge" then
                 for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
                 for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
@@ -130,15 +145,15 @@ game:GetService("Workspace").RunTime.ToadstoolGorge.Creatures.ChildAdded:Connect
                 end
                 moblist:Refresh(mobTable, "Boss Has Been Spawned!")
             end
+            pesan.msg("ToadstoolGorge Notification!!", "Fungi King Has Been Despawned!", 2.5)
         end
     end
 end)
 
-game:GetService("Workspace").RunTime.ToadstoolGorge.Creatures.ChildRemoved:Connect(function(v)
-    if v:FindFirstChild("HumanoidRootPart") then
-        if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Fungi King" or v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "FungiKing" then
+game:GetService("Workspace").RunTime.ToadstoolGorge.Creatures.ChildRemoved:Connect(function(dp1)
+    if dp1:FindFirstChild("HumanoidRootPart") then
+        if dp1.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Fungi King" or dp1.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "FungiKing" then
             if getgenv().area == "ToadstoolGorge" then
-                pesan.msg("ToadstoolGorge Notification!!", "Fungi King Has Been Despawned!", 2.5)
                 for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
                 for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
 
@@ -153,6 +168,7 @@ game:GetService("Workspace").RunTime.ToadstoolGorge.Creatures.ChildRemoved:Conne
                 getgenv().mob = "Fungi"
                 moblist:Setvalue("Fungi")
             end
+            pesan.msg("ToadstoolGorge Notification!!", "Fungi King Has Been Despawned!", 2.5)
         end
     end
 end)
@@ -168,7 +184,7 @@ local window = library:CreateWindow(gameName)
 local main = window:AddFolder("Main")
 local misc = window:AddFolder("Misc")
 
-pesan.msg(gameName, "This Script Made By Rykyy#8337\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
+pesan.msg(gameName, "This Script Made By Rykyy#0001\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
 pesan.msg("Notification!", "Hide Name Activated\nKeep Activated Even though you are dead", 2.5)
 
 -- Main Section
@@ -407,6 +423,16 @@ end})
 
 
 -- Misc Section
+misc:AddLabel({text = "~~Server"})
+
+misc:AddButton({text = "Rejoin", callback = function()
+    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
+end})
+
+misc:AddButton({text = "Server Hop", callback = function()
+    shop()
+end})
+
 
 misc:AddLabel({text = "~~Character"})
 
