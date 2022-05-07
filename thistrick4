@@ -14,7 +14,7 @@ getgenv().stat = "Strength"
 getgenv().mobname = "Blob"
 getgenv().ws = 19
 getgenv().jp = 50
-getgenv().distance = 7.5
+getgenv().distance = 7.7
 
 
 -- Table
@@ -86,51 +86,6 @@ game:GetService("RunService").Heartbeat:Connect(function()
 end)
 
 
-game:GetService("Workspace").RunTime.SunnyForest.Creatures.ChildRemoved:Connect(function(v)
-    if v:FindFirstChild("HumanoidRootPart") then
-        if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Blob King" or v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "BlobKing" then
-            if getgenv().area == "SunnyForest" then
-                for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
-                for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
-
-                for _,mob in pairs(game:GetService("Workspace").RunTime.ToadstoolGorge.Creatures:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") then
-                        insert = true
-                        for _,v2 in pairs(mobTable) do if v2 == tostring(mob.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text) then insert = false end end
-                        if insert then table.insert(mobTable, tostring(mob.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)) end
-                    end 
-                end
-                moblist:Refresh(mobTable, "Removed"..v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)
-                getgenv().mob = "Blob"
-                moblist:SetValue("Blob")
-            end
-        end
-    end
-end)
-
-game:GetService("Workspace").RunTime.ToadstoolGorge.Creatures.ChildRemoved:Connect(function(v)
-    if v:FindFirstChild("HumanoidRootPart") then
-        if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "Fungi King" or v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == "FungiKing" then
-            if getgenv().area == "ToadstoolGorge" then
-                for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
-                for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
-
-                for _,mob in pairs(game:GetService("Workspace").RunTime.ToadstoolGorge.Creatures:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") then
-                        insert = true
-                        for _,v2 in pairs(mobTable) do if v2 == tostring(mob.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text) then insert = false end end
-                        if insert then table.insert(mobTable, tostring(mob.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)) end
-                    end 
-                end
-                moblist:Refresh(mobTable, "Removed"..v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)
-                getgenv().mob = "Fungi"
-                moblist:Setvalue("Fungi")
-            end
-        end
-    end
-end)
-
-
 -- Library
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/roblox/scripts/uilibrary.lua"))()
 
@@ -140,7 +95,7 @@ local main = window:AddFolder("Main")
 local misc = window:AddFolder("Misc")
 
 pesan.msg(gameName, "This Script Made By Rykyy#0001\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
-pesan.msg("Notification!", "Hide Name Activated\nKeep Activated Even though you are dead", 2.5)
+pesan.msg("Notification!", "Hide Name Activated\n[Keep Activated Even though you are dead]  ", 2.5)
 
 -- Main Section
 
@@ -314,7 +269,7 @@ autofarm:AddToggle({text = "Enabled", callback = function(bool)
     end)       
 end})
 
---[[autofarm:AddToggle({text = "Auto Loot", callback = function(bool)
+autofarm:AddToggle({text = "Auto Loot [Semi Work]", callback = function(bool)
     getgenv().loot = bool
 
     while wait() do
@@ -326,7 +281,7 @@ end})
             TargetFunc:InvokeServer(itemsgsubed);
         end
     end
-end})]]
+end})
 
 autostats:AddList({text = "Stats List", values = statsTable, callback = function(selected)
     getgenv().stat = selected
