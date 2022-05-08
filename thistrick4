@@ -133,7 +133,8 @@ local teleports = misc:CreateSection("Teleports")
 local sc = misc:CreateSection("Server & Character")
 
 pesan(gameName, "This Script Made By Rykyy#8337\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
-pesan("Notification!", "Hide Name & Anti Afk Activated\n[Keep Activated Even though you are dead]", 2.5)
+pesan("Notification!", "If you want to fix gui bugs please rejoin or server hop", 15)
+pesan("Notification!", "Hide Name & Anti Afk Activated\n[Keep Activated Even though you are dead]", 5)
 
 autofarm:CreateLabel("~~Mob Settings")
 
