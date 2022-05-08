@@ -4,6 +4,9 @@ local gameName = "⚔️MeloBlox"
 local moblist;
 local tplist;
 local beat;
+local a1beat;
+local a2beat;
+local a3beat;
 local aunk;
 
 -- Global
@@ -113,10 +116,8 @@ local autostats = window:CreateSection("Auto Stats")
 local teleports = misc:CreateSection("Teleports")
 local sc = misc:CreateSection("Server & Character")
 
-pesan(gameName, "This Script Made By Rykyy#0001\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
-pesan("Notification!", "Hide Name Activated\n[Keep Activated Even though you are dead]", 2.5)
-pesan("Notification!", "Anti Afk Activated", 2.5)
-
+pesan(gameName, "This Script Made By Rykyy#8337\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
+pesan("Notification!", "Hide Name & Anti Afk Activated\n[Keep Activated Even though you are dead]", 2.5)
 
 autofarm:CreateLabel("~~Mob Settings")
 
@@ -151,7 +152,7 @@ autofarm:CreateLabel("~~Attack Action Settings")
 autofarm:CreateToggle("Slot 1", function(bool)
     a1 = bool
 
-    game:GetService("RunService").Stepped:Connect(function()
+    a1beat = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true and a1 == true then
             local args = {
                 [1] = "Action1",
@@ -159,6 +160,8 @@ autofarm:CreateToggle("Slot 1", function(bool)
             }
                                                             
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
+        elseif getgenv().enabled == false or a1 == false then
+            a1beat:Disconnect()
         end
     end)
 end)
@@ -166,7 +169,7 @@ end)
 autofarm:CreateToggle("Slot 2", function(bool)
     a2 = bool
 
-    game:GetService("RunService").Stepped:Connect(function()
+    a2beat = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true and a2 == true then
             local args = {
                 [1] = "Action2",
@@ -174,6 +177,8 @@ autofarm:CreateToggle("Slot 2", function(bool)
             }
                                                             
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
+        elseif getgenv().enabled == false or a2 == false then
+            a2beat:Disconnect()    
         end
     end)
 end)
@@ -182,7 +187,7 @@ end)
 autofarm:CreateToggle("Slot 3", function(bool)
     a3 = bool
 
-    game:GetService("RunService").Stepped:Connect(function()
+    a3beat = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true and a3 == true then
             local args = {
                 [1] = "Action3",
@@ -190,6 +195,8 @@ autofarm:CreateToggle("Slot 3", function(bool)
             }
                                                             
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
+        elseif getgenv().enabled == false or a3 == false then
+            a3beat:Disconnect()
         end
     end)
 end)
