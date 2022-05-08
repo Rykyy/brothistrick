@@ -17,6 +17,7 @@ getgenv().mobname = "Blob"
 getgenv().ws = 19
 getgenv().jp = 50
 getgenv().distance = 7.7
+getgenv().range = "Nearest"
 
 
 -- Table
@@ -75,7 +76,7 @@ local function shop()
 	end
 end
 
-function pesan(title, text, time)
+local function pesan(title, text, time)
     local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
     local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
@@ -84,6 +85,21 @@ function pesan(title, text, time)
         {OutlineColor = Color3.fromRGB(255, 84, 84),Time = time, Type = "image"},
         {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84)}
     )
+end
+
+local function nearestMob()
+    local dist = math.huge
+    local dekat = nil
+    for i,v in pairs(game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren()) do
+        if v:FindFirstChild("HumanoidRootPart") then
+            local magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+            if magnitude < dist then
+                dist = magnitude
+                dekat = v
+            end
+        end
+    end
+    return dekat
 end
 
 
@@ -141,6 +157,10 @@ end)
 moblist = autofarm:CreateDropdown("Mob List", mobTable, 1, function(selected)
     getgenv().mobname = selected
     print(selected)
+end)
+
+autofarm:CreateDropdown("Ranges List", {"Random", "Nearest"}, 1, function(selected)
+    getgenv().range = selected
 end)
 
 autofarm:CreateSlider("Distance", 0, 10, getgenv().distance, 0.999, function(s)
@@ -274,17 +294,31 @@ autofarm:CreateToggle("Enabled", function(bool)
     beat = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
             if getgenv().enabled == true then
-                for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
-                    if v:FindFirstChild("HumanoidRootPart") then
-                        if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
-                            repeat
-                                if v:FindFirstChild("HumanoidRootPart") then
-                                    moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(-90),0,0))
+                if getgenv().range == "Nearest" then
+                    if nearestMob().HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
+                        repeat
+                            if nearestMob():FindFirstChild("HumanoidRootPart") then
+                                moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(-90),0,0))
+                            end
+                        wait()
+                        until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
+                        if getgenv().enabled == false then
+                            beat:Disconnect()
+                        end
+                    end
+                elseif getgenv().range == "Random" then
+                    for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
+                        if v:FindFirstChild("HumanoidRootPart") then
+                            if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
+                                repeat
+                                    if v:FindFirstChild("HumanoidRootPart") then
+                                        moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(-90),0,0))
+                                    end
+                                wait()
+                                until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
+                                if getgenv().enabled == false then
+                                    beat:Disconnect()
                                 end
-                            wait()
-                            until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
-                            if getgenv().enabled == false then
-                                beat:Disconnect()
                             end
                         end
                     end
