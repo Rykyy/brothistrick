@@ -128,7 +128,7 @@ moblist = autofarm:AddList({text = "Mob List", values = mobTable, callback = fun
     print(selected)
 end})
 
-autofarm:AddSlider({text = "Distance", min = 0, max = 10, float = 0.0999, value = getgenv().distance, callback = function(s)
+autofarm:AddSlider({text = "Distance", min = 0, max = 15, float = 0.0999, value = getgenv().distance, callback = function(s)
     getgenv().distance = s
 end})
 
