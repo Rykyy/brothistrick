@@ -177,7 +177,7 @@ autofarm:CreateToggle("Slot 2", function(bool)
             }
                                                             
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
-        elseif getgenv().enabled == false a2 == false then
+        elseif getgenv().enabled == false and a2 == false then
             a2beat:Disconnect()    
         end
     end)
