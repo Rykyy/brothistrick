@@ -160,7 +160,7 @@ moblist = autofarm:CreateDropdown("Mob List", mobTable, 1, function(selected)
     print(selected)
 end)
 
-autofarm:CreateDropdown("Ranges List", {"Random", "Nearest"}, 1, function(selected)
+autofarm:CreateDropdown("Target List", {"Random", "Nearest"}, 1, function(selected)
     getgenv().range = selected
 end)
 
