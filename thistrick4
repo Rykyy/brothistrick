@@ -1,7 +1,6 @@
 -- Variable
-local pesan = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Rykyy/roblox/scripts/pesan.lua"),true))()
 local plyr = game.Players.LocalPlayer
-local gameName = "⚔️MeloBlox RPG"
+local gameName = "⚔️MeloBlox"
 local moblist;
 local tplist;
 local beat;
@@ -18,10 +17,10 @@ getgenv().distance = 7.7
 
 
 -- Table
-local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh"}
+local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 local mobTable = {}
 local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
-local areatpTable = {"SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh"}
+local areatpTable = {"SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 
 for _,v in pairs(game:GetService("Workspace").RunTime[getgenv().area]:GetDescendants()) do
     if v.Name == "CreatureName" then
@@ -73,6 +72,18 @@ local function shop()
 	end
 end
 
+function pesan(title, text, time)
+    local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+    local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+    Notification:Notify(
+        {Title = title, Description = text},
+        {OutlineColor = Color3.fromRGB(255, 84, 84),Time = time, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84)}
+    )
+end
+
+
 game:GetService("RunService").Heartbeat:Connect(function()
     if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("PlayerInfo") then
         game.Players.LocalPlayer.Character.HumanoidRootPart.PlayerInfo:Destroy()
@@ -85,27 +96,31 @@ game:GetService("RunService").Heartbeat:Connect(function()
     end
 end)
 
+repeat wait() until game:IsLoaded() 
+    game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+
 
 -- Library
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/roblox/scripts/uilibrary.lua"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/roblox/scripts/CoaUix.lua"))()
 
-local window = library:CreateWindow(gameName)
+local window = library:CreateTab(gameName)
+local misc = library:CreateTab("Misc")
 
-local main = window:AddFolder("Main")
-local misc = window:AddFolder("Misc")
+local autofarm = window:CreateSection("Auto Farm")
+local autostats = window:CreateSection("Auto Stats")
+local teleports = misc:CreateSection("Teleports")
+local sc = misc:CreateSection("Server & Character")
 
-pesan.msg(gameName, "This Script Made By Rykyy#0001\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
-pesan.msg("Notification!", "Hide Name Activated\n[Keep Activated Even though you are dead]  ", 2.5)
+pesan(gameName, "This Script Made By Rykyy#0001\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
+pesan("Notification!", "Hide Name Activated\n[Keep Activated Even though you are dead]", 2.5)
+pesan("Notification!", "Anti Afk Activated", 2.5)
 
--- Main Section
 
-local autofarm = main:AddFolder("Auto Farm")
-local autostats = main:AddFolder("Auto Stats")
-local teleports = main:AddFolder("Teleports")
+autofarm:CreateLabel("~~Mob Settings")
 
-autofarm:AddLabel({text = "~~Mob Settings"})
-
-autofarm:AddList({text = "Areas List", values = areaTable, callback = function(selected)
+autofarm:CreateDropdown("Areas List", areaTable, 1, function(selected)
     getgenv().area = selected
 
     for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
@@ -118,23 +133,22 @@ autofarm:AddList({text = "Areas List", values = areaTable, callback = function(s
             if insert then table.insert(mobTable, tostring(v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)) end
         end 
     end
-    moblist:Refresh(mobTable, "Area Has Been Changed")
+    moblist:Refresh(mobTable, 1, "AreaHasBeenChanged")
+    pesan("Mob Settings Notification!", "Make sure the area you choose is open otherwise you will be banned", 2.5)
+end)
 
-    pesan.msg("Mob Settings Notification!", "Make sure the area you choose is open otherwise you will be banned", 2.5)
-end})
-
-moblist = autofarm:AddList({text = "Mob List", values = mobTable, callback = function(selected)
+moblist = autofarm:CreateDropdown("Mob List", mobTable, 1, function(selected)
     getgenv().mobname = selected
     print(selected)
-end})
+end)
 
-autofarm:AddSlider({text = "Distance", min = 0, max = 15, float = 0.0999, value = getgenv().distance, callback = function(s)
+autofarm:CreateSlider("Distance", 0, 10, getgenv().distance, 0.999, function(s)
     getgenv().distance = s
-end})
+end)
 
-autofarm:AddLabel({text = "~~Attack Action Settings"})
+autofarm:CreateLabel("~~Attack Action Settings")
 
-autofarm:AddToggle({text = "Slot 1", callback = function(bool)
+autofarm:CreateToggle("Slot 1", function(bool)
     a1 = bool
 
     game:GetService("RunService").Stepped:Connect(function()
@@ -147,9 +161,9 @@ autofarm:AddToggle({text = "Slot 1", callback = function(bool)
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
         end
     end)
-end})
+end)
 
-autofarm:AddToggle({text = "Slot 2", callback = function(bool)
+autofarm:CreateToggle("Slot 2", function(bool)
     a2 = bool
 
     game:GetService("RunService").Stepped:Connect(function()
@@ -162,9 +176,10 @@ autofarm:AddToggle({text = "Slot 2", callback = function(bool)
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
         end
     end)
-end})
+end)
 
-autofarm:AddToggle({text = "Slot 3", callback = function(bool)
+
+autofarm:CreateToggle("Slot 3", function(bool)
     a3 = bool
 
     game:GetService("RunService").Stepped:Connect(function()
@@ -177,9 +192,10 @@ autofarm:AddToggle({text = "Slot 3", callback = function(bool)
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
         end
     end)
-end})
+end)
 
-autofarm:AddButton({text = "Get All Weapon Skill", callback = function()
+
+autofarm:CreateButton("Get All Weapon Skill", function()
     for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
         if string.find(v.Name, "Axe") then
             local args = {
@@ -240,11 +256,11 @@ autofarm:AddButton({text = "Get All Weapon Skill", callback = function()
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
         end
     end
-end})
+end)
 
-autofarm:AddLabel({text = "~~Farm"})
+autofarm:CreateLabel("~~Farm")
 
-autofarm:AddToggle({text = "Enabled", callback = function(bool)
+autofarm:CreateToggle("Enabled", function(bool)
     getgenv().enabled = bool
 
     
@@ -255,8 +271,10 @@ autofarm:AddToggle({text = "Enabled", callback = function(bool)
                     if v:FindFirstChild("HumanoidRootPart") then
                         if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
                             repeat
-                                moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(-90),0,0))
-                                wait()
+                                if v:FindFirstChild("HumanoidRootPart") then
+                                    moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(-90),0,0))
+                                end
+                            wait()
                             until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
                             if getgenv().enabled == false then
                                 beat:Disconnect()
@@ -267,9 +285,9 @@ autofarm:AddToggle({text = "Enabled", callback = function(bool)
             end
         end)
     end)       
-end})
+end)
 
-autofarm:AddToggle({text = "Auto Loot [Semi Work]", callback = function(bool)
+autofarm:CreateToggle("Auto Loot [Semi Work]", function(bool)
     getgenv().loot = bool
 
     while wait() do
@@ -281,15 +299,13 @@ autofarm:AddToggle({text = "Auto Loot [Semi Work]", callback = function(bool)
             TargetFunc:InvokeServer(itemsgsubed);
         end
     end
-end})
+end)
 
-autostats:AddList({text = "Stats List", values = statsTable, callback = function(selected)
+autostats:CreateDropdown("Stats List", statsTable, 1, function(selected)
     getgenv().stat = selected
-    
-    print(selected.."1 Point")
-end})
+end)
 
-autostats:AddToggle({text = "Enabled", callback = function(bool)
+autostats:CreateToggle("Enabled", function(bool)
     getgenv().enabled1 = bool
 
     game:GetService("RunService").RenderStepped:Connect(function()
@@ -301,60 +317,60 @@ autostats:AddToggle({text = "Enabled", callback = function(bool)
             game:GetService("ReplicatedStorage").Knit.Services.PrimaryStatsService.RF.AttributeStatPoint:InvokeServer(unpack(args))
         end
     end)
-end})
+end)
 
-teleports:AddLabel({text = "~~City"})
+teleports:CreateLabel("~~City")
 
-teleports:AddButton({text = "Shop", callback = function()
+teleports:CreateButton("Shop", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(277, 4, -0)
-end})
+end)
 
-teleports:AddButton({text = "Bank", callback = function()
+teleports:CreateButton("Bank", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(274, 4, 131)
-end})
+end)
 
-teleports:AddLabel({text = "~~Areas"})
+teleports:CreateLabel("~~Areas")
 
-tplist = teleports:AddList({text = "Areas List", values = areatpTable, callback = function(selected)
+tplist = teleports:CreateDropdown("Areas List", areatpTable, 1, function(selected)
     getgenv().areatp = selected
 
     if selected then
-        pesan.msg("Teleport Notification!", "Make sure the area you choose is open otherwise you will be banned", 2.5)
+        pesan("Teleport Notification!", "Make sure the area you choose is open otherwise you will be banned", 2.5)
     end
-end})
+end)
 
-teleports:AddButton({text = "Teleport", callback = function()
+teleports:CreateButton( "Teleport", function()
     for i,v in pairs(game:GetService("Workspace").RegionsAssets[getgenv().areatp].Environment:GetChildren()) do
         if string.find(v.Name, "Zone") then
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,3,0)
         end
     end
-end})
+end)
 
 
 -- Misc Section
-misc:AddLabel({text = "~~Server"})
+sc:CreateLabel( "~~Server")
 
-misc:AddButton({text = "Rejoin", callback = function()
+sc:CreateButton("Rejoin", function()
     game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
-end})
+end)
 
-misc:AddButton({text = "Server Hop", callback = function()
+sc:CreateButton( "Server Hop", function()
     shop()
-end})
+end)
 
 
-misc:AddLabel({text = "~~Character"})
+sc:CreateLabel("~~Character")
 
-misc:AddSlider({text = "WalkSpeed", min = 19, max = 125, value = 16, callback = function(s)
+sc:CreateSlider("Walk Speed", 19, 125, 16, 0, function(s)
     getgenv().ws = s
-end})
+end)
 
-misc:AddSlider({text = "JumpPower", min = 50, max = 100, value = 50, callback = function(s)
+sc:CreateSlider("Jump Power", 50, 125, 50, 0, function(s)
     getgenv().jp = s
-end})
+end)
 
-misc:AddToggle({text = "Enabled", callback = function(bool)
+sc:CreateToggle("Enabled", function(bool)
     getgenv().wsjp =  bool
 
     local beat2
@@ -369,26 +385,10 @@ misc:AddToggle({text = "Enabled", callback = function(bool)
             beat2:Disconnect()  
         end
     end)
-end})
+end)
 
-misc:AddLabel({text = "~~Admin Gui"})
+sc:CreateLabel("~~Admin Gui")
 
-misc:AddButton({text = "Infinite Yield", callback = function()
+sc:CreateButton("Infinite Yield", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()  
-end})
-
-misc:AddLabel({text = "~~UI Settings"})
-
-misc:AddBind({text = "Ui Toggle", key = Enum.KeyCode.RightAlt, callback = function()
-    library:ToggleUi()
-end})
-
-misc:AddButton({text = "Destroy UI", callback = function()
-    for i,v in pairs(game:GetService("CoreGui"):GetDescendants()) do
-        if v.ClassName == "TextLabel" and v.Text == gameName then
-            v.Parent:Destroy()
-        end
-    end
-end})
-
-library:Init()  
+end)
