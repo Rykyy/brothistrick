@@ -160,7 +160,7 @@ autofarm:CreateToggle("Slot 1", function(bool)
             }
                                                             
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
-        elseif getgenv().enabled == false or a1 == false then
+        elseif getgenv().enabled == falsethen
             a1beat:Disconnect()
         end
     end)
@@ -177,7 +177,7 @@ autofarm:CreateToggle("Slot 2", function(bool)
             }
                                                             
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
-        elseif getgenv().enabled == false or a2 == false then
+        elseif getgenv().enabled == false then
             a2beat:Disconnect()    
         end
     end)
@@ -195,7 +195,7 @@ autofarm:CreateToggle("Slot 3", function(bool)
             }
                                                             
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer(unpack(args))
-        elseif getgenv().enabled == false or a3 == false then
+        elseif getgenv().enabled == false then
             a3beat:Disconnect()
         end
     end)
