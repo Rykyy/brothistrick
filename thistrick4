@@ -348,40 +348,34 @@ autofarm:CreateToggle("Enabled", function(bool)
             if getgenv().enabled == true then
                 if getgenv().target == "Nearest" then
                     if getgenv().mode == "Above" then
-                        if nearestMob():FindFirstChild("HumanoidRootPart") then
-                            repeat
-                                if nearestMob():FindFirstChild("HumanoidRootPart") then
-                                    moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(-90),0,0))
-                                end
-                            wait()
-                            until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                            if getgenv().enabled == false then
-                                beat:Disconnect()
+                        repeat
+                            if nearestMob():FindFirstChild("HumanoidRootPart") then
+                                moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(-90),0,0))
                             end
+                        wait()
+                        until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
+                        if getgenv().enabled == false then
+                            beat:Disconnect()
                         end
                     elseif getgenv().mode == "Under" then
-                        if nearestMob():FindFirstChild("HumanoidRootPart") then
-                            repeat
-                                if nearestMob():FindFirstChild("HumanoidRootPart") then
-                                    moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(90),0,0))
-                                end
-                            wait()
-                            until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                            if getgenv().enabled == false then
-                                beat:Disconnect()
+                        repeat
+                            if nearestMob():FindFirstChild("HumanoidRootPart") then
+                                moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(90),0,0))
                             end
+                        wait()
+                        until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
+                        if getgenv().enabled == false then
+                            beat:Disconnect()
                         end
                     elseif getgenv().mode == "Nothing" then
-                        if nearestMob():FindFirstChild("HumanoidRootPart") then
-                            repeat
-                                if nearestMob():FindFirstChild("HumanoidRootPart") then
-                                    moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0))
-                                end
-                            wait()
-                            until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                            if getgenv().enabled == false then
-                                beat:Disconnect()
+                        repeat
+                            if nearestMob():FindFirstChild("HumanoidRootPart") then
+                                moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0))
                             end
+                        wait()
+                        until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
+                        if getgenv().enabled == false then
+                            beat:Disconnect()
                         end
                     end
                 elseif getgenv().target == "Random" then
