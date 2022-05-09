@@ -208,7 +208,7 @@ autofarm:CreateDropdown("Target List", {"Random", "Nearest"}, 1, function(select
     getgenv().target = selected
 end)
 
-autofarm:CreateSlider("Distance", -13, 13, getgenv().distance, 0.999, function(s)
+autofarm:CreateSlider("Distance", -15, 15, getgenv().distance, 0.999, function(s)
     getgenv().distance = s
 
     if getgenv().distance >= 1 and getgenv().distance ~= 0 then
