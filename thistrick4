@@ -175,7 +175,7 @@ local st = window:CreateSection("Auto Stats & Teleports")
 local sc = misc:CreateSection("Server & Character")
 
 pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
-pesan("Notification!", "If you want to fix gui bugs please rejoin or server hop", 25)
+pesan("Notification!", "If you play in ps, you must visit area you choose to spawn the mobs! & If you want to fix gui bugs please rejoin or server hop", 25)
 pesan("Notification!", "Hide Name & Anti Afk Activated\n[Hide Name Keep Activated Even though you are dead]", 5)
 
 autofarm:CreateLabel("~~Mob Settings")
