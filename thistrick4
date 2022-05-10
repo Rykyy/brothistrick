@@ -15,6 +15,8 @@ local aunp;
 -- Global
 getgenv().area = nil
 getgenv().areatp = "SunnyForest"
+getgenv().itemlist = "All Tier"
+getgenv().lootrange = 50
 getgenv().stat = "Strength"
 getgenv().mobname = "Blob"
 getgenv().ws = 19
@@ -26,8 +28,10 @@ getgenv().toggleui = true
 
 
 -- Table
-local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
+local areaTable = {"Select Area!","Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 local mobTable = {"Select Mob!"}
+local targetTable = {"Random", "Nearest"}
+local itemTable = {"All Tier", "T1", "T2", "T3", "T4", "T5"}
 local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
 local areatpTable = {"SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 
@@ -80,14 +84,22 @@ local function moveto(obj)
 end
 
 local function nearestItem()
-    local dist = math.huge
+    local dist = 150
     local dekat = nil
     for i,v in pairs(game:GetService("Workspace").RunTime.GroundLoot:GetChildren()) do
-        if v.ClassName == "MeshPart" or v.ClassName == "Part" then
+        if getgenv().itemlist == "All Tier" then
             local magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
             if magnitude < dist then
                 dist = magnitude
-                dekat = v.Name
+                dekat = v
+            end
+        elseif getgenv().itemlist ~= "All Tier" then
+            if string.find(v.Name, tostring(getgenv().itemlist)) then
+                local magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+                if magnitude < dist then
+                    dist = magnitude
+                    dekat = v
+                end
             end
         end
     end
@@ -124,7 +136,7 @@ end
 local function nearestMob()
     local dist = math.huge
     local dekat = nil
-    if getgenv().area  ~= nil then
+    if getgenv().area ~= nil then
         for i,v in pairs(game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren()) do
             if v:FindFirstChild("HumanoidRootPart") then
                 if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
@@ -170,7 +182,7 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy
 local window = library:CreateTab(gameName)
 local misc = library:CreateTab("Misc")
 
-local autofarm = window:CreateSection("Auto Farm")
+local autofarm = window:CreateSection("Auto Farm & Auto Loot")
 local st = window:CreateSection("Auto Stats & Teleports")
 local sc = misc:CreateSection("Server & Character")
 
@@ -201,7 +213,7 @@ moblist = autofarm:CreateDropdown("Mob List", mobTable, 1, function(selected)
     getgenv().mobname = selected
 end)
 
-autofarm:CreateDropdown("Target List", {"Random", "Nearest"}, 1, function(selected)
+autofarm:CreateDropdown("Target List", targetTable, 1, function(selected)
     getgenv().target = selected
 end)
 
@@ -435,6 +447,25 @@ autofarm:CreateToggle("Enabled", function(bool)
     if getgenv().enabled == false then
         backtosafeTp()
     end
+end)
+
+autofarm:CreateLabel("~~Loot Settings")
+
+autofarm:CreateDropdown("Items list", itemTable, 1, function(selected)
+    getgenv().itemlist = selected
+    print(getgenv().itemlist)
+end)
+
+autofarm:CreateToggle("Auto Loot [Bugged]", function(bool)
+    getgenv().loot = bool
+    local lootbeat;
+
+    lootbeat = game:GetService("RunService").Stepped:Connect(function()
+        if getgenv().loot == true then
+            nearestItem().CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            game:GetService('VirtualInputManager'):SendKeyEvent(true,"E",false,uwu)
+        end
+    end)
 end)
 
 st:CreateLabel("~Auto Stat")
