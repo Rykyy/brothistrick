@@ -196,7 +196,7 @@ autofarm:CreateDropdown("Area List", areaTable, 1, function(selected)
             if insert then table.insert(mobTable, tostring(v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)) end
         end 
     end
-    moblist:Refresh(mobTable, 1, mobTable[1])
+    moblist:Refresh(mobTable, 1, "Select Mob!")
     pesan("Mob Settings Notification!", "Make sure the area you choose is open otherwise you will be banned", 2.5)
 end)
 
