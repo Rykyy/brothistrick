@@ -456,7 +456,7 @@ autofarm:CreateDropdown("Items list", itemTable, 1, function(selected)
     print(getgenv().itemlist)
 end)
 
-autofarm:CreateToggle("Auto Loot [Bugged]", function(bool)
+autofarm:CreateToggle("Auto Loot", function(bool)
     getgenv().loot = bool
     local lootbeat;
 
