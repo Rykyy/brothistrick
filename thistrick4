@@ -437,16 +437,6 @@ autofarm:CreateToggle("Enabled", function(bool)
     end
 end)
 
-autofarm:CreateToggle("Auto Loot [Semi Work]", function(bool)
-    getgenv().loot = bool
-
-    while wait() do
-        if getgenv().loot == true then
-            game:GetService('VirtualInputManager'):SendKeyEvent(true,"E",false,uwu)
-        end
-    end
-end)
-
 st:CreateLabel("~Auto Stat")
 
 st:CreateDropdown("Stat List", statsTable, 1, function(selected)
@@ -498,8 +488,8 @@ tplist = st:CreateDropdown("Area List", areatpTable, 1, function(selected)
 end)
 
 st:CreateButton("Teleport", function()
-    for i,v in pairs(game:GetService("Workspace").RegionsAssets[getgenv().areatp].Environment:GetChildren()) do
-        if string.find(v.Name, "Zone") then
+    for i,v in pairs(game:GetService("Workspace").RegionsAssets[getgenv().areatp].PlayerSpawner:GetChildren()) do
+        if v.ClassName == "SpawnLocation" then
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,3,0)
         end
     end
