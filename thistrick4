@@ -28,7 +28,7 @@ getgenv().toggleui = true
 
 
 -- Table
-local areaTable = {"Select Area!","Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
+local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 local mobTable = {"Select Mob!"}
 local targetTable = {"Random", "Nearest"}
 local itemTable = {"All Tier", "T1", "T2", "T3", "T4", "T5"}
@@ -94,9 +94,9 @@ local function nearestItem()
                 dekat = v
             end
         elseif getgenv().itemlist ~= "All Tier" then
-            if string.find(v.Name, tostring(getgenv().itemlist)) then
+            if string.find(v.Name, getgenv().itemlist) or string.find(v.Name, "Gold") or string.find(v.Name, "Regret") then
                 local magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
-                if magnitude < dist then
+                if magnitude < dist then        
                     dist = magnitude
                     dekat = v
                 end
@@ -155,8 +155,10 @@ end
 
 
 game:GetService("RunService").Heartbeat:Connect(function()
-    if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("PlayerInfo") then
-        game.Players.LocalPlayer.Character.HumanoidRootPart.PlayerInfo:Destroy()
+    if game.Players.LocalPlayer.Character ~= nil then
+        if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("PlayerInfo") then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.PlayerInfo:Destroy()
+        end
     end
 end)
 
@@ -175,9 +177,7 @@ repeat wait() until game:IsLoaded()
     game:GetService("VirtualUser"):ClickButton2(Vector2.new())
 end)
 
-
--- Library
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/roblox/scripts/CoaUix.lua"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/brothistrick/main/brorqdassdax"))()
 
 local window = library:CreateTab(gameName)
 local misc = library:CreateTab("Misc")
@@ -192,7 +192,7 @@ pesan("Notification!", "Hide Name & Anti Afk Activated\n[Hide Name Keep Activate
 
 autofarm:CreateLabel("~~Mob Settings")
 
-autofarm:CreateDropdown("Area List", areaTable, 1, function(selected)
+autofarm:CreateDropdown("Area List", areaTable, 1, "Select Area!", function(selected)
     getgenv().area = selected
 
     for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
@@ -205,27 +205,26 @@ autofarm:CreateDropdown("Area List", areaTable, 1, function(selected)
             if insert then table.insert(mobTable, tostring(v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)) end
         end 
     end
+
     moblist:Refresh(mobTable, 1, "Select Mob!")
     pesan("Mob Settings Notification!", "Make sure the area you choose is open otherwise you will be banned", 2.5)
 end)
 
-moblist = autofarm:CreateDropdown("Mob List", mobTable, 1, function(selected)
+moblist = autofarm:CreateDropdown("Mob List", mobTable, 1, mobTable[1], function(selected)
     getgenv().mobname = selected
 end)
 
-autofarm:CreateDropdown("Target List", targetTable, 1, function(selected)
+autofarm:CreateDropdown("Target List", targetTable, 1, targetTable[1], function(selected)
     getgenv().target = selected
 end)
 
 autofarm:CreateSlider("Distance", -15, 15, getgenv().distance, 0.999, function(s)
     getgenv().distance = s
 
-    if getgenv().distance >= 1 and getgenv().distance ~= 0 then
-        getgenv().mode = "Above"
-    elseif getgenv().distance <= -1 and getgenv().distance ~= 0 then
-        getgenv().mode = "Under"
-    elseif getgenv().distance == 0 then
-        getgenv().mode = "Nothing"
+    if getgenv().distance >= 0  then
+        getgenv().mode = CFrame.Angles(math.rad(-   90),0,0)
+    elseif getgenv().distance <= -1 then
+        getgenv().mode = CFrame.Angles(math.rad(90),0,0)
     end
 end)
 
@@ -356,84 +355,29 @@ autofarm:CreateToggle("Enabled", function(bool)
         pcall(function()
             if getgenv().enabled == true then
                 if getgenv().area ~= nil then
-                    if getgenv().target == "Nearest" then
-                        if getgenv().mode == "Above" then
-                            repeat
-                                if nearestMob():FindFirstChild("HumanoidRootPart") then
-                                    moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(-90),0,0))
-                                end
-                            wait()
-                            until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                            if getgenv().enabled == false then
-                                beat:Disconnect()
+                    if getgenv().target == "Nearest" then      
+                        repeat
+                            if nearestMob():FindFirstChild("HumanoidRootPart") then
+                                moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
                             end
-                        elseif getgenv().mode == "Under" then
-                            repeat
-                                if nearestMob():FindFirstChild("HumanoidRootPart") then
-                                    moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(90),0,0))
-                                end
-                            wait()
-                            until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                            if getgenv().enabled == false then
-                                beat:Disconnect()
-                            end
-                        elseif getgenv().mode == "Nothing" then
-                            repeat
-                                if nearestMob():FindFirstChild("HumanoidRootPart") then
-                                    moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0))
-                                end
-                            wait()
-                            until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                            if getgenv().enabled == false then
-                                beat:Disconnect()
-                            end
+                        wait()
+                        until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
+                        if getgenv().enabled == false then
+                            beat:Disconnect()
                         end
                     elseif getgenv().target == "Random" then
-                        if getgenv().mode == "Above" then
-                            for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
-                                if v:FindFirstChild("HumanoidRootPart") then
-                                    if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
-                                        repeat
-                                            if v:FindFirstChild("HumanoidRootPart") then
-                                                moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(-90),0,0))
-                                            end
-                                        wait()
-                                        until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                                        if getgenv().enabled == false then
-                                            beat:Disconnect()
+                        for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
+                            if v:FindFirstChild("HumanoidRootPart") then
+                                if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
+                                    repeat
+                                        if v:FindFirstChild("HumanoidRootPart") then
+                                            moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
+                                            weapon.Handle.CFrame = nearestMob().HumanoidRootPart.CFrame
                                         end
-                                    end
-                                end
-                            end
-                        elseif getgenv().mode == "Under" then
-                            for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
-                                if v:FindFirstChild("HumanoidRootPart") then
-                                    if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
-                                        repeat
-                                            if v:FindFirstChild("HumanoidRootPart") then
-                                                moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * CFrame.Angles(math.rad(90),0,0))
-                                            end
-                                        wait()
-                                        until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                                        if getgenv().enabled == false then
-                                            beat:Disconnect()
-                                        end
-                                    end
-                                end
-                            end
-                        elseif getgenv().mode == "Nothing" then
-                            for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
-                                if v:FindFirstChild("HumanoidRootPart") then
-                                    if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
-                                        repeat
-                                            if v:FindFirstChild("HumanoidRootPart") then
-                                                moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0))
-                                            end
-                                        wait()
-                                        until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                                        if getgenv().enabled == false then
-                                            beat:Disconnect()
-                                        end
+                                    wait()
+                                    until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
+                                    if getgenv().enabled == false then
+                                        beat:Disconnect()
                                     end
                                 end
                             end
@@ -451,7 +395,7 @@ end)
 
 autofarm:CreateLabel("~~Loot Settings")
 
-autofarm:CreateDropdown("Items list", itemTable, 1, function(selected)
+autofarm:CreateDropdown("Items list", itemTable, 1, itemTable[1], function(selected)
     getgenv().itemlist = selected
     print(getgenv().itemlist)
 end)
@@ -461,7 +405,7 @@ autofarm:CreateToggle("Auto Loot", function(bool)
     local lootbeat;
 
     lootbeat = game:GetService("RunService").Stepped:Connect(function()
-        if getgenv().loot == true then
+        if getgenv().loot == true and nearestItem()  ~= nil then
             nearestItem().CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
             game:GetService('VirtualInputManager'):SendKeyEvent(true,"E",false,uwu)
         end
@@ -470,7 +414,7 @@ end)
 
 st:CreateLabel("~Auto Stat")
 
-st:CreateDropdown("Stat List", statsTable, 1, function(selected)
+st:CreateDropdown("Stat List", statsTable, 1, statsTable[1], function(selected)
     getgenv().stat = selected
 end)
 
@@ -510,7 +454,7 @@ end)
 
 st:CreateLabel("~Area~")
 
-tplist = st:CreateDropdown("Area List", areatpTable, 1, function(selected)
+tplist = st:CreateDropdown("Area List", areatpTable, 1, areatpTable[1], function(selected)
     getgenv().areatp = selected
 
     if selected then
