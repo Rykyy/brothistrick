@@ -407,7 +407,9 @@ autofarm:CreateToggle("Auto Loot", function(bool)
     lootbeat = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().loot == true and nearestItem()  ~= nil then
             nearestItem().CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-            game:GetService('VirtualInputManager'):SendKeyEvent(true,"E",false,uwu)
+            local items = tostring(nearestItem().Name)
+            local itemsid = items:gsub('[%a]-[%p][%a][%x][%p]','','1')
+            game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(itemsid)
         end
     end)
 end)
