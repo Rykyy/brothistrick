@@ -380,7 +380,6 @@ autofarm:CreateToggle("Enabled", function(bool)
                                     repeat
                                         if v:FindFirstChild("HumanoidRootPart") then
                                             moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
-                                            weapon.Handle.CFrame = nearestMob().HumanoidRootPart.CFrame
                                         end
                                     wait()
                                     until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
