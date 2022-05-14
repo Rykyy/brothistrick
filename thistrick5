@@ -14,7 +14,6 @@ local moblist;
 local idk;
 
 
-
 -- Global
 getgenv().enabled = nil
 getgenv().mobname = "SemiHollow"
@@ -41,7 +40,6 @@ for _,v in pairs(reps.Assets.Class:GetChildren()) do
     for _,v2 in pairs(classTable) do if v2 == tostring(v.Name) then insert = false end end
     if insert then table.insert(classTable, tostring(v.Name)) end
 end
-
 -- Function
 
 local function nameGui()
@@ -66,17 +64,6 @@ local function pesan(title, text, time)
     )
 end
 
-
-local function tpto(obj)
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = obj
-
-    if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-        aunk = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
-        aunk.Velocity = Vector3.new(0, 0, 0)
-        aunk.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-    end
-end
-
 local function shop()
     local x = {}
     for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
@@ -93,18 +80,29 @@ local function shop()
 	end
 end
 
-game:GetService("RunService").Stepped:Connect(function()
-    for i,v1 in pairs(reps:GetChildren()) do
-        if v1:FindFirstChild("CooldownModule") then
-            v1.CooldownModule:Destroy()
+
+local function tpto(obj)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = obj
+
+    if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+        aunk = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
+        aunk.Velocity = Vector3.new(0, 0, 0)
+        aunk.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    end
+end
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    if getgenv().enabled == false then 
+        if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+            aunk:Destroy()
         end
     end
 end)
 
 game:GetService("RunService").Stepped:Connect(function()
-    if getgenv().enabled == false then 
-        if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-            aunk:Destroy()
+    for i,v1 in pairs(reps:GetChildren()) do
+        if v1:FindFirstChild("CooldownModule") then
+            v1.CooldownModule:Destroy()
         end
     end
 end)
@@ -144,6 +142,7 @@ local sb = window:CreateSection("Auto Stats & Auto Buy")
 local sc = misc:CreateSection("Server & Character")
 
 pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plr.DisplayName.."~ Thx For Using My Script.", 10)
+print(classname)
 
 -- Main Section
 
@@ -181,12 +180,8 @@ fq:CreateToggle("Basic Attack", function(bool)
     a1 = bool
 
     a1beat = game:GetService("RunService").Stepped:Connect(function()
-        if getgenv().enabled == true and a1 == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
+        if getgenv().enabled == true and a1 == true then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",1)
-            reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",2)
-            reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",3)
-            reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",4)
-            reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",5)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Punch",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a1 == false then
             a1beat:Disconnect()
@@ -198,7 +193,7 @@ fq:CreateToggle("Skill1", function(bool)
     a2 = bool
 
     a2beat = game:GetService("RunService").Stepped:Connect(function()
-        if getgenv().enabled == true and a2 == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
+        if getgenv().enabled == true and a2 == true then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill1",1)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a2 == false then
@@ -211,7 +206,7 @@ fq:CreateToggle("Skill2", function(bool)
     a3 = bool
 
     a3beat = game:GetService("RunService").Stepped:Connect(function()
-        if getgenv().enabled == true and a3 == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
+        if getgenv().enabled == true and a3 == true then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill2",1)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a3 == false then
@@ -224,7 +219,7 @@ fq:CreateToggle("Skill3", function(bool)
     a4 = bool
 
     a4beat = game:GetService("RunService").Stepped:Connect(function()
-        if getgenv().enabled == true and a4 == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
+        if getgenv().enabled == true and a4 == true  then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill3",1)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a4 == false then
@@ -237,7 +232,7 @@ fq:CreateToggle("Skill4", function(bool)
     a5 = bool
 
     a5beat = game:GetService("RunService").Stepped:Connect(function()
-        if getgenv().enabled == true and a5 == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
+        if getgenv().enabled == true and a5 == true then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill4",1)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a5 == false then
@@ -251,49 +246,40 @@ fq:CreateLabel("~~Farm")
 fq:CreateToggle("Enabled", function(bool)
     getgenv().enabled = bool
 
-    xx = game:GetService("RunService").Stepped:Connect(function()
-        if getgenv().enabled == true then
-            if plr.Character.LowerTorso:FindFirstChild("Root") then
-                plr.Character.HumanoidRootPart.CFrame = CFrame.new(-325.257965, 62.4754448, 2155.13135, 0.999768972, -2.21638849e-08, 0.0214943159, 2.40191138e-08, 1, -8.60543636e-08, -0.0214943159, 8.65507559e-08, 0.999768972)
-
-                wait(0.5)
-                if plr.Character.LowerTorso.Root ~= nil then
-                    plr.Character.LowerTorso.Root:Destroy()
-                end
-            end
-        elseif getgenv().enabled == false then
-            xx:Disconnect()
-        end
-    end)
-
     bruh = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true and plr.Character ~= nil then
             pcall(function()
-                for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-                    if v:IsA("BasePart") and v.CanCollide == true then
-                        v.CanCollide = false
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-                    end
-                end
+                plr.Character.Humanoid:ChangeState(16)
             end)
         elseif getgenv().enabled == false then
+            plr.Character.Humanoid:ChangeState(18)
             bruh:Disconnect()
+        end
+    end)
+
+    bruh1 = game:GetService("RunService").Stepped:Connect(function()
+        if getgenv().enabled == true and plr.Character ~= nil then
+            pcall(function()
+                plr.Character.HumanoidRootPart.CFrame = CFrame.new(-325.257965, 62.4754448, 2155.13135, 0.999768972, -2.21638849e-08, 0.0214943159, 2.40191138e-08, 1, -8.60543636e-08, -0.0214943159, 8.65507559e-08, 0.999768972)
+                wait(0.5)
+                plr.Character.LowerTorso.Root:Destroy()
+            end)
+        elseif getgenv().enabled == false then
+            bruh1:Disconnect()
         end
     end)
 
     
     beat = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
-            if getgenv().enabled == true then
-                for i,v in pairs(wrk.NPCS:GetChildren()) do
+            if getgenv().enabled == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                for i,v in pairs(game:GetService("Workspace").NPCS:GetChildren()) do
                     if v.Name == getgenv().mobname then
                         if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
                             if v.Humanoid.Health ~= 0 and getgenv().enabled == true then
                                 repeat
                                     idk = v
-                                    if not plr.Character.LowerTorso:FindFirstChild("Root") then
-                                        tpto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
-                                    end
+                                    tpto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
                                     wait()
                                 until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health == 0
                                 if getgenv().enabled == false then
@@ -323,7 +309,7 @@ fq:CreateToggle("Enabled", function(bool)
 
     game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled1 == true and plr.PlayerGui.Frames.Quest.Visible == false then
-            plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
+            plr.Character.HumanoidRootPart.CFrame = game.Workspace.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
             local args = {
                 [1] = "QuestAdd",
                 [2] = getgenv().questname   
@@ -392,15 +378,13 @@ sb:CreateToggle("Enabled\n[Tell Me In Disc If Bugged]", function(bool)
         end
     end
 end)
-        
 
 -- Misc Section
 
-sc:CreateLabel("~~Server")
-
+sc:CreateLabel( "~~Server")
 
 sc:CreateButton("Rejoin", function()
-    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, plr)
+    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
 end)
 
 sc:CreateButton( "Server Hop", function()
