@@ -11,6 +11,7 @@ local a1beat;
 local aunk;
 local aunp;
 local moblist;
+local idk;
 
 
 
@@ -152,7 +153,7 @@ moblist = fq:CreateDropdown("Mob List", mobTable, 1, "SemiHollow", function(sele
     getgenv().mobname = selected
 end)
 
-fq:CreateSlider("Distance", -7, 7, getgenv().distance, 0.999, function(s)
+fq:CreateSlider("Distance", -15, 15, getgenv().distance, 0.999, function(s)
     getgenv().distance = s
 
     if getgenv().distance >= 0  then
@@ -241,6 +242,28 @@ fq:CreateLabel("~~Farm")
 fq:CreateToggle("Enabled", function(bool)
     getgenv().enabled = bool
 
+    xx = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().enabled == true then
+            if a1 == true then
+                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Punch",idk.HumanoidRootPart.Position,idk,true)
+            end
+            if a2 == true then
+                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
+            end
+            if a3 == true then
+                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
+            end
+            if a4 == true then
+                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
+            end
+            if a5 == true then
+                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
+            end
+        elseif getgenv().enabled == false then
+            xx:Disconnect()
+        end
+    end)
+
     bruh = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true and plr.Character ~= nil then
             pcall(function()
@@ -264,6 +287,7 @@ fq:CreateToggle("Enabled", function(bool)
                         if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
                             if v.Humanoid.Health ~= 0 and getgenv().enabled == true then
                                 repeat
+                                    idk = v
                                     tpto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
                                     wait()
                                 until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health == 0
