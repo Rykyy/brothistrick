@@ -321,7 +321,7 @@ end)
 fq:CreateToggle("Enabled", function(bool)
     getgenv().enabled1 = bool
 
-    game:GetService("RunService").Stepped:Connect(function()
+    game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled1 == true and plr.PlayerGui.Frames.Quest.Visible == false then
             plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
             local args = {
