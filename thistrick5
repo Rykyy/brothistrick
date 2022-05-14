@@ -101,7 +101,7 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 end)
 
-game:GetService("RunService").Heartbeat:Connect(function()
+game:GetService("RunService").Stepped:Connect(function()
     if getgenv().enabled == false then 
         if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
             aunk:Destroy()
@@ -166,7 +166,7 @@ end)
 fq:CreateToggle("Reset when energy is low\nto restore energy", function(bool)
     getgenv().reset = bool
 
-    rx = game:GetService("RunService").Heartbeat:Connect(function()
+    rx = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().reset == true and plr.Stats:GetAttribute("Energy") <= 3 and getgenv().enabled == true then
             plr.Character:BreakJoints()
         elseif getgenv().reset == false then
@@ -187,6 +187,7 @@ fq:CreateToggle("Basic Attack", function(bool)
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",3)
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",4)
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",5)
+            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Punch",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a1 == false then
             a1beat:Disconnect()
         end
@@ -199,6 +200,7 @@ fq:CreateToggle("Skill1", function(bool)
     a2beat = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true and a2 == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill1",1)
+            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a2 == false then
             a1beat:Disconnect()
         end
@@ -211,6 +213,7 @@ fq:CreateToggle("Skill2", function(bool)
     a3beat = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true and a3 == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill2",1)
+            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a3 == false then
             a1beat:Disconnect()
         end
@@ -223,6 +226,7 @@ fq:CreateToggle("Skill3", function(bool)
     a4beat = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true and a4 == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill3",1)
+            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a4 == false then
             a1beat:Disconnect()
         end
@@ -235,6 +239,7 @@ fq:CreateToggle("Skill4", function(bool)
     a5beat = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true and a5 == true and not plr.Character.LowerTorso:FindFirstChild("Root") then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill4",1)
+            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a5 == false then
             a1beat:Disconnect()
         end
@@ -246,27 +251,15 @@ fq:CreateLabel("~~Farm")
 fq:CreateToggle("Enabled", function(bool)
     getgenv().enabled = bool
 
-    xx = game:GetService("RunService").Heartbeat:Connect(function()
+    xx = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled == true then
             if plr.Character.LowerTorso:FindFirstChild("Root") then
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(-325.257965, 62.4754448, 2155.13135, 0.999768972, -2.21638849e-08, 0.0214943159, 2.40191138e-08, 1, -8.60543636e-08, -0.0214943159, 8.65507559e-08, 0.999768972)
+
                 wait(0.5)
-                plr.Character.LowerTorso.Root:Destroy()
-            end
-            if a1 == true then
-                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Punch",idk.HumanoidRootPart.Position,idk,true)
-            end
-            if a2 == true then
-                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
-            end
-            if a3 == true then
-                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
-            end
-            if a4 == true then
-                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
-            end
-            if a5 == true then
-                reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
+                if plr.Character.LowerTorso.Root ~= nil then
+                    plr.Character.LowerTorso.Root:Destroy()
+                end
             end
         elseif getgenv().enabled == false then
             xx:Disconnect()
@@ -328,7 +321,7 @@ end)
 fq:CreateToggle("Enabled", function(bool)
     getgenv().enabled1 = bool
 
-    game:GetService("RunService").Heartbeat:Connect(function()
+    game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled1 == true and plr.PlayerGui.Frames.Quest.Visible == false then
             plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
             local args = {
