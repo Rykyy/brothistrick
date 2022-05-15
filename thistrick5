@@ -288,23 +288,23 @@ fq:CreateToggle("Enabled", function(bool)
                         plr.Character.LowerTorso.Root:Destroy()
                     end)
                 elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
-                for i,v in pairs(game:GetService("Workspace").NPCS:GetChildren()) do
-                    if v.Name == getgenv().mobname then
-                        if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
-                            if v.Humanoid.Health ~= 0 and getgenv().enabled == true then
-                                repeat
-                                    idk = v
-                                    tpto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
-                                    wait()
-                                until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health == 0
-                                if getgenv().enabled == false then
-                                    beat:Disconnect()
+                    for i,v in pairs(game:GetService("Workspace").NPCS:GetChildren()) do
+                        if v.Name == getgenv().mobname then
+                            if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
+                                if v.Humanoid.Health ~= 0 and getgenv().enabled == true then
+                                    repeat
+                                        idk = v
+                                        tpto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
+                                        wait()
+                                    until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health == 0
+                                    if getgenv().enabled == false then
+                                        beat:Disconnect()
+                                    end
                                 end
                             end
                         end
                     end
                 end
-            end
             end
         end)
     end)
@@ -325,13 +325,21 @@ fq:CreateToggle("Enabled", function(bool)
 
     game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled1 == true and plr.PlayerGui.Frames.Quest.Visible == false then
-            plr.Character.HumanoidRootPart.CFrame = game.Workspace.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
-            local args = {
-                [1] = "QuestAdd",
-                [2] = getgenv().questname   
-            }
-            
-            game:GetService("ReplicatedStorage").Remotes.QUEST_EVENT:FireServer(unpack(args))
+            if plr.Character.LowerTorso:FindFirstChild("Root") then
+                pcall(function()
+                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+                    wait(0.5)
+                    plr.Character.LowerTorso.Root:Destroy()
+                end)
+            elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
+                plr.Character.HumanoidRootPart.CFrame = game.Workspace.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
+                local args = {
+                    [1] = "QuestAdd",
+                    [2] = getgenv().questname   
+                }
+                
+                game:GetService("ReplicatedStorage").Remotes.QUEST_EVENT:FireServer(unpack(args))
+            end
         end
     end)     
 end)
@@ -365,15 +373,15 @@ end)
 sb:CreateToggle("Enabled", function(bool)
     getgenv().enabled3 = bool
 
-    while wait() do
+    bruh3 = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled3 == true then
             if classname ~= getgenv().class then
                 reps.Remotes.SPIN_EVENT:FireServer("CLASS")
             elseif classname == getgenv().class then
-                break;
+                bruh3:Disconnect()
             end
         end
-    end
+    end)
 end)
 
 -- Misc Section
