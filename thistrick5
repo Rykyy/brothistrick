@@ -21,13 +21,13 @@ getgenv().questname = "1"
 getgenv().statname = "Power"
 getgenv().distance = 0
 getgenv().mode = nil
+getgenv().class = nil
 
 -- Table
 local mobTable = {}
 local questTable = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","19","20","21"}
 local statTable = {"Power", "Stamina", "Defence"}
 local classTable = {}
-local classTable1 = {}
 
 for _,v in pairs(wrk.NPCS:GetChildren()) do
     insert = true
@@ -41,6 +41,21 @@ for _,v in pairs(reps.Assets.Class:GetChildren()) do
     if insert then table.insert(classTable, tostring(v.Name)) end
 end
 -- Function
+
+for i,v in next, wrk.QUEST:GetChildren() do
+    local copy = game:GetService("ReplicatedStorage").CurrentQuest:Clone()
+    copy.Parent = v.HumanoidRootPart
+
+    for i,v1 in pairs(copy:GetChildren()) do
+        if v1.ClassName == "TextLabel" then
+            v1.Parent.Size = UDim2.new(25,50,25,50)
+            v1.Parent.StudsOffset = Vector3.new(0,25,0)
+            v1.Text = v.Name
+            v1.TextColor3 = Color3.new(255, 255, 0)
+        end
+    end
+end
+    
 
 local function nameGui()
     local name = nil
@@ -341,40 +356,21 @@ end)
 
 sb:CreateLabel("~~Buy")
 
-cl1 = sb:CreateDropdown("Class List", classTable, 1, classTable[1], function(selected)
-    for i,v in pairs(classTable) do
-        if v == selected then
-            table.remove(classTable, i)
-            table.insert(classTable1, 1, v)
-            cl1:Refresh(classTable, 1, "Selected!")
-            cl2:Refresh(classTable1, 1, "Add "..v)
-        end
-    end
+sb:CreateDropdown("Class List", classTable, 1, "<None>", function(selected)
+    getgenv().class = selected
 end)
 
-cl2 = sb:CreateDropdown("SelectedClass", classTable1, 1, "---", function(selected)
-    for i,v in pairs(classTable1) do
-        if v == selected then
-            table.remove(classTable1, i)
-            table.insert(classTable, v)
-            cl1:Refresh(classTable, 1, classTable[1])
-            cl2:Refresh(classTable1, 1, "Remove "..v)
-        end
-    end
-end)
 
-sb:CreateToggle("Enabled\n[Tell Me In Disc If Bugged]", function(bool)
+
+sb:CreateToggle("Enabled", function(bool)
     getgenv().enabled3 = bool
 
     while wait() do
         if getgenv().enabled3 == true then
-            for i,v in pairs(classTable1) do
-                print(v)
-                if v ~= nil and v ~= classname then
-                    reps.Remotes.SPIN_EVENT:FireServer("CLASS")
-                elseif v == classname then
-                    break;
-                end
+            if classname ~= getgenv().class then
+                reps.Remotes.SPIN_EVENT:FireServer("CLASS")
+            elseif classname == getgenv().class then
+                break;
             end
         end
     end
@@ -442,4 +438,4 @@ sc:CreateButton("Destroy UI", function()
             v.Parent.Parent:Destroy()
         end
     end
-end)
+end)    
