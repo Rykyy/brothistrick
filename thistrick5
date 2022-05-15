@@ -166,13 +166,12 @@ local sb = window:CreateSection("Auto Stats & Auto Buy & Teleports")
 local sc = misc:CreateSection("Server & Character")
 
 pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plr.DisplayName.."~ Thx For Using My Script.", 10)
-print(classname)
 
 -- Main Section
 
 fq:CreateLabel("~~Mob Settings")
 
-moblist = fq:CreateDropdown("Mob List", mobTable, 1, "SemiHollow", function(selected)
+moblist = fq:CreateDropdown("Mob List", mobTable, 1, "Select Mob!", function(selected)
     getgenv().mobname = selected
 end)
 
@@ -295,9 +294,23 @@ fq:CreateToggle("Enabled", function(bool)
         pcall(function()
             if getgenv().enabled == true then
                 if plr.Character.LowerTorso:FindFirstChild("Root") then
-                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
-                    wait(0.3)
-                    plr.Character.LowerTorso.Root:Destroy()
+                    if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+                        wait(0.3)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+                        wait(0.3)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+                        wait(0.3)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+                        wait(0.3)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    end
                 elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
                     for i,v in pairs(wrk.NPCS:GetChildren()) do
                         if v.Name == getgenv().mobname then
@@ -334,12 +347,26 @@ end)
 fq:CreateToggle("Enabled", function(bool)
     getgenv().enabled1 = bool
 
-    game:GetService("RunService").Heartbeat:Connect(function()
+    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled1 == true and plr.PlayerGui.Frames.Quest.Visible == false then
             if plr.Character.LowerTorso:FindFirstChild("Root") then
-                plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
-                wait(0.3)
-                plr.Character.LowerTorso.Root:Destroy()
+                if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+                    wait(0.3)
+                    plr.Character.LowerTorso.Root:Destroy()
+                elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+                    wait(0.3)
+                    plr.Character.LowerTorso.Root:Destroy()
+                elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+                    wait(0.3)
+                    plr.Character.LowerTorso.Root:Destroy()
+                elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+                    wait(0.3)
+                    plr.Character.LowerTorso.Root:Destroy()
+                end
             elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
                 plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
                 local args = {
@@ -349,6 +376,11 @@ fq:CreateToggle("Enabled", function(bool)
                 
                 reps.Remotes.QUEST_EVENT:FireServer(unpack(args))
             end
+        elseif getgenv().enabled1 == false and plr.PlayerGui.Frames.Quest.Visible == true then
+            reps.Remotes.QUEST_EVENT:FireServer("Abandon")
+            breh1:Disconnect()
+        elseif getgenv().enabled1 == false then
+            breh1:Disconnect()
         end
     end)     
 end)
@@ -441,9 +473,23 @@ end)
 
 sc:CreateButton("Invisible", function()
     if plr.Character.LowerTorso:FindFirstChild("Root") then
-        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
-        wait(0.2)
-        plr.Character.LowerTorso.Root:Destroy()
+        if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        end
     end
 end)
 
