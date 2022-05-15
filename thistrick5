@@ -11,7 +11,7 @@ local a1beat;
 local aunk;
 local aunp;
 local moblist;
-local idk;
+local idk = nil
 
 
 -- Global
@@ -200,7 +200,7 @@ fq:CreateToggle("Basic Attack", function(bool)
     a1 = bool
 
     a1beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a1 == true then
+        if getgenv().enabled == true and a1 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",1)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Punch",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a1 == false then
@@ -213,7 +213,7 @@ fq:CreateToggle("Skill1", function(bool)
     a2 = bool
 
     a2beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a2 == true then
+        if getgenv().enabled == true and a2 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill1",1)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a2 == false then
@@ -226,7 +226,7 @@ fq:CreateToggle("Skill2", function(bool)
     a3 = bool
 
     a3beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a3 == true then
+        if getgenv().enabled == true and a3 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill2",1)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a3 == false then
@@ -239,7 +239,7 @@ fq:CreateToggle("Skill3", function(bool)
     a4 = bool
 
     a4beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a4 == true  then
+        if getgenv().enabled == true and a4 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill3",1)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a4 == false then
@@ -252,7 +252,7 @@ fq:CreateToggle("Skill4", function(bool)
     a5 = bool
 
     a5beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a5 == true then
+        if getgenv().enabled == true and a5 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
             reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill4",1)
             reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
         elseif getgenv().enabled == false and a5 == false then
