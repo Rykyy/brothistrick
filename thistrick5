@@ -377,7 +377,7 @@ sb:CreateToggle("Enabled", function(bool)
         if getgenv().enabled3 == true then
             if classname ~= getgenv().class then
                 reps.Remotes.SPIN_EVENT:FireServer("CLASS")
-            elseif classname == getgenv().class then
+            elseif getgenv().false == false or classname == getgenv().class then
                 bruh3:Disconnect()
             end
         end
