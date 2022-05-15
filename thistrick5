@@ -185,7 +185,7 @@ end)
 fq:CreateToggle("Reset when energy is low\nto restore energy", function(bool)
     getgenv().reset = bool
 
-    rx = game:GetService("RunService").Stepped:Connect(function()
+    rx = game:GetService("RunService").RenderStepped:Connect(function()
         if getgenv().reset == true and plr.Stats:GetAttribute("Energy") <= 3 and getgenv().enabled == true then
             plr.Character:BreakJoints()
         elseif getgenv().reset == false then
@@ -377,7 +377,7 @@ sb:CreateToggle("Enabled", function(bool)
         if getgenv().enabled3 == true then
             if classname ~= getgenv().class then
                 reps.Remotes.SPIN_EVENT:FireServer("CLASS")
-            elseif getgenv().false == false or classname == getgenv().class then
+            elseif getgenv().enabled3 == false or classname == getgenv().class then
                 bruh3:Disconnect()
             end
         end
