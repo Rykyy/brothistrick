@@ -176,7 +176,7 @@ moblist = fq:CreateDropdown("Mob List", mobTable, 1, "SemiHollow", function(sele
     getgenv().mobname = selected
 end)
 
-fq:CreateSlider("Distance", 0, 15, getgenv().distance, 0.999, function(s)
+fq:CreateSlider("Distance", 0, 19, getgenv().distance, 0.999, function(s)
     getgenv().distance = s
 
     if getgenv().distance >= 0  then
