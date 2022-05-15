@@ -55,7 +55,7 @@ for i,v in next, wrk.QUEST:GetChildren() do
         end
     end
 end
-    
+
 
 local function nameGui()
     local name = nil
@@ -107,9 +107,11 @@ local function tpto(obj)
 end
 
 game:GetService("RunService").Heartbeat:Connect(function()
-    if getgenv().enabled == false then 
-        if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-            aunk:Destroy()
+    if getgenv().enabled == false then
+        if plr.Character ~= nil then 
+            if plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+                aunk:Destroy()
+            end
         end
     end
 end)
@@ -172,13 +174,11 @@ moblist = fq:CreateDropdown("Mob List", mobTable, 1, "SemiHollow", function(sele
     getgenv().mobname = selected
 end)
 
-fq:CreateSlider("Distance", -15, 15, getgenv().distance, 0.999, function(s)
+fq:CreateSlider("Distance", 0, 15, getgenv().distance, 0.999, function(s)
     getgenv().distance = s
 
     if getgenv().distance >= 0  then
         getgenv().mode = CFrame.Angles(math.rad(-90),0,0)
-    elseif getgenv().distance <= -1 then
-        getgenv().mode = CFrame.Angles(math.rad(90),0,0)
     end
 end)
 
@@ -289,26 +289,13 @@ fq:CreateLabel("~~Farm")
 fq:CreateToggle("Enabled", function(bool)
     getgenv().enabled = bool
 
-    bruh = game:GetService("RunService").Stepped:Connect(function()
-        if getgenv().enabled == true and plr.Character ~= nil then
-            pcall(function()
-                plr.Character.Humanoid:ChangeState(16)
-            end)
-        elseif getgenv().enabled == false then
-            plr.Character.Humanoid:ChangeState(18)
-            bruh:Disconnect()
-        end
-    end)
-
     beat = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
             if getgenv().enabled == true then
                 if plr.Character.LowerTorso:FindFirstChild("Root") then
-                    pcall(function()
-                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
-                        wait(0.5)
-                        plr.Character.LowerTorso.Root:Destroy()
-                    end)
+                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+                    wait(0.3)
+                    plr.Character.LowerTorso.Root:Destroy()
                 elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
                     for i,v in pairs(game:GetService("Workspace").NPCS:GetChildren()) do
                         if v.Name == getgenv().mobname then
@@ -348,11 +335,9 @@ fq:CreateToggle("Enabled", function(bool)
     game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled1 == true and plr.PlayerGui.Frames.Quest.Visible == false then
             if plr.Character.LowerTorso:FindFirstChild("Root") then
-                pcall(function()
-                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
-                    wait(0.5)
-                    plr.Character.LowerTorso.Root:Destroy()
-                end)
+                plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+                wait(0.3)
+                plr.Character.LowerTorso.Root:Destroy()
             elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
                 plr.Character.HumanoidRootPart.CFrame = game.Workspace.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
                 local args = {
@@ -438,6 +423,14 @@ sc:CreateSlider("Walk Speed", 16, 125, 16, 0, function(s)
     pcall(function()
         getgenv().___ = true
     end)
+end)
+
+sc:CreateButton("Invisible", function()
+    if plr.Character.LowerTorso:FindFirstChild("Root") then
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+        wait(0.2)
+        plr.Character.LowerTorso.Root:Destroy()
+    end
 end)
 
 sc:CreateLabel("~~Admin Gui")
