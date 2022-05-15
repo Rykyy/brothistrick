@@ -22,12 +22,14 @@ getgenv().statname = "Power"
 getgenv().distance = 0
 getgenv().mode = nil
 getgenv().class = nil
+getgenv().tp = nil
 
 -- Table
 local mobTable = {}
 local questTable = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","19","20","21"}
 local statTable = {"Power", "Stamina", "Defence"}
 local classTable = {}
+local tpTable = {"MainIsland", "JojoIsland", "DbzIsland", "BCIsland"}
 
 for _,v in pairs(wrk.NPCS:GetChildren()) do
     insert = true
@@ -43,7 +45,7 @@ end
 -- Function
 
 for i,v in next, wrk.QUEST:GetChildren() do
-    local copy = game:GetService("ReplicatedStorage").CurrentQuest:Clone()
+    local copy = reps.CurrentQuest:Clone()
     copy.Parent = v.HumanoidRootPart
 
     for i,v1 in pairs(copy:GetChildren()) do
@@ -160,7 +162,7 @@ local window = library:CreateTab("AJ")
 local misc = library:CreateTab("Misc")
 
 local fq = window:CreateSection("Auto Farm & Auto Quest")
-local sb = window:CreateSection("Auto Stats & Auto Buy")
+local sb = window:CreateSection("Auto Stats & Auto Buy & Teleports")
 local sc = misc:CreateSection("Server & Character")
 
 pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plr.DisplayName.."~ Thx For Using My Script.", 10)
@@ -297,7 +299,7 @@ fq:CreateToggle("Enabled", function(bool)
                     wait(0.3)
                     plr.Character.LowerTorso.Root:Destroy()
                 elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
-                    for i,v in pairs(game:GetService("Workspace").NPCS:GetChildren()) do
+                    for i,v in pairs(wrk.NPCS:GetChildren()) do
                         if v.Name == getgenv().mobname then
                             if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
                                 if v.Humanoid.Health ~= 0 and getgenv().enabled == true then
@@ -339,13 +341,13 @@ fq:CreateToggle("Enabled", function(bool)
                 wait(0.3)
                 plr.Character.LowerTorso.Root:Destroy()
             elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
-                plr.Character.HumanoidRootPart.CFrame = game.Workspace.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
+                plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
                 local args = {
                     [1] = "QuestAdd",
                     [2] = getgenv().questname   
                 }
                 
-                game:GetService("ReplicatedStorage").Remotes.QUEST_EVENT:FireServer(unpack(args))
+                reps.Remotes.QUEST_EVENT:FireServer(unpack(args))
             end
         end
     end)     
@@ -389,6 +391,18 @@ sb:CreateToggle("Enabled", function(bool)
             end
         end
     end)
+end)
+
+sb:CreateLabel("~~Teleports")
+
+sb:CreateDropdown("Teleports List", tpTable, 1, tpTable[1], function(selected)
+    getgenv().tp = selected
+end)
+
+sb:CreateButton("Teleport", function()
+    reps.Remotes.REMOTE_EVENT:FireServer("SetSpawnPoint", getgenv().tp)
+    wait(0.2)
+    plr.Character:BreakJoints()
 end)
 
 -- Misc Section
