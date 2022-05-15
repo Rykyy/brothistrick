@@ -31,7 +31,7 @@ getgenv().toggleui = true
 local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 local mobTable = {"Select Mob!"}
 local targetTable = {"Random", "Nearest"}
-local itemTable = {"All Tier", "T1", "T2", "T3", "T4", "T5"}
+local itemTable = {"All Tier" ,"Copper", "T1", "T2", "T3", "T4", "T5"}
 local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
 local areatpTable = {"SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 
@@ -95,6 +95,14 @@ local function nearestItem()
             end
         elseif getgenv().itemlist ~= "All Tier" then
             if string.find(v.Name, getgenv().itemlist) or string.find(v.Name, "Gold") or string.find(v.Name, "Regret") then
+                local magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+                if magnitude < dist then        
+                    dist = magnitude
+                    dekat = v
+                end
+            end
+        elseif getgenv().itemlist == "Copper" then
+            if string.find(v.Name, "Gold") then
                 local magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
                 if magnitude < dist then        
                     dist = magnitude
@@ -187,7 +195,7 @@ local st = window:CreateSection("Auto Stats & Teleports")
 local sc = misc:CreateSection("Server & Character")
 
 pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
-pesan("Notification!", "If you play in ps, you must visit area you choose to spawn the mobs! & If you want to fix gui bugs please rejoin or server hop", 25)
+pesan("Notification!", "If you play in ps, you must visit area you choose to spawn the mobs!", 25)
 pesan("Notification!", "Hide Name & Anti Afk Activated\n[Hide Name Keep Activated Even though you are dead]", 5)
 
 autofarm:CreateLabel("~~Mob Settings")
@@ -407,7 +415,8 @@ autofarm:CreateToggle("Auto Loot", function(bool)
     lootbeat = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().loot == true and nearestItem()  ~= nil then
             nearestItem().CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-            game:GetService('VirtualInputManager'):SendKeyEvent(true,"E",false,uwu)
+            local itemname = string.split(nearestItem().Name, "_")[3]
+            game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(itemname)
         end
     end)
 end)
