@@ -187,7 +187,9 @@ fq:CreateToggle("Reset when energy is low\nto restore energy", function(bool)
 
     rx = game:GetService("RunService").RenderStepped:Connect(function()
         if getgenv().reset == true and plr.Stats:GetAttribute("Energy") <= 3 and getgenv().enabled == true then
-            plr.Character:BreakJoints()
+            pcall(function()
+                plr.Character:BreakJoints()
+            end)
         elseif getgenv().reset == false then
             rx:Disconnect()
         end
@@ -200,11 +202,15 @@ fq:CreateToggle("Basic Attack", function(bool)
     a1 = bool
 
     a1beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a1 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
-            reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",1)
-            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Punch",idk.HumanoidRootPart.Position,idk,true)
-        elseif getgenv().enabled == false and a1 == false then
-            a1beat:Disconnect()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and a1 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Punch",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and a1 == false then
+                    a1beat:Disconnect()
+                end
+            end)
         end
     end)
 end)
@@ -213,11 +219,15 @@ fq:CreateToggle("Skill1", function(bool)
     a2 = bool
 
     a2beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a2 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
-            reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill1",1)
-            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
-        elseif getgenv().enabled == false and a2 == false then
-            a1beat:Disconnect()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and a2 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill1",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and a2 == false then
+                    a1beat:Disconnect()
+                end
+            end)
         end
     end)
 end)
@@ -226,11 +236,15 @@ fq:CreateToggle("Skill2", function(bool)
     a3 = bool
 
     a3beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a3 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
-            reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill2",1)
-            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
-        elseif getgenv().enabled == false and a3 == false then
-            a1beat:Disconnect()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and a3 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill2",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and a3 == false then
+                    a1beat:Disconnect()
+                end
+            end)
         end
     end)
 end)
@@ -239,11 +253,15 @@ fq:CreateToggle("Skill3", function(bool)
     a4 = bool
 
     a4beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a4 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
-            reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill3",1)
-            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
-        elseif getgenv().enabled == false and a4 == false then
-            a1beat:Disconnect()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and a4 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill3",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and a4 == false then
+                    a1beat:Disconnect()
+                end
+            end)
         end
     end)
 end)
@@ -252,11 +270,15 @@ fq:CreateToggle("Skill4", function(bool)
     a5 = bool
 
     a5beat = game:GetService("RunService").RenderStepped:Connect(function()
-        if getgenv().enabled == true and a5 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
-            reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill4",1)
-            reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
-        elseif getgenv().enabled == false and a5 == false then
-            a1beat:Disconnect()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and a5 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill4",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and a5 == false then
+                    a1beat:Disconnect()
+                end
+            end)
         end
     end)
 end)
