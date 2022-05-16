@@ -12,11 +12,13 @@ local aunk;
 local aunp;
 local moblist;
 local idk = nil
+local questinfo = require(reps.SharedModules.INDEXER.QuestInfo)
+
 
 
 -- Global
 getgenv().enabled = nil
-getgenv().mobname = "SemiHollow"
+getgenv().mobname = "De"
 getgenv().questname = "1"
 getgenv().statname = "Power"
 getgenv().distance = 0
@@ -31,10 +33,20 @@ local statTable = {"Power", "Stamina", "Defence"}
 local classTable = {}
 local tpTable = {"MainIsland", "JojoIsland", "DbzIsland", "BCIsland"}
 
-for _,v in pairs(wrk.NPCS:GetChildren()) do
+for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
     insert = true
-    for _,v2 in pairs(mobTable) do if v2 == tostring(v.Name) then insert = false end end
-    if insert then table.insert(mobTable, tostring(v.Name)) end
+    for a,x in next, questinfo do
+        if a == "GetServerQuestInfo" then
+            for a1,x1 in next, getupvalues(x) do
+                for a2,x2 in next, x1 do
+                    if x2["Npc"] == tostring(v.Npc.Value) then
+                        for _,v2 in pairs(mobTable) do if v2 == tostring("Level "..x2["Level"].." :"..v.NpcName.Text) then insert = false end end
+                        if insert then table.insert(mobTable, tostring("Level "..x2["Level"].." :"..v.NpcName.Text)) end
+                    end
+                end
+            end
+        end
+    end
 end
 
 for _,v in pairs(reps.Assets.Class:GetChildren()) do
@@ -42,18 +54,34 @@ for _,v in pairs(reps.Assets.Class:GetChildren()) do
     for _,v2 in pairs(classTable) do if v2 == tostring(v.Name) then insert = false end end
     if insert then table.insert(classTable, tostring(v.Name)) end
 end
+
 -- Function
 
 for i,v in next, wrk.QUEST:GetChildren() do
     local copy = reps.CurrentQuest:Clone()
     copy.Parent = v.HumanoidRootPart
 
-    for i,v1 in pairs(copy:GetChildren()) do
-        if v1.ClassName == "TextLabel" then
-            v1.Parent.Size = UDim2.new(25,50,25,50)
-            v1.Parent.StudsOffset = Vector3.new(0,25,0)
-            v1.Text = v.Name
-            v1.TextColor3 = Color3.new(255, 255, 0)
+    
+    for a,x in next, questinfo do
+        if a == "GetServerQuestInfo" then
+            for a1,x1 in next, getupvalues(x) do
+                for a2,x2 in pairs(x1) do
+                    if a2 == v.Name then
+                        for a3,x3 in next, x2 do
+                            if a3 == "Level" then
+                                for i1,v1 in pairs(copy:GetChildren()) do
+                                    if v1.ClassName == "TextLabel" then
+                                        v1.Parent.Size = UDim2.new(25,25,25,25)
+                                        v1.Parent.StudsOffset = Vector3.new(0,25,0)
+                                        v1.Text = "Quest "..a3..":"..x3
+                                        v1.TextColor3 = Color3.new(255, 255, 0)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
         end
     end
 end
@@ -131,29 +159,6 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 end)
 
-wrk.NPCS.ChildAdded:Connect(function()
-    for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
-    for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
-
-    for _,v in pairs(wrk.NPCS:GetChildren()) do
-        insert = true 
-        for _,v2 in pairs(mobTable) do if v2 == v.Name then insert = false end end
-        if insert then table.insert(mobTable, v.Name) end
-    end
-    moblist:Refresh(mobTable, 1, getgenv().mobname)
-end)
-
-wrk.NPCS.ChildRemoved:Connect(function()
-    for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
-    for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
-
-    for _,v in pairs(wrk.NPCS:GetChildren()) do
-        insert = true 
-        for _,v2 in pairs(mobTable) do if v2 == v.Name then insert = false end end
-        if insert then table.insert(mobTable, v.Name) end
-    end
-    moblist:Refresh(mobTable, 1, getgenv().mobname)
-end)
 
 -- Library
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/brothistrick/main/brorqdassdax"))()
@@ -172,7 +177,25 @@ pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plr.DisplayName.."~ Thx 
 fq:CreateLabel("~~Mob Settings")
 
 moblist = fq:CreateDropdown("Mob List", mobTable, 1, "Select Mob!", function(selected)
-    getgenv().mobname = selected
+    getgenv().mobname = string.split(selected, ":")[2]
+
+    print(getgenv().mobname)
+
+    for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
+        if v.NpcName.Text == getgenv().mobname then
+            for a,x in next, questinfo do
+                if a == "GetServerQuestInfo" then
+                    for a1,x1 in next, getupvalues(x) do
+                        for a2,x2 in next, x1 do
+                            if x2["Npc"] == tostring(v.Npc.Value) then
+                                getgenv().questname = a2
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
 end)
 
 fq:CreateSlider("Distance", 0, 19, getgenv().distance, 0.999, function(s)
@@ -285,15 +308,15 @@ fq:CreateToggle("Skill4", function(bool)
 end)
 
 
-fq:CreateLabel("~~Farm")
+fq:CreateLabel("~~Farm Settings")
 
-fq:CreateToggle("Enabled", function(bool)
-    getgenv().enabled = bool
+fq:CreateToggle("Quest", function(bool)
+    getgenv().quest = bool
 
-    beat = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            if getgenv().enabled == true then
-                if plr.Character.LowerTorso:FindFirstChild("Root") then
+    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().quest == true and getgenv().enabled == true then
+            if plr.Character.LowerTorso:FindFirstChild("Root") then
+                if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
                     if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
                         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
                         wait(0.3)
@@ -311,16 +334,58 @@ fq:CreateToggle("Enabled", function(bool)
                         wait(0.3)
                         plr.Character.LowerTorso.Root:Destroy()
                     end
+                end
+            elseif not plr.Character.LowerTorso:FindFirstChild("Root") and plr.PlayerGui.Frames.Quest.Visible == false then
+                plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[getgenv().questname].RightFoot.CFrame
+                local args = {
+                    [1] = "QuestAdd",
+                    [2] = getgenv().questname   
+                }
+                
+                reps.Remotes.QUEST_EVENT:FireServer(unpack(args))
+            end
+        elseif getgenv().quest == false then
+            breh1:Disconnect()
+        end
+    end)     
+end)
+
+fq:CreateToggle("Enabled", function(bool)
+    getgenv().enabled = bool
+
+    beat = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            if getgenv().enabled == true then
+                if plr.Character.LowerTorso:FindFirstChild("Root") then
+                    if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
+                        if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+                            wait(0.3)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+                            wait(0.3)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+                            wait(0.3)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+                            wait(0.3)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        end
+                    end
                 elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
-                    for i,v in pairs(wrk.NPCS:GetChildren()) do
-                        if v.Name == getgenv().mobname then
-                            if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") then
-                                if v.Humanoid.Health ~= 0 and getgenv().enabled == true then
+                    for i,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
+                        if v.NpcName.Text == getgenv().mobname then
+                            if v.Npc.Value:FindFirstChild("HumanoidRootPart") and v.Npc.Value:FindFirstChild("Humanoid") then
+                                if v.Npc.Value.Humanoid.Health ~= 0 and getgenv().enabled == true then
                                     repeat
-                                        idk = v
-                                        tpto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
+                                        idk = v.Npc.Value
+                                        tpto(v.Npc.Value.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
                                         wait()
-                                    until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart") or v.Humanoid.Health == 0
+                                    until getgenv().enabled == false or not v.Npc.Value:FindFirstChild("HumanoidRootPart") or v.Npc.Value.Humanoid.Health == 0
                                     if getgenv().enabled == false then
                                         beat:Disconnect()
                                     end
@@ -336,53 +401,6 @@ fq:CreateToggle("Enabled", function(bool)
     if getgenv().enabled == false then
         plr.Character:BreakJoints()
     end
-end)
-
-fq:CreateLabel("~~Quest")
-
-fq:CreateDropdown("Quest List", questTable, 1, getgenv().questname, function(selected)
-    getgenv().questname = selected
-end)
-
-fq:CreateToggle("Enabled", function(bool)
-    getgenv().enabled1 = bool
-
-    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().enabled1 == true and plr.PlayerGui.Frames.Quest.Visible == false then
-            if plr.Character.LowerTorso:FindFirstChild("Root") then
-                if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
-                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
-                    wait(0.3)
-                    plr.Character.LowerTorso.Root:Destroy()
-                elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
-                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
-                    wait(0.3)
-                    plr.Character.LowerTorso.Root:Destroy()
-                elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
-                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
-                    wait(0.3)
-                    plr.Character.LowerTorso.Root:Destroy()
-                elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
-                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
-                    wait(0.3)
-                    plr.Character.LowerTorso.Root:Destroy()
-                end
-            elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
-                plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[tostring(getgenv().questname)].RightFoot.CFrame
-                local args = {
-                    [1] = "QuestAdd",
-                    [2] = getgenv().questname   
-                }
-                
-                reps.Remotes.QUEST_EVENT:FireServer(unpack(args))
-            end
-        elseif getgenv().enabled1 == false and plr.PlayerGui.Frames.Quest.Visible == true then
-            reps.Remotes.QUEST_EVENT:FireServer("Abandon")
-            breh1:Disconnect()
-        elseif getgenv().enabled1 == false then
-            breh1:Disconnect()
-        end
-    end)     
 end)
 
 -- Main2 Section
