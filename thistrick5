@@ -337,12 +337,7 @@ fq:CreateToggle("Quest", function(bool)
                 end
             elseif not plr.Character.LowerTorso:FindFirstChild("Root") and plr.PlayerGui.Frames.Quest.Visible == false then
                 plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[getgenv().questname].RightFoot.CFrame
-                local args = {
-                    [1] = "QuestAdd",
-                    [2] = getgenv().questname   
-                }
-                
-                reps.Remotes.QUEST_EVENT:FireServer(unpack(args))
+                reps.Remotes.QUEST_EVENT:FireServer("QuestAdd", getgenv().questname)
             end
         elseif getgenv().quest == false then
             breh1:Disconnect()
