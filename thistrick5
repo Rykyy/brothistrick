@@ -19,7 +19,7 @@ local questinfo = require(reps.SharedModules.INDEXER.QuestInfo)
 -- Global
 getgenv().enabled = nil
 getgenv().mobname = "De"
-getgenv().questname = "1"
+getgenv().questname = nil
 getgenv().statname = "Power"
 getgenv().distance = 0
 getgenv().mode = nil
@@ -28,7 +28,6 @@ getgenv().tp = nil
 
 -- Table
 local mobTable = {}
-local questTable = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","19","20","21"}
 local statTable = {"Power", "Stamina", "Defence"}
 local classTable = {}
 local tpTable = {"MainIsland", "JojoIsland", "DbzIsland", "BCIsland"}
@@ -54,6 +53,8 @@ for _,v in pairs(reps.Assets.Class:GetChildren()) do
     for _,v2 in pairs(classTable) do if v2 == tostring(v.Name) then insert = false end end
     if insert then table.insert(classTable, tostring(v.Name)) end
 end
+
+table.sort(mobTable)
 
 -- Function
 
@@ -136,7 +137,7 @@ local function tpto(obj)
     end
 end
 
-game:GetService("RunService").Heartbeat:Connect(function()
+game:GetService("RunService").Stepped:Connect(function()
     if getgenv().enabled == false then
         if plr.Character ~= nil then 
             if plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
@@ -169,8 +170,6 @@ local misc = library:CreateTab("Misc")
 local fq = window:CreateSection("Auto Farm & Auto Quest")
 local sb = window:CreateSection("Auto Stats & Auto Buy & Teleports")
 local sc = misc:CreateSection("Server & Character")
-
-pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plr.DisplayName.."~ Thx For Using My Script.", 10)
 
 -- Main Section
 
@@ -225,7 +224,7 @@ fq:CreateLabel("~~Attack Settings")
 fq:CreateToggle("Basic Attack", function(bool)
     a1 = bool
 
-    a1beat = game:GetService("RunService").RenderStepped:Connect(function()
+    a1beat = game:GetService("RunService").Stepped:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
                 if getgenv().enabled == true and a1 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
@@ -242,10 +241,10 @@ end)
 fq:CreateToggle("Skill1", function(bool)
     a2 = bool
 
-    a2beat = game:GetService("RunService").RenderStepped:Connect(function()
+    a2beat = game:GetService("RunService").Stepped:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
-                if getgenv().enabled == true and a2 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                if getgenv().enabled == true and a2 == true and idk ~= nil  and not plr.Character.LowerTorso:FindFirstChild("Root") then
                     reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill1",1)
                     reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
                 elseif getgenv().enabled == false and a2 == false then
@@ -259,10 +258,10 @@ end)
 fq:CreateToggle("Skill2", function(bool)
     a3 = bool
 
-    a3beat = game:GetService("RunService").RenderStepped:Connect(function()
+    a3beat = game:GetService("RunService").Stepped:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
-                if getgenv().enabled == true and a3 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                if getgenv().enabled == true and a3 == true and idk ~= nil  and not plr.Character.LowerTorso:FindFirstChild("Root") then
                     reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill2",1)
                     reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
                 elseif getgenv().enabled == false and a3 == false then
@@ -276,10 +275,10 @@ end)
 fq:CreateToggle("Skill3", function(bool)
     a4 = bool
 
-    a4beat = game:GetService("RunService").RenderStepped:Connect(function()
+    a4beat =game:GetService("RunService").Stepped:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
-                if getgenv().enabled == true and a4 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                if getgenv().enabled == true and a4 == true and idk ~= nil  and not plr.Character.LowerTorso:FindFirstChild("Root") then
                     reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill3",1)
                     reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
                 elseif getgenv().enabled == false and a4 == false then
@@ -293,7 +292,7 @@ end)
 fq:CreateToggle("Skill4", function(bool)
     a5 = bool
 
-    a5beat = game:GetService("RunService").RenderStepped:Connect(function()
+    a5beat = game:GetService("RunService").Stepped:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
                 if getgenv().enabled == true and a5 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
@@ -399,6 +398,7 @@ fq:CreateToggle("Enabled", function(bool)
     end)
 
     if getgenv().enabled == false then
+        beat:Disconnect()
         plr.Character:BreakJoints()
     end
 end)
@@ -414,9 +414,11 @@ end)
 sb:CreateToggle("Enabled", function(bool)
     getgenv().enabled2 = bool
 
-    game:GetService("RunService").Stepped:Connect(function()
+    beatx = game:GetService("RunService").Stepped:Connect(function()
         if getgenv().enabled2 == true then
             reps.Remotes.REMOTE_EVENT:FireServer("Add"..getgenv().statname, 1)
+        elseif getgenv().enabled2 == false then
+            beatx:Disconnect()
         end
     end)
 end)
@@ -540,3 +542,5 @@ sc:CreateButton("Destroy UI", function()
         end
     end
 end)    
+
+pesan(gameName,"This Script Made By Ikky#8337\n".."~"..plr.DisplayName.."~ Thx For Using My Script.", 10)
