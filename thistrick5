@@ -18,7 +18,7 @@ local questinfo = require(reps.SharedModules.INDEXER.QuestInfo)
 
 -- Global
 getgenv().enabled = nil
-getgenv().mobname = "De"
+getgenv().mobname = nil
 getgenv().questname = nil
 getgenv().statname = "Power"
 getgenv().distance = 0
@@ -137,7 +137,7 @@ local function tpto(obj)
     end
 end
 
-game:GetService("RunService").Stepped:Connect(function()
+game:GetService("RunService").Heartbeat:Connect(function()
     if getgenv().enabled == false then
         if plr.Character ~= nil then 
             if plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
@@ -147,7 +147,7 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 end)
 
-game:GetService("RunService").Stepped:Connect(function()
+game:GetService("RunService").Heartbeat:Connect(function()
     for i,v in pairs(plr.PlayerGui.Main.InfoBar:GetChildren()) do
         if v.Name == "ClassText" then
             classname = string.split(v.Text, " ")[1]
@@ -188,6 +188,7 @@ moblist = fq:CreateDropdown("Mob List", mobTable, 1, "Select Mob!", function(sel
                         for a2,x2 in next, x1 do
                             if x2["Npc"] == tostring(v.Npc.Value) then
                                 getgenv().questname = a2
+                                print(getgenv().questname)
                             end
                         end
                     end
@@ -208,7 +209,7 @@ end)
 fq:CreateToggle("Reset when energy is low\nto restore energy", function(bool)
     getgenv().reset = bool
 
-    rx = game:GetService("RunService").RenderStepped:Connect(function()
+    rx = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().reset == true and plr.Stats:GetAttribute("Energy") <= 3 and getgenv().enabled == true then
             pcall(function()
                 plr.Character:BreakJoints()
@@ -318,19 +319,19 @@ fq:CreateToggle("Quest", function(bool)
                 if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
                     if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
                         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
-                        wait(0.3)
+                        wait(0.4)
                         plr.Character.LowerTorso.Root:Destroy()
                     elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
                         plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
-                        wait(0.3)
+                        wait(0.4)
                         plr.Character.LowerTorso.Root:Destroy()
                     elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
                         plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
-                        wait(0.3)
+                        wait(0.4)
                         plr.Character.LowerTorso.Root:Destroy()
                     elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
                         plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
-                        wait(0.3)
+                        wait(0.4)
                         plr.Character.LowerTorso.Root:Destroy()
                     end
                 end
@@ -359,19 +360,19 @@ fq:CreateToggle("Enabled", function(bool)
                     if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
                         if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
                             plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
-                            wait(0.3)
+                            wait(0.4)
                             plr.Character.LowerTorso.Root:Destroy()
                         elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
                             plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
-                            wait(0.3)
+                            wait(0.4)
                             plr.Character.LowerTorso.Root:Destroy()
                         elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
                             plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
-                            wait(0.3)
+                            wait(0.4)
                             plr.Character.LowerTorso.Root:Destroy()
                         elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
                             plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
-                            wait(0.3)
+                            wait(0.4)
                             plr.Character.LowerTorso.Root:Destroy()
                         end
                     end
@@ -414,7 +415,7 @@ end)
 sb:CreateToggle("Enabled", function(bool)
     getgenv().enabled2 = bool
 
-    beatx = game:GetService("RunService").Stepped:Connect(function()
+    beatx = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled2 == true then
             reps.Remotes.REMOTE_EVENT:FireServer("Add"..getgenv().statname, 1)
         elseif getgenv().enabled2 == false then
@@ -434,7 +435,7 @@ end)
 sb:CreateToggle("Enabled", function(bool)
     getgenv().enabled3 = bool
 
-    bruh3 = game:GetService("RunService").Stepped:Connect(function()
+    bruh3 = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled3 == true then
             if classname ~= getgenv().class then
                 reps.Remotes.SPIN_EVENT:FireServer("CLASS")
