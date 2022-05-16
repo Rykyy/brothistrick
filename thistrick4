@@ -193,10 +193,8 @@ local misc = library:CreateTab("Misc")
 local autofarm = window:CreateSection("Auto Farm & Auto Loot")
 local st = window:CreateSection("Auto Stats & Teleports")
 local sc = misc:CreateSection("Server & Character")
+local credits = misc:CreateSection("Credits")
 
-pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
-pesan("Notification!", "If you play in ps, you must visit area you choose to spawn the mobs!", 25)
-pesan("Notification!", "Hide Name & Anti Afk Activated\n[Hide Name Keep Activated Even though you are dead]", 5)
 
 autofarm:CreateLabel("~~Mob Settings")
 
@@ -548,3 +546,10 @@ sc:CreateButton("Destroy UI", function()
         end
     end
 end)
+
+credits:CreateLabel("Made By : Ikky#8337")
+credits:CreateLabel("Tester : Unknown:))")
+
+pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plyr.DisplayName.."~ Thx For Using My Script.", 10)
+pesan("Notification!", "If you play in ps, you must visit area you choose to spawn the mobs!", 25)
+pesan("Notification!", "Hide Name & Anti Afk Activated\n[Hide Name Keep Activated Even though you are dead]", 5)
