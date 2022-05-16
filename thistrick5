@@ -170,6 +170,7 @@ local misc = library:CreateTab("Misc")
 local fq = window:CreateSection("Auto Farm & Auto Quest")
 local sb = window:CreateSection("Auto Stats & Auto Buy & Teleports")
 local sc = misc:CreateSection("Server & Character")
+local credits = misc:CreateSection("Credits")
 
 -- Main Section
 
@@ -537,6 +538,9 @@ sc:CreateButton("Destroy UI", function()
             v.Parent.Parent:Destroy()
         end
     end
-end)    
+end) 
+
+credits:CreateLabel("Made By : Ikky#8337")
+credits:CreateLabel("Tester : Unknown:))")
 
 pesan(gameName,"This Script Made By Ikky#8337\n".."~"..plr.DisplayName.."~ Thx For Using My Script.", 10)
