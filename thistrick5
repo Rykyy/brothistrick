@@ -224,7 +224,7 @@ fq:CreateLabel("~~Attack Settings")
 fq:CreateToggle("Basic Attack", function(bool)
     a1 = bool
 
-    a1beat = game:GetService("RunService").Stepped:Connect(function()
+    a1beat = game:GetService("RunService").Heartbeat:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
                 if getgenv().enabled == true and a1 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
@@ -241,7 +241,7 @@ end)
 fq:CreateToggle("Skill1", function(bool)
     a2 = bool
 
-    a2beat = game:GetService("RunService").Stepped:Connect(function()
+    a2beat = game:GetService("RunService").Heartbeat:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
                 if getgenv().enabled == true and a2 == true and idk ~= nil  and not plr.Character.LowerTorso:FindFirstChild("Root") then
@@ -258,7 +258,7 @@ end)
 fq:CreateToggle("Skill2", function(bool)
     a3 = bool
 
-    a3beat = game:GetService("RunService").Stepped:Connect(function()
+    a3beat = game:GetService("RunService").Heartbeat:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
                 if getgenv().enabled == true and a3 == true and idk ~= nil  and not plr.Character.LowerTorso:FindFirstChild("Root") then
@@ -275,7 +275,7 @@ end)
 fq:CreateToggle("Skill3", function(bool)
     a4 = bool
 
-    a4beat =game:GetService("RunService").Stepped:Connect(function()
+    a4beat = game:GetService("RunService").Heartbeat:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
                 if getgenv().enabled == true and a4 == true and idk ~= nil  and not plr.Character.LowerTorso:FindFirstChild("Root") then
@@ -292,7 +292,7 @@ end)
 fq:CreateToggle("Skill4", function(bool)
     a5 = bool
 
-    a5beat = game:GetService("RunService").Stepped:Connect(function()
+    a5beat = game:GetService("RunService").Heartbeat:Connect(function()
         if plr.Character ~= nil then
             pcall(function()
                 if getgenv().enabled == true and a5 == true and idk ~= nil and not plr.Character.LowerTorso:FindFirstChild("Root") then
