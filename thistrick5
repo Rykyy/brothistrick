@@ -20,6 +20,8 @@ local aunp;
 local moblist;
 local idk = nil
 local questinfo = require(reps.SharedModules.INDEXER.QuestInfo)
+local cl1;
+local cl2;
 
 
 
@@ -36,7 +38,8 @@ getgenv().tp = nil
 -- Table
 local mobTable = {}
 local statTable = {"Power", "Stamina", "Defence"}
-local classTable = {}
+local cl1Table = {}
+local cl2Table = {}
 local tpTable = {"MainIsland", "JojoIsland", "DbzIsland", "BCIsland"}
 
 for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
@@ -57,8 +60,8 @@ end
 
 for _,v in pairs(reps.Assets.Class:GetChildren()) do
     insert = true
-    for _,v2 in pairs(classTable) do if v2 == tostring(v.Name) then insert = false end end
-    if insert then table.insert(classTable, tostring(v.Name)) end
+    for _,v2 in pairs(cl1Table) do if v2 == tostring(v.Name) then insert = false end end
+    if insert then table.insert(cl1Table, tostring(v.Name)) end
 end
 
 table.sort(mobTable)
@@ -429,20 +432,37 @@ end)
 
 sb:CreateLabel("~~Buy")
 
-sb:CreateDropdown("Class List", classTable, 1, "<None>", function(selected)
-    getgenv().class = selected
+cl1 = sb:CreateDropdown("Class List", cl1Table, 1, "<--->", function(selected)
+    for i,v in pairs(cl1Table) do
+        if v == selected then
+            print(i)
+            table.remove(cl1Table, i)
+            table.insert(cl2Table, selected)
+            cl1:Refresh(cl1Table, 1, cl1Table[1])
+            cl2:Refresh(cl2Table, 1, cl2Table[1])
+        end
+    end
 end)
 
-
+cl2 = sb:CreateDropdown("Selected", cl2Table, 1, "<--->", function(selected)
+    for i,v in pairs(cl2Table) do
+        if v == selected then
+            table.remove(cl2Table, i)
+            table.insert(cl1Table, selected)
+            cl1:Refresh(cl1Table, 1, cl1Table[1])
+            cl2:Refresh(cl2Table, 1, cl2Table[1])
+        end
+    end
+end)
 
 sb:CreateToggle("Enabled", function(bool)
     getgenv().enabled3 = bool
 
     bruh3 = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled3 == true then
-            if classname ~= getgenv().class then
+            if not table.find(cl2Table, classname) then
                 reps.Remotes.SPIN_EVENT:FireServer("CLASS")
-            elseif getgenv().enabled3 == false or classname == getgenv().class then
+            elseif getgenv().enabled3 == false or table.find(cl2Table, classname) then
                 bruh3:Disconnect()
             end
         end
