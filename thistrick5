@@ -294,7 +294,7 @@ fq:CreateToggle("Skill3", function(bool)
                     reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill3",1)
                     reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
                 elseif getgenv().enabled == false and s4 == false then
-                    s1beat:Disconnect()
+                    s4beat:Disconnect()
                 end
             end)
         end
@@ -311,7 +311,7 @@ fq:CreateToggle("Skill4", function(bool)
                     reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill4",1)
                     reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
                 elseif getgenv().enabled == false and s5 == false then
-                    s1beat:Disconnect()
+                    s5beat:Disconnect()
                 end
             end)
         end
