@@ -235,7 +235,7 @@ autofarm:CreateLabel("~~Attack Action Settings")
 autofarm:CreateToggle("Slot 1", function(bool)
     a1 = bool
 
-    a1beat = game:GetService("RunService").Stepped:Connect(function()
+    a1beat =  game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled == true and a1 == true then                                              
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer("Action1","Down")
         elseif getgenv().enabled == false and a1 == false then
@@ -247,7 +247,7 @@ end)
 autofarm:CreateToggle("Slot 2", function(bool)
     a2 = bool
 
-    a2beat = game:GetService("RunService").Stepped:Connect(function()
+    a2beat =  game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled == true and a2 == true then
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer("Action2","Down")
         elseif getgenv().enabled == false and a2 == false then
@@ -260,7 +260,7 @@ end)
 autofarm:CreateToggle("Slot 3", function(bool)
     a3 = bool
 
-    a3beat = game:GetService("RunService").Stepped:Connect(function()
+    a3beat = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled == true and a3 == true then
             game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer("Action3","Down")
         elseif getgenv().enabled == false and a3 == false then
@@ -421,7 +421,7 @@ autofarm:CreateToggle("Auto Loot", function(bool)
     getgenv().loot = bool
     local lootbeat;
 
-    lootbeat = game:GetService("RunService").Stepped:Connect(function()
+    lootbeat = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().loot == true and nearestItem() ~= nil and plr.Character ~= nil then
             nearestItem().CFrame = plr.Character.HumanoidRootPart.CFrame
             local itemname = string.split(nearestItem().Name, "_")[3]
