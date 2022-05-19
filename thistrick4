@@ -157,11 +157,6 @@ end
 game:GetService("RunService").Heartbeat:Connect(function()
     charIDR = require(plr.PlayerScripts.FrameworkClient.Controllers.GameLogic.GameLoopController)
     charID = charIDR:GetCharInfo().ID
-    if plr.Character ~= nil then
-        if plr.Character.HumanoidRootPart:FindFirstChild("PlayerInfo") then
-            plr.Character.HumanoidRootPart.PlayerInfo:Destroy()
-        end
-    end
 end)
 
 game:GetService("RunService").Heartbeat:Connect(function()
