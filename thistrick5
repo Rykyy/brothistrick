@@ -329,7 +329,7 @@ fq:CreateToggle("Quest", function(bool)
             if plr.Character.LowerTorso:FindFirstChild("Root") then
                 if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
                     if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
-                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
                         wait(0.4)
                         plr.Character.LowerTorso.Root:Destroy()
                     elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
@@ -343,6 +343,10 @@ fq:CreateToggle("Quest", function(bool)
                     elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
                         plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
                         wait(0.4)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
+                        wait(0.3)
                         plr.Character.LowerTorso.Root:Destroy()
                     end
                 end
@@ -365,7 +369,7 @@ fq:CreateToggle("Enabled", function(bool)
                 if plr.Character.LowerTorso:FindFirstChild("Root") then
                     if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
                         if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
-                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
                             wait(0.4)
                             plr.Character.LowerTorso.Root:Destroy()
                         elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
@@ -379,6 +383,10 @@ fq:CreateToggle("Enabled", function(bool)
                         elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
                             plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
                             wait(0.4)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
+                            wait(0.3)
                             plr.Character.LowerTorso.Root:Destroy()
                         end
                     end
@@ -518,7 +526,7 @@ end)
 sc:CreateButton("Invisible", function()
     if plr.Character.LowerTorso:FindFirstChild("Root") then
         if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-368, 61, 2865)
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
             wait(0.3)
             plr.Character.LowerTorso.Root:Destroy()
         elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
@@ -531,6 +539,10 @@ sc:CreateButton("Invisible", function()
             plr.Character.LowerTorso.Root:Destroy()
         elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
             wait(0.3)
             plr.Character.LowerTorso.Root:Destroy()
         end
