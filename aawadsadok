@@ -92,6 +92,7 @@ for i,v in next, wrk.QUEST:GetChildren() do
                             if a3 == "Level" then
                                 for i1,v1 in pairs(copy:GetChildren()) do
                                     if v1.ClassName == "TextLabel" then
+                                        v1.Name = "SZQuestEsp"
                                         v1.Parent.Size = UDim2.new(25,25,25,25)
                                         v1.Parent.StudsOffset = Vector3.new(0,25,0)
                                         v1.Text = "Quest "..a3..":"..x3
@@ -239,6 +240,11 @@ credits:Button(
 
 function destroyguis()
     game:GetService("CoreGui")["Discord"]:Destroy()
+    for i,v in pairs(wrk.QUEST:GetDescendants()) do
+        if v.Name == "SZQuestEsp" then
+            v:Destroy()
+        end
+    end
 end
 
 credits:Button(
