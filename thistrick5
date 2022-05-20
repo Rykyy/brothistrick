@@ -40,7 +40,7 @@ local mobTable = {}
 local statTable = {"Power", "Stamina", "Defence"}
 local cl1Table = {}
 local cl2Table = {}
-local tpTable = {"MainIsland", "JojoIsland", "DbzIsland", "BCIsland"}
+local tpTable = {"MainIsland", "JojoIsland", "DbzIsland", "BCIsland", "NarutoIsland"}
 
 for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
     insert = true
