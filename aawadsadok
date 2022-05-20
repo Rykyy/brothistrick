@@ -1,0 +1,656 @@
+-- Variable
+local plr = game:GetService("Players").LocalPlayer
+local reps = game:GetService("ReplicatedStorage")
+local wrk = game:GetService("Workspace")
+local gameName = "Anime Journey"
+local classname;
+local beat;
+local s1beat;
+local s2beat;
+local s3beat;
+local s4beat;
+local s5beat;
+local aunk;
+local aunp;
+local moblist;
+local idk = nil
+local questinfo = require(reps.SharedModules.INDEXER.QuestInfo)
+local cl1;
+local cl2;
+local Settings;
+
+
+-- Table
+local mobTable = {}
+local statTable = {"Power", "Stamina", "Defence"}
+local cl1Table = {}
+local cl2Table = {}
+local tpTable = {"MainIsland", "JojoIsland", "DbzIsland", "BCIsland", "NarutoIsland"}
+
+for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
+    insert = true
+    for a,x in next, questinfo do
+        if a == "GetServerQuestInfo" then
+            for a1,x1 in next, getupvalues(x) do
+                for a2,x2 in next, x1 do
+                    if x2["Npc"] == tostring(v.Npc.Value) then
+                        for _,v2 in pairs(mobTable) do if v2 == tostring("Level "..x2["Level"].." :"..v.NpcName.Text) then insert = false end end
+                        if insert then table.insert(mobTable, tostring("Level "..x2["Level"].." :"..v.NpcName.Text)) end
+                    end
+                end
+            end
+        end
+    end
+end
+
+for _,v in pairs(reps.Assets.Class:GetChildren()) do
+    insert = true
+    for _,v2 in pairs(cl1Table) do if v2 == tostring(v.Name) then insert = false end end
+    if insert then table.insert(cl1Table, tostring(v.Name)) end
+end
+
+table.sort(mobTable)
+
+-- Function
+
+local Name = "SZAnimeJourney.txt"
+
+local Des = {}
+if makefolder then
+    makefolder("SAZA HUB")
+end
+
+
+if
+    not pcall(
+        function()
+            readfile("SAZA HUB//" .. Name)
+        end
+    )
+ then
+    writefile("SAZA HUB//" .. Name, game:service "HttpService":JSONEncode(Des))
+end
+
+Settings = game:service "HttpService":JSONDecode(readfile("SAZA HUB//" .. Name))
+
+local function Save()
+    writefile("SAZA HUB//" .. Name, game:service "HttpService":JSONEncode(Settings))
+end
+
+
+for i,v in next, wrk.QUEST:GetChildren() do
+    local copy = reps.CurrentQuest:Clone()
+    copy.Parent = v.HumanoidRootPart
+
+    
+    for a,x in next, questinfo do
+        if a == "GetServerQuestInfo" then
+            for a1,x1 in next, getupvalues(x) do
+                for a2,x2 in pairs(x1) do
+                    if a2 == v.Name then
+                        for a3,x3 in next, x2 do
+                            if a3 == "Level" then
+                                for i1,v1 in pairs(copy:GetChildren()) do
+                                    if v1.ClassName == "TextLabel" then
+                                        v1.Parent.Size = UDim2.new(25,25,25,25)
+                                        v1.Parent.StudsOffset = Vector3.new(0,25,0)
+                                        v1.Text = "Quest "..a3..":"..x3
+                                        v1.TextColor3 = Color3.new(0,0,0)
+                                        v1.TextStrokeColor3 = Color3.new(99, 95, 98)
+                                        v1.Font = "LuckiestGuy"
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+
+local function nameGui()
+    local name = nil
+    for i,v in pairs(game.CoreGui:GetDescendants()) do
+        if v.Name == "UITabs" and v.Parent.Name == "Main" then
+            name = v.Parent.Parent
+        end
+    end
+    return name
+end
+
+
+local function pesan(title, text, time)
+    local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+    local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+    Notification:Notify(
+        {Title = title, Description = text},
+        {OutlineColor = Color3.fromRGB(255, 84, 84),Time = time, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84)}
+    )
+end
+
+local function shop()
+    local x = {}
+    for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
+        if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
+           x[#x + 1] = v.id
+        end
+    end
+    if #x > 0 then
+       game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
+       wait(5)
+       game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
+	else
+        print("....")
+	end
+end
+
+
+local function tpto(obj)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = obj
+
+    if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+        aunk = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
+        aunk.Velocity = Vector3.new(0, 0, 0)
+        aunk.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    end
+end
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    if Settings.enabled == false then
+        if plr.Character ~= nil then 
+            if plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+                aunk:Destroy()
+            end
+        end
+    end
+end)
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    for i,v in pairs(plr.PlayerGui.Main.InfoBar:GetChildren()) do
+        if v.Name == "ClassText" then
+            classname = string.split(v.Text, " ")[1]
+        end
+    end
+    for i,v1 in pairs(reps:GetChildren()) do
+        if v1:FindFirstChild("CooldownModule") then
+            v1.CooldownModule:Destroy()
+        end
+    end
+end)
+
+
+-- Library
+loadstring(game:HttpGet("https://raw.githubusercontent.com/QwertyzSZ/SAZAISBEST/main/version.lua"))()
+repeat
+    wait()
+until getgenv().Version ~= nil
+
+local NotifyHolder = loadstring(game:HttpGet"https://raw.githubusercontent.com/QwertyzSZ/SAZAISBEST/main/Functions/HolderNotifyy.lua")()
+local Notification = loadstring(game:HttpGet"https://raw.githubusercontent.com/QwertyzSZ/SAZAISBEST/main/Functions/Notifyy.lua")()
+local DiscordLib = loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-SazaUiFree-2115"))():Window("Anime Journey",getgenv().Version)
+
+local window = DiscordLib:Server("SAZA HUB", "")
+
+local credits = window:Channel("Credits ", "http://www.roblox.com/asset/?id=173616340")
+
+local fq = window:Channel("Farm & Quest", "http://www.roblox.com/asset/?id=173616340")
+local sb = window:Channel("Stats & Buy", "http://www.roblox.com/asset/?id=173616340")
+
+local sc = window:Channel("Misc", "http://www.roblox.com/asset/?id=173616340")
+
+
+-- Credits Section
+
+credits:Seperator()
+
+credits:Label("Credits")
+credits:Button(
+    "Join Discord SAZA HUB",
+    function()
+        local request = (syn and syn.request) or (http and http.request) or http_request
+
+        if request then
+            request(
+                {
+                    Url = "http://127.0.0.1:6463/rpc?v=1",
+                    Method = "POST",
+                    Headers = {
+                        ["Content-Type"] = "application/json",
+                        ["Origin"] = "https://discord.com"
+                    },
+                    Body = game:GetService("HttpService"):JSONEncode(
+                        {
+                            cmd = "INVITE_BROWSER",
+                            args = {code = "jhnvcjge2h"},
+                            nonce = game:GetService("HttpService"):GenerateGUID(false)
+                        }
+                    )
+                }
+            )
+        end
+        Notification.new("SazaSystem:", "Link Discord Has Coppied", 3)
+        setclipboard("https://discord.gg/jhnvcjge2h")
+    end
+)
+
+function destroyguis()
+    game:GetService("CoreGui")["Discord"]:Destroy()
+end
+
+credits:Button(
+    "Delete Gui",
+    function()
+        Notification.new("SazaSystem:", "Thanks for use SAZA HUB", 1)
+        wait(1)
+        game.CoreGui.Discord:Destroy()
+    end
+)
+
+credits:Label("Press Right-CTRL for Hide Gui")
+credits:Label("Anti AFK Always On")
+
+credits:Seperator()
+
+credits:Label(" Owner: Zaaa 愛#1688, Saskai#2799")
+credits:Label(" Contributor: Ikky#8337")
+
+
+-- Main Section
+
+fq:Seperator()
+
+fq:Label("~~Mob Settings")
+
+moblist = fq:Dropdown("Mob List", mobTable, function(selected)
+    Settings.mobname = string.split(selected, ":")[2]
+
+    for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
+        if v.NpcName.Text == Settings.mobname then
+            for a,x in next, questinfo do
+                if a == "GetServerQuestInfo" then
+                    for a1,x1 in next, getupvalues(x) do
+                        for a2,x2 in next, x1 do
+                            if x2["Npc"] == tostring(v.Npc.Value) then
+                                Settings.questname = a2
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+fq:Slider("Distance", 0, 19, Settings.distance,  function(s)
+    Settings.distance = s
+end)
+
+fq:Toggle("Reset when energy is low\nto restore energy", Settings.reset, function(bool)
+    Settings.reset = bool
+
+    rx = game:GetService("RunService").Heartbeat:Connect(function()
+        if Settings.reset == true and plr.Stats:GetAttribute("Energy") <= 3 and Settings.enabled == true then
+            pcall(function()
+                plr.Character:BreakJoints()
+            end)
+        elseif Settings.reset == false then
+            rx:Disconnect()
+        end
+    end)
+end)
+
+fq:Seperator()
+
+fq:Label("~~Attack Settings")
+
+fq:Toggle("Basic Attack", Settings.s1, function(bool)
+    Settings.s1 = bool
+
+    s1beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if Settings.enabled == true and Settings.s1 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Punch",idk.HumanoidRootPart.Position,idk,true)
+                elseif Settings.enabled == false and Settings.s1 == false then
+                    s1beat:Disconnect()
+                end
+            end)
+        end
+    end)
+end)
+
+fq:Toggle("Skill1", Settings.s2, function(bool)
+    Settings.s2 = bool
+
+    s2beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if Settings.enabled == true and Settings.s2 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill1",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
+                elseif Settings.enabled == false and Settings.s2 == false then
+                    s2beat:Disconnect()
+                end
+            end)
+        end
+    end)
+end)
+
+fq:Toggle("Skill2", Settings.s3, function(bool)
+    Settings.s3 = bool
+
+    s3beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if Settings.enabled == true and Settings.s3 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill2",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
+                elseif Settings.enabled == false and Settings.s3 == false then
+                    s3beat:Disconnect()
+                end
+            end)
+        end
+    end)
+end)
+
+fq:Toggle("Skill3", Settings.s4, function(bool)
+    Settings.s4 = bool
+
+    s4beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if Settings.enabled == true and Settings.s4 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill3",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
+                elseif Settings.enabled == false and Settings.s4 == false then
+                    s4beat:Disconnect()
+                end
+            end)
+        end
+    end)
+end)
+
+fq:Toggle("Skill4", Settings.s5, function(bool)
+    Settings.s5 = bool
+
+    s5beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if Settings.enabled == true and Settings.s5 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill4",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
+                elseif Settings.enabled == false and Settings.s5 == false then
+                    s5beat:Disconnect()
+                end
+            end)
+        end
+    end)
+end)
+
+fq:Seperator()
+
+fq:Label("~~Farm Settings")
+
+fq:Toggle("Quest", Settings.quest, function(bool)
+    Settings.quest = bool
+
+    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
+        if Settings.quest == true and Settings.enabled == true then
+            if plr.Character.LowerTorso:FindFirstChild("Root") then
+                if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
+                    if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
+                        wait(0.4)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+                        wait(0.4)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+                        wait(0.4)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+                        wait(0.4)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
+                        wait(0.3)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    end
+                end
+            elseif not plr.Character.LowerTorso:FindFirstChild("Root") and plr.PlayerGui.Frames.Quest.Visible == false then
+                plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[Settings.questname].RightFoot.CFrame
+                reps.Remotes.QUEST_EVENT:FireServer("QuestAdd", Settings.questname)
+            end
+        elseif Settings.quest == false then
+            breh1:Disconnect()
+        end
+    end)     
+end)
+
+fq:Toggle("Enabled", Settings.enabled, function(bool)
+    Settings.enabled = bool
+
+    beat = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            if Settings.enabled == true and plr.Character ~= nil then
+                if plr.Character.LowerTorso:FindFirstChild("Root") then
+                    if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
+                        if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
+                            wait(0.4)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+                            wait(0.4)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+                            wait(0.4)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+                            wait(0.4)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
+                            wait(0.3)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        end
+                    end
+                elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    for i,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
+                        if v.NpcName.Text == Settings.mobname then
+                            if v.Npc.Value:FindFirstChild("HumanoidRootPart") and v.Npc.Value:FindFirstChild("Humanoid") then
+                                if v.Npc.Value.Humanoid.Health ~= 0 and Settings.enabled == true then
+                                    repeat
+                                        idk = v.Npc.Value
+                                        tpto(v.Npc.Value.HumanoidRootPart.CFrame * CFrame.new(0,Settings.distance,0) * CFrame.Angles(math.rad(-90),0,0))
+                                        wait()
+                                    until Settings.enabled == false or not v.Npc.Value:FindFirstChild("HumanoidRootPart") or v.Npc.Value.Humanoid.Health == 0
+                                    if Settings.enabled == false then
+                                        beat:Disconnect()
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end)
+
+    if Settings.enabled == false then
+        beat:Disconnect()
+        plr.Character:BreakJoints()
+    end
+end)
+
+-- Main2 Section
+
+sb:Seperator()
+
+sb:Label("~~Stats")
+
+sb:Dropdown("Stats List", statTable, function(selected)
+    Settings.statname = selected
+end)
+
+sb:Toggle("Enabled", Settings.enabled2, function(bool)
+    Settings.enabled2 = bool
+
+    beatx = game:GetService("RunService").Heartbeat:Connect(function()
+        if Settings.enabled2 == true then
+            reps.Remotes.REMOTE_EVENT:FireServer("Add"..Settings.statname, 1)
+        elseif Settings.enabled2 == false then
+            beatx:Disconnect()
+        end
+    end)
+end)
+
+sb:Seperator()
+
+sb:Label("~~Buy")
+
+cl1 = sb:Dropdown("Class List", cl1Table, function(selected)
+    for i,v in pairs(cl1Table) do
+        if v == selected then
+            print(i)
+            table.remove(cl1Table, i)
+            table.insert(cl2Table, selected)
+            cl1:Clear()
+            for i,v1 in pairs(cl1Table) do
+                cl1:Add(v1)
+            end
+            cl2:Clear()
+            for i,v2 in pairs(cl2Table) do
+                cl2:Add(v2)
+            end
+        end
+    end
+end)
+
+cl2 = sb:Dropdown("Selected", cl2Table, function(selected)
+    for i,v in pairs(cl2Table) do
+        if v == selected then
+            table.remove(cl2Table, i)
+            table.insert(cl1Table, selected)
+            cl1:Clear()
+            for i,v1 in pairs(cl1Table) do
+                cl1:Add(v1)
+            end
+            cl2:Clear()
+            for i,v2 in pairs(cl2Table) do
+                cl2:Add(v2)
+            end
+        end
+    end
+end)
+
+sb:Toggle("Enabled", Settings.enabled3, function(bool)
+    Settings.enabled3 = bool
+
+    bruh3 = game:GetService("RunService").Heartbeat:Connect(function()
+        if Settings.enabled3 == true then
+            if not table.find(cl2Table, classname) then
+                reps.Remotes.SPIN_EVENT:FireServer("CLASS")
+            elseif Settings.enabled3 == false or table.find(cl2Table, classname) then
+                bruh3:Disconnect()
+            end
+        end
+    end)
+end)
+
+
+-- Misc Section
+sc:Seperator()
+
+sc:Label("~~Teleports")
+
+
+sc:Dropdown("Teleports List", tpTable, function(selected)
+    Settings.tp = selected
+end)
+
+sc:Button("Teleport", function()
+    reps.Remotes.REMOTE_EVENT:FireServer("SetSpawnPoint", Settings.tp)
+    wait(0.2)
+    plr.Character:BreakJoints()
+end)
+
+sc:Seperator()
+
+sc:Label( "~~Server")
+
+sc:Button("Rejoin", function()
+    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
+end)
+
+sc:Button( "Server Hop", function()
+    shop()
+end)
+
+sc:Seperator()
+
+sc:Label("~~Character")
+
+sc:Slider("Walk Speed", 16, 125, 16, function(s)
+    local __ = plr.Character
+
+    if ___ and not _G.___ == true then
+        __.Humanoid.WalkSpeed = s
+        return
+    else
+        _ = hookmetamethod(__, "__index", function(self,w)
+            if w == "WalkSpeed" then
+                return 16
+            end
+            return _(self,w)
+        end)
+    end
+    
+    pcall(function()
+        getgenv().___ = true
+    end)
+end)
+
+sc:Button("Invisible", function()
+    if plr.Character.LowerTorso:FindFirstChild("Root") then
+        if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        end
+    end
+end)
+
+spawn(
+    function()
+        while wait() do
+            Save()
+        end
+    end
+)
