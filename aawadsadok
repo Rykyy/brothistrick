@@ -81,8 +81,11 @@ end
 for i,v in next, wrk.QUEST:GetChildren() do
     local copy = reps.CurrentQuest:Clone()
     copy.Parent = v.HumanoidRootPart
+    copy.Size = UDim2.new(25,25,25,25)
+    copy.StudsOffset = Vector3.new(0,25,0)
+    copy.StudsOffsetWorldSpace = Vector3.new(0,0,0)
+    copy.Name = "SZQuestEsp"
 
-    
     for a,x in next, questinfo do
         if a == "GetServerQuestInfo" then
             for a1,x1 in next, getupvalues(x) do
@@ -92,9 +95,6 @@ for i,v in next, wrk.QUEST:GetChildren() do
                             if a3 == "Level" then
                                 for i1,v1 in pairs(copy:GetChildren()) do
                                     if v1.ClassName == "TextLabel" then
-                                        v1.Name = "SZQuestEsp"
-                                        v1.Parent.Size = UDim2.new(25,25,25,25)
-                                        v1.Parent.StudsOffset = Vector3.new(0,25,0)
                                         v1.Text = "Quest "..a3..":"..x3
                                         v1.TextColor3 = Color3.new(0,0,0)
                                         v1.TextStrokeColor3 = Color3.new(99, 95, 98)
@@ -252,7 +252,7 @@ credits:Button(
     function()
         Notification.new("SazaSystem:", "Thanks for use SAZA HUB", 1)
         wait(1)
-        game.CoreGui.Discord:Destroy()
+        destroyguis()
     end
 )
 
