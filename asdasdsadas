@@ -209,11 +209,19 @@ main:Toggle("Buy Chest", Settings.chest, function(bool)
         end
     end)
 
-    bruh2 = plr.PlayerGui.ChestResult.Changed:Connect(function()
+    bruh2 = plr.PlayerGui.ChestResult.Content.Changed:Connect(function()
         if Settings.chest then
-            plr.PlayerGui.ChestResult.Enabled = false
+            plr.PlayerGui.ChestResult.Content.ImageTransparency = 1
         else
             bruh2:Disconnect()
+        end
+    end)
+
+    bruh3 = plr.PlayerGui.ChestResult.ViewportFrame.ChildAdded:Connect(function(v)
+        if Settings.chest then
+            v:Destroy()
+        else
+            bruh3:Disconnect()
         end
     end)
 
