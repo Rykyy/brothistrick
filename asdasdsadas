@@ -1,0 +1,256 @@
+-- Variable
+local plr = game:GetService("Players").LocalPlayer
+local reps = game:GetService("ReplicatedStorage")
+local wrk = game:GetService("Workspace")
+local Settings;
+
+
+-- Table
+local chestTable = {}
+for i,v in pairs(workspace:WaitForChild("ChestStands"):GetChildren()) do
+    table.insert(chestTable,tostring(v))
+end
+
+
+local worldTable = {}
+for i,v in next, game:GetService("Workspace").Ignore:GetChildren() do
+    if v.ClassName == "Part" and v.Name ~= "Part" then
+        table.insert(worldTable, v.SurfaceGui.Frame.AwardDisplayFrame.AmountText.Text..":"..v.Name)
+    end
+end
+
+local upgradeTable = {"Strength", "Accuracy", "Speed"}
+
+
+
+-- Function
+local function shop()
+    local x = {}
+    for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
+        if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
+           x[#x + 1] = v.id
+        end
+    end
+    if #x > 0 then
+       game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
+       wait(5)
+       game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
+	else
+        print("....")
+	end
+end
+
+
+local Name = "SZGoalKickSim.txt"
+
+local Des = {}
+if makefolder then
+    makefolder("SAZA HUB")
+end
+
+
+if
+    not pcall(
+        function()
+            readfile("SAZA HUB//" .. Name)
+        end
+    )
+ then
+    writefile("SAZA HUB//" .. Name, game:service "HttpService":JSONEncode(Des))
+end
+
+Settings = game:service "HttpService":JSONDecode(readfile("SAZA HUB//" .. Name))
+
+local function Save()
+    writefile("SAZA HUB//" .. Name, game:service "HttpService":JSONEncode(Settings))
+end
+
+
+
+-- Library
+loadstring(game:HttpGet("https://raw.githubusercontent.com/QwertyzSZ/SAZAISBEST/main/version.lua"))()
+repeat
+    wait()
+until getgenv().Version ~= nil
+
+local NotifyHolder = loadstring(game:HttpGet"https://raw.githubusercontent.com/QwertyzSZ/SAZAISBEST/main/Functions/HolderNotifyy.lua")()
+local Notification = loadstring(game:HttpGet"https://raw.githubusercontent.com/QwertyzSZ/SAZAISBEST/main/Functions/Notifyy.lua")()
+local DiscordLib = loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-SazaUiFree-2115"))():Window("Goal Kick Simulator",getgenv().Version)
+
+local window = DiscordLib:Server("SAZA HUB", "")
+
+local credits = window:Channel("Credits ", "http://www.roblox.com/asset/?id=173616340")
+
+local main = window:Channel("Main", "http://www.roblox.com/asset/?id=173616340")
+
+local misc = window:Channel("Misc", "http://www.roblox.com/asset/?id=173616340")
+
+
+-- Credits Section
+
+credits:Seperator()
+
+credits:Label("Credits")
+credits:Button(
+    "Join Discord SAZA HUB",
+    function()
+        local request = (syn and syn.request) or (http and http.request) or http_request
+
+        if request then
+            request(
+                {
+                    Url = "http://127.0.0.1:6463/rpc?v=1",
+                    Method = "POST",
+                    Headers = {
+                        ["Content-Type"] = "application/json",
+                        ["Origin"] = "https://discord.com"
+                    },
+                    Body = game:GetService("HttpService"):JSONEncode(
+                        {
+                            cmd = "INVITE_BROWSER",
+                            args = {code = "jhnvcjge2h"},
+                            nonce = game:GetService("HttpService"):GenerateGUID(false)
+                        }
+                    )
+                }
+            )
+        end
+        Notification.new("SazaSystem:", "Link Discord Has Coppied", 3)
+        setclipboard("https://discord.gg/jhnvcjge2h")
+    end
+)
+
+function destroyguis()
+    game:GetService("CoreGui")["Discord"]:Destroy()
+end
+
+credits:Button(
+    "Delete Gui",
+    function()
+        Notification.new("SazaSystem:", "Thanks for use SAZA HUB", 1)
+        wait(1)
+        destroyguis()
+    end
+)
+
+credits:Label("Press Right-CTRL for Hide Gui")
+credits:Label("Anti AFK Always On")
+
+credits:Seperator()
+
+credits:Label(" Owner: Zaaa 愛#1688, Saskai#2799")
+credits:Label(" Contributor: Ikky#8337")
+
+-- Main
+
+main:Seperator()
+main:Label("Farm")
+
+main:Toggle("Tp Buff Area", Settings.buff, function(bool)
+    Settings.buff = bool
+end)
+
+main:Toggle("Auto Kick", Settings.kick, function(bool)
+    Settings.kick = bool
+    
+    bruh = game:GetService("RunService").Heartbeat:Connect(function()
+        if Settings.kick then
+            if Settings.buff then
+                if wrk.Ignore:FindFirstChild("BuffArea") then
+                    plr.Character.HumanoidRootPart.CFrame = wrk.Ignore:FindFirstChild("BuffArea").Model.Dizzy.Stars.CFrame * CFrame.new(-0.2,0,0) * CFrame.Angles(1.5,1.5,1.5) * CFrame.Angles(math.rad(-90),0,0)
+                end
+            end
+            reps.Remote.RemoteFunction:InvokeServer("Throw", 1)
+        elseif not Settings.kick then
+            bruh:Disconnect()
+        end
+    end)
+end)
+
+main:Seperator()
+main:Label("Upgrade & Chest & World")
+
+main:Dropdown("Upgrade List", upgradeTable, function(selected)
+    Settings.upgradelist = selected
+
+    if selected == "Strength" then
+        Settings.upgradelist = "KickPower"
+    elseif selected == "Accuracy" then
+        Settings.upgradelist = "KickAccuracy"
+    end
+end)
+
+main:Toggle("Upgrade", Settings.upgrade, function(bool)
+    Settings.upgrade = bool
+    
+    while wait() do
+        if Settings.upgrade and Settings.upgradelist ~= nil or Settings.upgradelist ~= "" then
+            reps.Remote.RemoteFunction:InvokeServer("UpgradeStats", Settings.upgradelist, 1)
+        else
+            break;
+        end
+    end
+end)
+
+main:Seperator()
+
+main:Dropdown("Chest List", chestTable, function(selected)
+    Settings.chestlist = selected
+end)
+
+main:Toggle("Buy Chest", Settings.chest, function(bool)
+    Settings.chest = bool
+
+    bruh = game:GetService("RunService").Heartbeat:Connect(function()
+        if Settings.chest and Settings.chestlist ~= nil or Settings.chestlist ~= "" then
+            plr.PlayerGui.ChestResult.Content.ImageTransparency = 1
+            reps.Remote.RemoteFunction:InvokeServer("PromptPurchaseChest", wrk.ChestStands[Settings.chestlist])
+        else
+            bruh:Disconnect()
+        end
+    end)
+end)
+
+main:Seperator()
+
+main:Dropdown("World List", worldTable, function(selected)
+    Settings.worldlist = selected
+end)
+
+main:Button("Buy World", function()
+    game:GetService("ReplicatedStorage").Remote.RemoteFunction:InvokeServer("UnlockArea", wrk.Ignore[string.split(Settings.wordlist, ":")[2]])
+end)
+
+
+-- Misc
+
+misc:Seperator()
+
+
+misc:Label( "~~Server")
+
+misc:Button("Rejoin", function()
+    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, plr)
+end)
+
+misc:Button("Server Hop", function()
+    shop()
+end)
+
+misc:Label("~~Character")
+
+misc:Slider("Walk Speed", 16, 500, 16,  function(s)
+    plr.Character.Humanoid.WalkSpeed = s
+end)
+
+misc:Slider("Jump Power", 50, 250, 50, function(s)
+    plr.Character.Humanoid.JumpPower = s
+end)
+
+spawn(
+    function()
+        while wait() do
+            Save()
+        end
+    end
+)
