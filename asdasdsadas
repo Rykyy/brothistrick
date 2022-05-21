@@ -215,10 +215,12 @@ main:Seperator()
 
 main:Dropdown("World List", worldTable, function(selected)
     Settings.worldlist = selected
+
+    print(string.split(selected, ":")[2])
 end)
 
 main:Button("Buy World", function()
-    game:GetService("ReplicatedStorage").Remote.RemoteFunction:InvokeServer("UnlockArea", wrk.Ignore[string.split(Settings.wordlist, ":")[2]])
+    reps.Remote.RemoteFunction:InvokeServer("UnlockArea", wrk.Ignore[string.split(Settings.worldlist, ":")[2]])
 end)
 
 
