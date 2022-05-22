@@ -101,7 +101,7 @@ local function nearestItem()
                 end
             end
         elseif getgenv().itemlist ~= "All Tier" and getgenv().itemlist ~= "Copper" and getgenv().itemlist ~= "Egg" then
-            if string.find(v.Name, getgenv().itemlist) or string.find(v.Name, "Gold") then
+            if string.find(v.Name, getgenv().itemlist) or string.find(v.Name, "Gold") or string.find(v.Name, "Egg") then
                 if getgenv().rarity == "All Rarity" then
                     local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
                     if magnitude < dist then        
@@ -382,24 +382,26 @@ autofarm:CreateToggle("Enabled", function(bool)
                     elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
                         if getgenv().target == "Nearest" then
                             local dist = math.huge
-                            for i,v in pairs(game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren()) do
-                                if v:FindFirstChild("HumanoidRootPart") then
-                                    if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname then
-                                        local magnitude = (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+                            local dekat = nil
+                            for i,x in pairs(game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren()) do
+                                if x:FindFirstChild("HumanoidRootPart") then
+                                    if x.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname then
+                                        local magnitude = (plr.Character.HumanoidRootPart.Position - x.HumanoidRootPart.Position).magnitude
                                         if magnitude < dist and getgenv().enabled == true then
                                             dist = magnitude
+                                            dekat = x
                                             repeat
-                                                if v:FindFirstChild("HumanoidRootPart") then
-                                                    moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
+                                                if x:FindFirstChild("HumanoidRootPart") then
+                                                    moveto(x.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
                                                 end
                                             wait()
-                                            until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
+                                            until getgenv().enabled == false or not x:FindFirstChild("HumanoidRootPart")
                                         end
                                     end
                                 end
                             end
                         elseif getgenv().target == "Random" then
-                            for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
+                            for i,v in pairs(game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren()) do
                                 if v:FindFirstChild("HumanoidRootPart") then
                                     if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
                                         repeat
