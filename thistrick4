@@ -21,13 +21,12 @@ getgenv().areatp = "SunnyForest"
 getgenv().itemlist = "All Tier"
 getgenv().rarity = "All Rarity"
 getgenv().raritysell = "Common"
-getgenv().itemsell = "I"
+getgenv().itemsell = "All Tier"
 getgenv().stat = "Strength"
 getgenv().mobname = "Blob"
 getgenv().ws = 19
 getgenv().jp = 50
 getgenv().distance = 0
-getgenv().target = "Nearest"
 getgenv().mode = "Nothing"
 getgenv().toggleui = true
 
@@ -35,12 +34,11 @@ getgenv().toggleui = true
 -- Table
 local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 local mobTable = {"Select Mob!"}
-local targetTable = {"Nearest", "Random"}
 local itemTable = {"All Tier" ,"Copper", "Egg", "T1", "T2", "T3", "T4", "T5"}
 local rarityTable = {"All Rarity", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
 local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
-local itemsellTable = {"T1", "T2", "T3", "T4", "T5"}
-local raritysellTable = {"All Rarity", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
+local itemsellTable = {"All Tier", "T1", "T2", "T3", "T4", "T5"}
+local raritysellTable = {"Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
 local areatpTable = {"Tutorial","SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 
 -- Function
@@ -78,26 +76,6 @@ local function moveto(obj)
         aunk.Velocity = Vector3.new(0, 0, 0)
         aunk.MaxForce = Vector3.new(9e9, 9e9, 9e9)
     end
-end
-
-
-local function nearestMob()
-    local dist = math.huge
-    local dekat = nil
-    if getgenv().area ~= nil then
-        for i,x in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
-            if x:FindFirstChild("HumanoidRootPart") then
-                if x.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname then
-                    local magnitude = (plr.Character.HumanoidRootPart.Position - x.HumanoidRootPart.Position).magnitude
-                    if magnitude < dist and getgenv().enabled == true then
-                        dist = magnitude
-                        dekat = x
-                    end
-                end
-            end
-        end
-    end
-    return dekat
 end
 
 local function nearestItem()
@@ -245,9 +223,6 @@ moblist = autofarm:CreateDropdown("Mob List", mobTable, 1, mobTable[1], function
     getgenv().mobname = selected
 end)
 
-autofarm:CreateDropdown("Target List", targetTable, 1, targetTable[1], function(selected)
-    getgenv().target = selected
-end)
 
 autofarm:CreateSlider("Distance", -15, 15, getgenv().distance, 0.999, function(s)
     getgenv().distance = s
@@ -400,26 +375,15 @@ autofarm:CreateToggle("Enabled", function(bool)
                     if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
                         print("Revive!!!!!!!")
                     elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
-                        if getgenv().target == "Nearest" then
-                            if nearestMob():FindFirstChild("HumanoidRootPart") then
-                                repeat
-                                    if nearestMob():FindFirstChild("HumanoidRootPart") then
-                                        moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
-                                    end
-                                wait()
-                                until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
-                            end
-                        elseif getgenv().target == "Random" then
-                            for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
-                                if v:FindFirstChild("HumanoidRootPart") then
-                                    if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
-                                        repeat
-                                            if v:FindFirstChild("HumanoidRootPart") then
-                                                moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
-                                            end
-                                        wait()
-                                        until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
-                                    end
+                        for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
+                            if v:FindFirstChild("HumanoidRootPart") then
+                                if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
+                                    repeat
+                                        if v:FindFirstChild("HumanoidRootPart") then
+                                            moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
+                                        end
+                                    wait()
+                                    until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
                                 end
                             end
                         end
@@ -533,10 +497,12 @@ st:CreateToggle("Sell", function(bool)
         if getgenv().sell == true then
             for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
                 if v.Name == "Item" then
-                    if v.Button.Tier.TextLabel.Text == getgenv().tiersell then
-                        if getgenv().raritysell == "All Rarity" then
+                    if getgenv().tiersell == "All Tier" then
+                        if v:GetAttribute("Rarity") == getgenv().raritysell then
                             game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
-                        elseif getgenv().raritysell ~= "All Rarity" then
+                        end
+                    elseif getgenv().tiersell ~= "All Tier" then 
+                        if v.Button.Tier.TextLabel.Text == getgenv().tiersell then
                             if v:GetAttribute("Rarity") == getgenv().raritysell then
                                 game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
                             end
