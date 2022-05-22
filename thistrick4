@@ -386,7 +386,7 @@ end)
 autofarm:CreateLabel("~~Loot Settings")
 
 autofarm:CreateDropdown("Items list", itemTable, 1, itemTable[1], function(selected)
-    getgenv().modeloot = selected
+    getgenv().itemlist = selected
 end)
 
 autofarm:CreateDropdown("Rarity list", rarityTable, 1, rarityTable[1], function(selected)
