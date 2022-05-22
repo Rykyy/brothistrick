@@ -80,6 +80,26 @@ local function moveto(obj)
     end
 end
 
+
+local function nearestMob()
+    local dist = math.huge
+    local dekat = nil
+    if getgenv().area ~= nil then
+        for i,x in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
+            if x:FindFirstChild("HumanoidRootPart") then
+                if x.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname then
+                    local magnitude = (plr.Character.HumanoidRootPart.Position - x.HumanoidRootPart.Position).magnitude
+                    if magnitude < dist and getgenv().enabled == true then
+                        dist = magnitude
+                        dekat = x
+                    end
+                end
+            end
+        end
+    end
+    return dekat
+end
+
 local function nearestItem()
     local dist = 150
     local dekat = nil   
@@ -381,27 +401,16 @@ autofarm:CreateToggle("Enabled", function(bool)
                         print("Revive!!!!!!!")
                     elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
                         if getgenv().target == "Nearest" then
-                            local dist = math.huge
-                            local dekat = nil
-                            for i,x in pairs(game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren()) do
-                                if x:FindFirstChild("HumanoidRootPart") then
-                                    if x.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname then
-                                        local magnitude = (plr.Character.HumanoidRootPart.Position - x.HumanoidRootPart.Position).magnitude
-                                        if magnitude < dist and getgenv().enabled == true then
-                                            dist = magnitude
-                                            dekat = x
-                                            repeat
-                                                if x:FindFirstChild("HumanoidRootPart") then
-                                                    moveto(x.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
-                                                end
-                                            wait()
-                                            until getgenv().enabled == false or not x:FindFirstChild("HumanoidRootPart")
-                                        end
+                            if nearestMob():FindFirstChild("HumanoidRootPart") then
+                                repeat
+                                    if nearestMob():FindFirstChild("HumanoidRootPart") then
+                                        moveto(nearestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
                                     end
-                                end
+                                wait()
+                                until getgenv().enabled == false or not nearestMob():FindFirstChild("HumanoidRootPart")
                             end
                         elseif getgenv().target == "Random" then
-                            for i,v in pairs(game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren()) do
+                            for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
                                 if v:FindFirstChild("HumanoidRootPart") then
                                     if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
                                         repeat
