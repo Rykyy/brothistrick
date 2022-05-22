@@ -20,7 +20,7 @@ getgenv().area = nil
 getgenv().areatp = "SunnyForest"
 getgenv().itemlist = "All Tier"
 getgenv().rarity = "All Rarity"
-getgenv().raritysell = "Common"
+getgenv().raritysell = 1
 getgenv().itemsell = "All Tier"
 getgenv().stat = "Strength"
 getgenv().mobname = "Blob"
@@ -79,7 +79,7 @@ local function moveto(obj)
 end
 
 local function nearestItem()
-    local dist = 150
+    local dist = 100
     local dekat = nil   
     for i,v in pairs(game:GetService("Workspace").RunTime.GroundLoot:GetChildren()) do
         if getgenv().itemlist == "All Tier" then
