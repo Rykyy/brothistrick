@@ -202,31 +202,6 @@ end)
 main:Toggle("Buy Chest", Settings.chest, function(bool)
     Settings.chest = bool
 
-    bruh1 = game:GetService("Lighting").ChestBlur.Changed:Connect(function()
-        if Settings.chest then
-            game:GetService("Lighting").ChestBlur.Enabled = false
-        else
-            bruh1:Disconnect()
-        end
-    end)
-
-    bruh2 = plr.PlayerGui.ChestResult.Content.Changed:Connect(function()
-        if Settings.chest then
-            plr.PlayerGui.ChestResult.Content.ImageTransparency = 1
-        else
-            bruh2:Disconnect()
-        end
-    end)
-
-    bruh3 = plr.PlayerGui.ChestResult.ViewportFrame.Changed:Connect(function()
-        if Settings.chest then
-            plr.PlayerGui.ChestResult.ViewportFrame.Visible = false
-        else
-            bruh3:Disconnect()
-        end
-    end)
-
-
     while wait() do
         if Settings.chest and Settings.chestlist ~= nil or Settings.chestlist ~= "" then
             reps.Remote.RemoteFunction:InvokeServer("PromptPurchaseChest", wrk.ChestStands[Settings.chestlist])
