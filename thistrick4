@@ -45,7 +45,7 @@ local areatpTable = {"Tutorial","SunnyForest", "DenseForest", "ToadstoolGorge", 
 
 -- Function
 
-local function nameGui()
+function nameGui()
     local name = nil
     for i,v in pairs(game.CoreGui:GetDescendants()) do
         if v.Name == "UITabs" and v.Parent.Name == "Main" then
@@ -55,7 +55,7 @@ local function nameGui()
     return name
 end
 
-local function backtosafeTp()
+function backtosafeTp()
     if getgenv().area  ~= nil then
         local dist = math.huge
         for i,v in pairs(game.Workspace.RegionsAssets[getgenv().area].PlayerSpawner:GetChildren()) do
@@ -70,7 +70,7 @@ local function backtosafeTp()
     end
 end
 
-local function nearestItem()
+function nearestItem()
     local dist = 100
     local dekat = nil   
     for i,v in pairs(game:GetService("Workspace").RunTime.GroundLoot:GetChildren()) do
@@ -129,7 +129,7 @@ local function nearestItem()
     return dekat
 end
 
-local function shop()
+function shop()
     local x = {}
     for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
         if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
@@ -145,7 +145,7 @@ local function shop()
 	end
 end
 
-local function pesan(title, text, time)
+function pesan(title, text, time)
     local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
     local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
