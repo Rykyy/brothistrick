@@ -20,8 +20,9 @@ getgenv().area = nil
 getgenv().areatp = "SunnyForest"
 getgenv().itemlist = "All Tier"
 getgenv().rarity = "All Rarity"
-getgenv().raritysell = 1
+getgenv().modeloot = "Bring Item"
 getgenv().itemsell = "All Tier"
+getgenv().raritysell = 1
 getgenv().stat = "Strength"
 getgenv().mobname = "Blob"
 getgenv().ws = 19
@@ -36,6 +37,7 @@ local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "
 local mobTable = {"Select Mob!"}
 local itemTable = {"All Tier" ,"Copper", "Egg", "T1", "T2", "T3", "T4", "T5"}
 local rarityTable = {"All Rarity", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
+local modelootTable = {"Bring Item", "Tp To Item"}
 local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
 local itemsellTable = {"All Tier", "T1", "T2", "T3", "T4", "T5"}
 local raritysellTable = {"Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
@@ -65,16 +67,6 @@ local function backtosafeTp()
                 end 
             end
         end
-    end
-end
-
-local function moveto(obj)
-    plr.Character.HumanoidRootPart.CFrame = obj
-
-    if not plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-        aunk = Instance.new("BodyVelocity", plr.Character.HumanoidRootPart)
-        aunk.Velocity = Vector3.new(0, 0, 0)
-        aunk.MaxForce = Vector3.new(9e9, 9e9, 9e9)
     end
 end
 
@@ -164,24 +156,10 @@ local function pesan(title, text, time)
     )
 end
 
-
-
 game:GetService("RunService").Heartbeat:Connect(function()
     charIDR = require(plr.PlayerScripts.FrameworkClient.Controllers.GameLogic.GameLoopController)
     charID = charIDR:GetCharInfo().ID
 end)
-
-game:GetService("RunService").Heartbeat:Connect(function()
-    if getgenv().enabled == false then
-        aunp:Disconnect()  
-        if plr.Character ~= nil then
-            if plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-                aunk:Destroy()
-            end
-        end
-    end
-end)
-
 
 repeat wait() until game:IsLoaded() 
     plr.Idled:connect(function()
@@ -342,8 +320,18 @@ autofarm:CreateLabel("~~Farm")
 autofarm:CreateToggle("Enabled", function(bool)
     getgenv().enabled = bool
 
-    if getgenv().enabled == true and charID ~= nil and plr.PlayerGui.DeathScreen.Enabled == true then
-        game:GetService("ReplicatedStorage").Knit.Services.CharacterHealthService.RF.Revive:InvokeServer(charID)
+    if getgenv().enabled == true then
+        if charID ~= nil and plr.PlayerGui.DeathScreen.Enabled == true then
+            game:GetService("ReplicatedStorage").Knit.Services.CharacterHealthService.RF.Revive:InvokeServer(charID)
+        end
+        if not plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+            aunk = Instance.new("BodyVelocity", plr.Character.HumanoidRootPart)
+            aunk.Velocity = Vector3.new(0, 0, 0)
+            aunk.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+        end
+    else
+        aunk:Destroy()
+        backtosafeTp()
     end
 
     aunp = game:GetService("RunService").Heartbeat:Connect(function()
@@ -358,7 +346,6 @@ autofarm:CreateToggle("Enabled", function(bool)
             aunp:Disconnect()
         end
     end)
-
 
     bruh = plr.PlayerGui.DeathScreen.Changed:Connect(function(v)
         if getgenv().enabled == true and charID ~= nil and plr.PlayerGui.DeathScreen.Enabled == true then
@@ -380,7 +367,7 @@ autofarm:CreateToggle("Enabled", function(bool)
                                 if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
                                     repeat
                                         if v:FindFirstChild("HumanoidRootPart") then
-                                            moveto(v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
+                                            plr.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode
                                         end
                                     wait()
                                     until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
@@ -394,16 +381,12 @@ autofarm:CreateToggle("Enabled", function(bool)
             end
         end)
     end)
-    
-    if getgenv().enabled == false then
-        backtosafeTp()
-    end
 end)
 
 autofarm:CreateLabel("~~Loot Settings")
 
 autofarm:CreateDropdown("Items list", itemTable, 1, itemTable[1], function(selected)
-    getgenv().itemlist = selected
+    getgenv().modeloot = selected
 end)
 
 autofarm:CreateDropdown("Rarity list", rarityTable, 1, rarityTable[1], function(selected)
@@ -424,6 +407,10 @@ autofarm:CreateDropdown("Rarity list", rarityTable, 1, rarityTable[1], function(
     end
 end)
 
+autofarm:CreateDropdown("Mode List", modelootTable, 1, modelootTable[1], function(selected)
+    getgenv().modeloot = selected
+end)
+
 
 autofarm:CreateToggle("Loot", function(bool)
     getgenv().loot = bool
@@ -431,9 +418,13 @@ autofarm:CreateToggle("Loot", function(bool)
 
     lootbeat = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().loot == true and nearestItem() ~= nil and plr.Character ~= nil then
-            nearestItem().CFrame = plr.Character.HumanoidRootPart.CFrame
-            local itemname = string.split(nearestItem().Name, "_")[3]
-            game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(itemname)
+            if getgenv().modeloot == "Bring Item" then
+                nearestItem().CFrame = plr.Character.HumanoidRootPart.CFrame
+                game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
+            elseif getgenv().modeloot == "Tp To Item" then
+                plr.Character.HumanoidRootPart.CFrame = nearestItem().CFrame
+                game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
+            end
         end
     end)
 end)
@@ -493,7 +484,7 @@ end)
 st:CreateToggle("Sell", function(bool)
     getgenv().sell = bool
 
-    while wait() do
+    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().sell == true then
             for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
                 if v.Name == "Item" then
@@ -511,9 +502,9 @@ st:CreateToggle("Sell", function(bool)
                 end
             end            
         else
-            break;
+            breh1:Disconnect()
         end
-    end
+    end)
 end)
 
 st:CreateLabel("~~Teleports")
