@@ -27,7 +27,7 @@ getgenv().mobname = "Blob"
 getgenv().ws = 19
 getgenv().jp = 50
 getgenv().distance = 0
-getgenv().target = "Random"
+getgenv().target = "Nearest"
 getgenv().mode = "Nothing"
 getgenv().toggleui = true
 
@@ -35,7 +35,7 @@ getgenv().toggleui = true
 -- Table
 local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 local mobTable = {"Select Mob!"}
-local targetTable = {"Random", "Nearest"}
+local targetTable = {"Nearest", "Random"}
 local itemTable = {"All Tier" ,"Copper", "Egg", "T1", "T2", "T3", "T4", "T5"}
 local rarityTable = {"All Rarity", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
 local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
