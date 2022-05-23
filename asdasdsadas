@@ -157,10 +157,12 @@ main:Toggle("Auto Kick", Settings.kick, function(bool)
         if Settings.kick then
             reps.Remote.RemoteFunction:InvokeServer("Throw", 1)
             if Settings.buff then
-                if wrk.Ignore:FindFirstChild("BuffArea") then
+                if wrk.Ignore:FindFirstChild("BuffArea", true) then
                     plr.Character.HumanoidRootPart.CFrame = wrk.Ignore:FindFirstChild("BuffArea").Model.Dizzy.Stars.CFrame * CFrame.new(-0.2,0,0) * CFrame.Angles(1.5,1.5,1.5) * CFrame.Angles(math.rad(-90),0,0)
                     reps.Remote.RemoteFunction:InvokeServer("Throw", 1)
                 end
+            else
+                reps.Remote.RemoteFunction:InvokeServer("Throw", 1)
             end
         elseif not Settings.kick then
             bruh:Disconnect()
