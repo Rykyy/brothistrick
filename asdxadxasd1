@@ -849,7 +849,9 @@ local library = {
         ["zoom-in-2"] = "rbxassetid://3610253578",
         ["zoom-out"] = "rbxassetid://7743879082",
         ["zoom-out-2"] = "rbxassetid://3610253853",
-    }
+    },
+    
+    Functions = {}
 } -- main
 local page = {}
 local section = {}
@@ -861,6 +863,14 @@ do
 	section.__index = section
 
 	-- new classes
+
+    function library.Functions.findByIndex(t: table, value)
+		for i, v in pairs(t) do
+			if tostring(i):lower() == value:lower() then
+				return v
+			end
+		end
+	end
 
 	function library.new(config)
 		local config = config or {}
@@ -952,7 +962,7 @@ do
 									Position = UDim2.new(0, -20, 0.5, 0),
 									Size = UDim2.new(0, 16, 0, 16),
 									ZIndex = 4,
-									Image = "rbxassetid://" .. tostring(icon),
+									Image = "rbxassetid://" .. library.Functions.findByIndex(config, "icon"),
 									ImageColor3 = themes.TextColor,
 								}) or {}
 							}),
