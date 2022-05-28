@@ -967,7 +967,7 @@ do
                     BackgroundTransparency = 1,
                     LayoutOrder = 1,
                     RichText = true,
-                    TextColor3 = library.Settings.theme.TextColor,
+                    TextColor3 = themes.TextColor,
                     Text = "<b> Saza Hub <font color='"..utility:colorToHex(themes.Accent).."'>".."V2".."</font>!</b>\n <b> Welcome <font color='"..utility:colorToHex(themes.Accent).."'>"..player.DisplayName.."</font></b>",
                     Visible = false,
                     MaxVisibleGraphemes = 1,
