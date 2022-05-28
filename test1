@@ -968,7 +968,7 @@ do
                     LayoutOrder = 1,
                     RichText = true,
                     TextColor3 = library.Settings.theme.TextColor,
-                    Text = "<b> Saza Hub <font color='"..utility:colorToHex(library.Settings.theme.Accent).."'>".."V2".."</font>!</b>\n <b> Welcome <font color='"..utility:colorToHex(library.Settings.theme.Accent).."'>"..player.DisplayName.."</font></b>",
+                    Text = "<b> Saza Hub <font color='"..utility:colorToHex(themes.Accent).."'>".."V2".."</font>!</b>\n <b> Welcome <font color='"..utility:colorToHex(themes.Accent).."'>"..player.DisplayName.."</font></b>",
                     Visible = false,
                     MaxVisibleGraphemes = 1,
                     TextYAlignment = Enum.TextYAlignment.Center,
