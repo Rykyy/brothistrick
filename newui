@@ -235,7 +235,6 @@ do
             task.wait(delay)
         end
     end
-    function
 end
 
 -- classes
