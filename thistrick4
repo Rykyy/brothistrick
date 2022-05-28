@@ -1,51 +1,113 @@
 -- Variable
-local TweenService = game:GetService("TweenService")
 local plr = game:GetService("Players").LocalPlayer
 local reps = game:GetService("ReplicatedStorage")
-local gameName = "⚔️MeloBlox"
-local moblist;
-local tplist;
-local tpbeat;
+local wrk = game:GetService("Workspace")
+local gameName = "Anime Journey"
+local classname;
+local s1;
+local s2;
+local s3;
+local s4;
+local s5;
 local beat;
-local a1beat;
-local a2beat;
-local a3beat;
+local s1beat;
+local s2beat;
+local s3beat;
+local s4beat;
+local s5beat;
 local aunk;
 local aunp;
-local charIDR;
-local charID
+local moblist;
+local idk = nil
+local questinfo = require(reps.SharedModules.INDEXER.QuestInfo)
+local cl1;
+local cl2;
+
+
 
 -- Global
-getgenv().area = nil
-getgenv().areatp = "SunnyForest"
-getgenv().itemlist = "All Tier"
-getgenv().rarity = "All Rarity"
-getgenv().modeloot = "Bring Item"
-getgenv().itemsell = "All Tier"
-getgenv().raritysell = 1
-getgenv().stat = "Strength"
-getgenv().mobname = "Blob"
-getgenv().ws = 19
-getgenv().jp = 50
+getgenv().enabled = nil
+getgenv().mobname = nil
+getgenv().questname = nil
+getgenv().statname = "Power"
 getgenv().distance = 0
-getgenv().mode = "Nothing"
-getgenv().toggleui = true
-
+getgenv().mode = nil
+getgenv().class = nil
+getgenv().tp = nil
 
 -- Table
-local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
-local mobTable = {"Select Mob!"}
-local itemTable = {"All Tier" ,"Copper", "Egg", "T1", "T2", "T3", "T4", "T5"}
-local rarityTable = {"All Rarity", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
-local modelootTable = {"Bring Item", "Tp To Item"}
-local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
-local itemsellTable = {"All Tier", "T1", "T2", "T3", "T4", "T5"}
-local raritysellTable = {"Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
-local areatpTable = {"Tutorial","SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
+local mobTable = {}
+local statTable = {"Power", "Stamina", "Defence"}
+local cl1Table = {}
+local cl2Table = {}
+local tpTable = {}
+
+for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
+    insert = true
+    for a,x in next, questinfo do
+        if a == "GetServerQuestInfo" then
+            for a1,x1 in next, getupvalues(x) do
+                for a2,x2 in next, x1 do
+                    if x2["Npc"] == tostring(v.Npc.Value) then
+                        for _,v2 in pairs(mobTable) do if v2 == tostring("Level "..x2["Level"].." :"..v.NpcName.Text) then insert = false end end
+                        if insert then table.insert(mobTable, tostring("Level "..x2["Level"].." :"..v.NpcName.Text)) end
+                    end
+                end
+            end
+        end
+    end
+end
+
+for _,v in pairs(wrk.Spawns:GetChildren()) do
+    if v.ClassName == "SpawnLocation" then
+        table.insert(tpTable, v.Name)
+    end
+end
+
+for _,v in pairs(reps.Assets.Class:GetChildren()) do
+    insert = true
+    for _,v2 in pairs(cl1Table) do if v2 == tostring(v.Name) then insert = false end end
+    if insert then table.insert(cl1Table, tostring(v.Name)) end
+end
+
+table.sort(mobTable)
 
 -- Function
 
-function nameGui()
+for i,v in next, wrk.QUEST:GetChildren() do
+    local copy = reps.CurrentQuest:Clone()
+    copy.Parent = v.HumanoidRootPart
+    copy.StudsOffset = Vector3.new(0,25,0)
+    copy.StudsOffsetWorldSpace = Vector3.new(0,0,0)
+    copy.Name = "IkkyEspQuest"
+
+    
+    for a,x in next, questinfo do
+        if a == "GetServerQuestInfo" then
+            for a1,x1 in next, getupvalues(x) do
+                for a2,x2 in pairs(x1) do
+                    if a2 == v.Name then
+                        for a3,x3 in next, x2 do
+                            if a3 == "Level" then
+                                for i1,v1 in pairs(copy:GetChildren()) do
+                                    if v1.ClassName == "TextLabel" then
+                                        v1.Parent.Size = UDim2.new(25,25,25,25)
+                                        v1.Parent.StudsOffset = Vector3.new(0,25,0)
+                                        v1.Text = "Quest "..a3..":"..x3
+                                        v1.TextColor3 = Color3.new(255, 255, 0)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+
+local function nameGui()
     local name = nil
     for i,v in pairs(game.CoreGui:GetDescendants()) do
         if v.Name == "UITabs" and v.Parent.Name == "Main" then
@@ -55,81 +117,19 @@ function nameGui()
     return name
 end
 
-function backtosafeTp()
-    if getgenv().area  ~= nil then
-        local dist = math.huge
-        for i,v in pairs(game.Workspace.RegionsAssets[getgenv().area].PlayerSpawner:GetChildren()) do
-            if v.ClassName == "SpawnLocation" then
-                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                if magnitude < dist then
-                    dist = magnitude
-                    plr.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,3,0)
-                end 
-            end
-        end
-    end
+
+local function pesan(title, text, time)
+    local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+    local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+    Notification:Notify(
+        {Title = title, Description = text},
+        {OutlineColor = Color3.fromRGB(255, 84, 84),Time = time, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84)}
+    )
 end
 
-function nearestItem()
-    local dist = 100
-    local dekat = nil   
-    for i,v in pairs(game:GetService("Workspace").RunTime.GroundLoot:GetChildren()) do
-        if getgenv().itemlist == "All Tier" then
-            if getgenv().rarity == "All Rarity" then
-                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                if magnitude < dist then
-                    dist = magnitude
-                    dekat = v
-                end
-            elseif getgenv().rarity ~= "All Rarity" then
-                if v:GetAttribute("Rarity") == getgenv().rarity then
-                    local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                    if magnitude < dist then        
-                        dist = magnitude
-                        dekat = v
-                    end
-                end
-            end
-        elseif getgenv().itemlist ~= "All Tier" and getgenv().itemlist ~= "Copper" and getgenv().itemlist ~= "Egg" then
-            if string.find(v.Name, getgenv().itemlist) or string.find(v.Name, "Gold") or string.find(v.Name, "Egg") then
-                if getgenv().rarity == "All Rarity" then
-                    local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                    if magnitude < dist then        
-                        dist = magnitude
-                        dekat = v
-                    end
-                elseif getgenv().rarity ~= "All Rarity" then
-                    if v:GetAttribute("Rarity") == getgenv().rarity then
-                        local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                        if magnitude < dist then        
-                            dist = magnitude
-                            dekat = v
-                        end
-                    end
-                end
-            end
-        elseif getgenv().itemlist == "Copper" and getgenv().itemlist ~= "Egg" then
-            if string.find(v.Name, "Gold") then
-                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                if magnitude < dist then        
-                    dist = magnitude
-                    dekat = v
-                end
-            end
-        elseif getgenv().itemlist == "Egg" and getgenv().itemlist ~= "Copper" then
-            if string.find(v.Name, "Egg") then
-                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                if magnitude < dist then        
-                    dist = magnitude
-                    dekat = v
-                end
-            end
-        end
-    end
-    return dekat
-end
-
-function shop()
+local function shop()
     local x = {}
     for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
         if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
@@ -145,444 +145,425 @@ function shop()
 	end
 end
 
-function pesan(title, text, time)
-    local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
-    local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
-    Notification:Notify(
-        {Title = title, Description = text},
-        {OutlineColor = Color3.fromRGB(255, 84, 84),Time = time, Type = "image"},
-        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84)}
-    )
+local function tpto(obj)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = obj
+
+    if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+        aunk = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
+        aunk.Velocity = Vector3.new(0, 0, 0)
+        aunk.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    end
 end
 
 game:GetService("RunService").Heartbeat:Connect(function()
-    charIDR = require(plr.PlayerScripts.FrameworkClient.Controllers.GameLogic.GameLoopController)
-    charID = charIDR:GetCharInfo().ID
+    if getgenv().enabled == false then
+        if plr.Character ~= nil then 
+            if plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+                aunk:Destroy()
+            end
+        end
+    end
 end)
 
-repeat wait() until game:IsLoaded() 
-    plr.Idled:connect(function()
-    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+game:GetService("RunService").Heartbeat:Connect(function()
+    for i,v in pairs(plr.PlayerGui.Main.InfoBar:GetChildren()) do
+        if v.Name == "ClassText" then
+            classname = string.split(v.Text, " ")[1]
+        end
+    end
+    for i,v1 in pairs(reps:GetChildren()) do
+        if v1:FindFirstChild("CooldownModule") then
+            v1.CooldownModule:Destroy()
+        end
+    end
 end)
 
+
+-- Library
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/brothistrick/main/brorqdassdax"))()
 
-local window = library:CreateTab(gameName)
+local window = library:CreateTab("AJ")
 local misc = library:CreateTab("Misc")
 
-local autofarm = window:CreateSection("Auto Farm & Auto Loot")
-local st = window:CreateSection("Auto Stats & Auto Sells & Teleports")
+local fq = window:CreateSection("Auto Farm & Auto Quest")
+local sb = window:CreateSection("Auto Stats & Auto Buy & Teleports")
 local sc = misc:CreateSection("Server & Character")
 local credits = misc:CreateSection("Credits")
 
+-- Main Section
 
-autofarm:CreateLabel("~~Mob Settings")
+fq:CreateLabel("~~Mob Settings")
 
-autofarm:CreateDropdown("Area List", areaTable, 1, "Select Area!", function(selected)
-    getgenv().area = selected
+moblist = fq:CreateDropdown("Mob List", mobTable, 1, "Select Mob!", function(selected)
+    getgenv().mobname = string.split(selected, ":")[2]
 
-    for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
-    for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end
+    print(getgenv().mobname)
 
-    for _,v in pairs(game:GetService("Workspace").RunTime[selected].Creatures:GetChildren()) do
-        if v:FindFirstChild("HumanoidRootPart") then
-            insert = true
-            for _,v2 in pairs(mobTable) do if v2 == tostring(v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text) then insert = false end end
-            if insert then table.insert(mobTable, tostring(v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text)) end
-        end 
+    for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
+        if v.NpcName.Text == getgenv().mobname then
+            for a,x in next, questinfo do
+                if a == "GetServerQuestInfo" then
+                    for a1,x1 in next, getupvalues(x) do
+                        for a2,x2 in next, x1 do
+                            if x2["Npc"] == tostring(v.Npc.Value) then
+                                getgenv().questname = a2
+                                print(getgenv().questname)
+                            end
+                        end
+                    end
+                end
+            end
+        end
     end
-
-    moblist:Refresh(mobTable, 1, "Select Mob!")
-    pesan("Mob Settings Notification!", "Make sure the area you choose is open otherwise you will be banned", 2.5)
 end)
 
-moblist = autofarm:CreateDropdown("Mob List", mobTable, 1, mobTable[1], function(selected)
-    getgenv().mobname = selected
-end)
-
-
-autofarm:CreateSlider("Distance", -15, 15, getgenv().distance, 0.999, function(s)
+fq:CreateSlider("Distance", 0, 19, getgenv().distance, 0.999, function(s)
     getgenv().distance = s
 
     if getgenv().distance >= 0  then
-        getgenv().mode = CFrame.Angles(math.rad(-   90),0,0)
-    elseif getgenv().distance <= -1 then
-        getgenv().mode = CFrame.Angles(math.rad(90),0,0)
+        getgenv().mode = CFrame.Angles(math.rad(-90),0,0)
     end
 end)
 
-autofarm:CreateLabel("~~Attack Action Settings")
+fq:CreateToggle("Reset when energy is low\nto restore energy", function(bool)
+    getgenv().reset = bool
 
-autofarm:CreateToggle("Slot 1", function(bool)
-    a1 = bool
-
-    a1beat =  game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().enabled == true and a1 == true then                                              
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer("Action1","Down")
-        elseif getgenv().enabled == false and a1 == false then
-            a1beat:Disconnect()
+    rx = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().reset == true and plr.Stats:GetAttribute("Energy") <= 3 and getgenv().enabled == true then
+            pcall(function()
+                plr.Character:BreakJoints()
+            end)
+        elseif getgenv().reset == false then
+            rx:Disconnect()
         end
     end)
 end)
 
-autofarm:CreateToggle("Slot 2", function(bool)
-    a2 = bool
+fq:CreateLabel("~~Attack Settings")
 
-    a2beat =  game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().enabled == true and a2 == true then
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer("Action2","Down")
-        elseif getgenv().enabled == false and a2 == false then
-            a2beat:Disconnect()    
-        end
-    end)
-end)
+fq:CreateToggle("Basic Attack", function(bool)
+    s1 = bool
 
-
-autofarm:CreateToggle("Slot 3", function(bool)
-    a3 = bool
-
-    a3beat = game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().enabled == true and a3 == true then
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.InputReceived:FireServer("Action3","Down")
-        elseif getgenv().enabled == false and a3 == false then
-            a3beat:Disconnect()
-        end
-    end)
-end)
-
-
-autofarm:CreateButton("Get All Weapon Skill", function()
-    for i,v in pairs(plr.Character:GetChildren()) do
-        if string.find(v.Name, "Axe") then
-            local args = {
-                [1] = "Action1",
-                [2] = "BasicAttack"
-            }
-                
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
-            local args = {
-                [1] = "Action2",
-                [2] = "FireSlash"
-            }
-                
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
-            local args = {
-                [1] = "Action3",
-                [2] = "GroundSlam"
-            }
-                
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
-        elseif string.find(v.Name, "Sword") and not string.find(v.Name, "Shield")  then
-            local args = {
-                [1] = "Action1",
-                [2] = "BasicAttack"
-            }
-                
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
-            local args = {
-                [1] = "Action2",
-                [2] = "SwiftStrike"
-            }
-                
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
-            local args = {
-                [1] = "Action3",
-                [2] = "Whirlwind"
-            }
-                
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
-        elseif string.find(v.Name, "Shield") then
-            local args = {
-                [1] = "Action1",
-                [2] = "BasicAttack"
-            }
-                
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
-            local args = {
-                [1] = "Action2",
-                [2] = "BombShield"
-            }
-                
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
-            local args = {
-                [1] = "Action3",
-                [2] = "HardSkin"
-            }
-                
-            game:GetService("ReplicatedStorage").Knit.Services.ActionBarService.RE.SelectSkill:FireServer(unpack(args))
-        end
-    end
-end)
-
-autofarm:CreateLabel("~~Farm")
-
-autofarm:CreateToggle("Enabled", function(bool)
-    getgenv().enabled = bool
-
-    if getgenv().enabled == true then
-        if charID ~= nil and plr.PlayerGui.DeathScreen.Enabled == true then
-            game:GetService("ReplicatedStorage").Knit.Services.CharacterHealthService.RF.Revive:InvokeServer(charID)
-        end
-        if not plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-            aunk = Instance.new("BodyVelocity", plr.Character.HumanoidRootPart)
-            aunk.Velocity = Vector3.new(0, 0, 0)
-            aunk.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-        end
-    else
-        aunk:Destroy()
-        backtosafeTp()
-    end
-
-    aunp = game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().enabled == true then
-            for i, v in pairs(plr.Character:GetDescendants()) do
-                if v:IsA("BasePart") and v.CanCollide == true then
-                    v.CanCollide = false
-                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+    s1beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and s1 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Punch",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Punch",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and s1 == false then
+                    s1beat:Disconnect()
                 end
-            end
-        elseif getgenv().enabled == false then
-            aunp:Disconnect()
+            end)
         end
     end)
+end)
 
-    bruh = plr.PlayerGui.DeathScreen.Changed:Connect(function(v)
-        if getgenv().enabled == true and charID ~= nil and plr.PlayerGui.DeathScreen.Enabled == true then
-            game:GetService("ReplicatedStorage").Knit.Services.CharacterHealthService.RF.Revive:InvokeServer(charID)
-        elseif getgenv().enabled == false then
-            bruh:Disconnect()
+fq:CreateToggle("Skill1", function(bool)
+    s2 = bool
+
+    s2beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and s2 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill1",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill1",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and s2 == false then
+                    s2beat:Disconnect()
+                end
+            end)
         end
     end)
+end)
+
+fq:CreateToggle("Skill2", function(bool)
+    s3 = bool
+
+    s3beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and s3 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill2",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill2",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and s3 == false then
+                    s3beat:Disconnect()
+                end
+            end)
+        end
+    end)
+end)
+
+fq:CreateToggle("Skill3", function(bool)
+    s4 = bool
+
+    s4beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and s4 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill3",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill3",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and s4 == false then
+                    s4beat:Disconnect()
+                end
+            end)
+        end
+    end)
+end)
+
+fq:CreateToggle("Skill4", function(bool)
+    s5 = bool
+
+    s5beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if plr.Character ~= nil then
+            pcall(function()
+                if getgenv().enabled == true and s5 == true and wrk.NPCS:FindFirstChild(tostring(idk)) and not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    reps.Remotes.SKILL_EVENT:FireServer(classname.."|Skill4",1)
+                    reps.Remotes.HITBOX_EVENT:FireServer(classname.."|Skill4",idk.HumanoidRootPart.Position,idk,true)
+                elseif getgenv().enabled == false and s5 == false then
+                    s5beat:Disconnect()
+                end
+            end)
+        end
+    end)
+end)
+
+
+fq:CreateLabel("~~Farm Settings")
+
+fq:CreateToggle("Quest", function(bool)
+    getgenv().quest = bool
+
+    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().quest == true and getgenv().enabled == true then
+            if plr.Character.LowerTorso:FindFirstChild("Root", true) then
+                if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
+                    if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
+                        wait(0.4)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+                        wait(0.4)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+                        wait(0.4)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+                        wait(0.4)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
+                        wait(0.3)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "AlabastaIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-626, 89, 7198)
+                        wait(0.3)
+                        plr.Character.LowerTorso.Root:Destroy()
+                    end
+                end
+            elseif not plr.Character.LowerTorso:FindFirstChild("Root") and plr.PlayerGui.Frames.Quest.Visible == false then
+                plr.Character.HumanoidRootPart.CFrame = wrk.QUEST[getgenv().questname].RightFoot.CFrame
+                reps.Remotes.QUEST_EVENT:FireServer("QuestAdd", getgenv().questname)
+            end
+        elseif getgenv().quest == false then
+            breh1:Disconnect()
+        end
+    end)     
+end)
+
+fq:CreateToggle("Enabled", function(bool)
+    getgenv().enabled = bool
 
     beat = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
-            if getgenv().enabled == true then
-                if getgenv().area ~= nil then
-                    if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
-                        print("Revive!!!!!!!")
-                    elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
-                        for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
-                            if v:FindFirstChild("HumanoidRootPart") then
-                                if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
+            if getgenv().enabled == true and plr.Character ~= nil then
+                if plr.Character.LowerTorso:FindFirstChild("Root", true) then
+                    if plr.PlayerGui.Frames.Quest.Visible == false or plr.PlayerGui.Frames.Quest.Visible == true then 
+                        if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
+                            wait(0.4)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+                            wait(0.4)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+                            wait(0.4)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+                            wait(0.4)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
+                            wait(0.3)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "AlabastaIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-626, 89, 7198)
+                            wait(0.3)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        end
+                    end
+                elseif not plr.Character.LowerTorso:FindFirstChild("Root") then
+                    for i,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
+                        if v.NpcName.Text == getgenv().mobname then
+                            if v.Npc.Value:FindFirstChild("HumanoidRootPart") and v.Npc.Value:FindFirstChild("Humanoid") then
+                                if v.Npc.Value.Humanoid.Health ~= 0 and getgenv().enabled == true then
                                     repeat
-                                        if v:FindFirstChild("HumanoidRootPart") then
-                                            plr.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode
-                                        end
-                                    wait()
-                                    until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
+                                        idk = v.Npc.Value
+                                        tpto(v.Npc.Value.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode)
+                                        wait()
+                                    until getgenv().enabled == false or not v.Npc.Value:FindFirstChild("HumanoidRootPart") or v.Npc.Value.Humanoid.Health == 0
+                                    if getgenv().enabled == false then
+                                        beat:Disconnect()
+                                    end
                                 end
                             end
                         end
                     end
                 end
-            else
-                beat:Disconnect()
             end
         end)
     end)
-end)
 
-autofarm:CreateLabel("~~Loot Settings")
-
-autofarm:CreateDropdown("Items list", itemTable, 1, itemTable[1], function(selected)
-    getgenv().itemlist = selected
-end)
-
-autofarm:CreateDropdown("Rarity list", rarityTable, 1, rarityTable[1], function(selected)
-    getgenv().rarity = selected
-
-    if selected == "Common" then
-        getgenv().rarity = 1
-    elseif selected == "Uncommon" then
-        getgenv().rarity = 2
-    elseif selected == "Rare" then
-        getgenv().rarity = 3
-    elseif selected == "Epic" then
-        getgenv().rarity = 4
-    elseif selected == "Legendary" then
-        getgenv().rarity = 5
-    elseif selected == "Mythic" then
-        getgenv().rarity = 6
+    if getgenv().enabled == false then
+        beat:Disconnect()
+        plr.Character:BreakJoints()
     end
 end)
 
-autofarm:CreateDropdown("Mode List", modelootTable, 1, modelootTable[1], function(selected)
-    getgenv().modeloot = selected
+-- Main2 Section
+
+sb:CreateLabel("~~Stats")
+
+sb:CreateDropdown("Stats List", statTable, 1, statTable[1], function(selected)
+    getgenv().statname = selected
 end)
 
+sb:CreateToggle("Enabled", function(bool)
+    getgenv().enabled2 = bool
 
-autofarm:CreateToggle("Loot", function(bool)
-    getgenv().loot = bool
-    local lootbeat;
+    beatx = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().enabled2 == true then
+            reps.Remotes.REMOTE_EVENT:FireServer("Add"..getgenv().statname, 1)
+        elseif getgenv().enabled2 == false then
+            beatx:Disconnect()
+        end
+    end)
+end)
 
-    lootbeat = game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().loot == true and nearestItem() ~= nil and plr.Character ~= nil then
-            if getgenv().modeloot == "Bring Item" then
-                nearestItem().CFrame = plr.Character.HumanoidRootPart.CFrame
-                game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
-            elseif getgenv().modeloot == "Tp To Item" then
-                plr.Character.HumanoidRootPart.CFrame = nearestItem().CFrame
-                game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
+sb:CreateLabel("~~Buy")
+
+cl1 = sb:CreateDropdown("Class List", cl1Table, 1, "<--->", function(selected)
+    for i,v in pairs(cl1Table) do
+        if v == selected then
+            print(i)
+            table.remove(cl1Table, i)
+            table.insert(cl2Table, selected)
+            cl1:Refresh(cl1Table, 1, cl1Table[1])
+            cl2:Refresh(cl2Table, 1, cl2Table[1])
+        end
+    end
+end)
+
+cl2 = sb:CreateDropdown("Selected", cl2Table, 1, "<--->", function(selected)
+    for i,v in pairs(cl2Table) do
+        if v == selected then
+            table.remove(cl2Table, i)
+            table.insert(cl1Table, selected)
+            cl1:Refresh(cl1Table, 1, cl1Table[1])
+            cl2:Refresh(cl2Table, 1, cl2Table[1])
+        end
+    end
+end)
+
+sb:CreateToggle("Enabled", function(bool)
+    getgenv().enabled3 = bool
+
+    bruh3 = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().enabled3 == true then
+            if not table.find(cl2Table, classname) then
+                reps.Remotes.SPIN_EVENT:FireServer("CLASS")
+            elseif getgenv().enabled3 == false or table.find(cl2Table, classname) then
+                bruh3:Disconnect()
             end
         end
     end)
 end)
 
-st:CreateLabel("~~Auto Stats")
+sb:CreateLabel("~~Teleports")
 
-st:CreateDropdown("Stat List", statsTable, 1, statsTable[1], function(selected)
-    getgenv().stat = selected
+sb:CreateDropdown("Teleports List", tpTable, 1, tpTable[1], function(selected)
+    getgenv().tp = selected
 end)
 
-st:CreateToggle("Enabled", function(bool)
-    getgenv().enabled1 = bool
-
-    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().enabled1 == true then
-            game:GetService("ReplicatedStorage").Knit.Services.PrimaryStatsService.RF.AttributeStatPoint:InvokeServer(getgenv().stat)
-        elseif getgenv().enabled1 == false then
-            breh1:Disconnect()
-        end
-    end)
+sb:CreateButton("Teleport", function()
+    reps.Remotes.REMOTE_EVENT:FireServer("SetSpawnPoint", getgenv().tp)
+    wait(.1)
+    plr.Character:BreakJoints()
 end)
-
-st:CreateLabel("~~Auto Sell")
-
-st:CreateDropdown("Items list", itemsellTable, 1, itemsellTable[1], function(selected)
-    if selected == "T1" then
-        getgenv().tiersell = "I"
-    elseif selected == "T2" then
-        getgenv().tiersell = "II"
-    elseif selected == "T3" then
-        getgenv().tiersell = "III"
-    elseif selected == "T4" then
-        getgenv().tiersell = "IV"
-    elseif selected == "T5" then
-        getgenv().tiersell = "V"
-    end
-end)
-
-st:CreateDropdown("Rarity list", rarityTable, 1, raritysellTable[1], function(selected)
-    getgenv().raritysell = selected
-
-    if selected == "Common" then
-        getgenv().raritysell = 1
-    elseif selected == "Uncommon" then
-        getgenv().raritysell = 2
-    elseif selected == "Rare" then
-        getgenv().raritysell = 3
-    elseif selected == "Epic" then
-        getgenv().raritysell = 4
-    elseif selected == "Legendary" then
-        getgenv().raritysell = 5
-    elseif selected == "Mythic" then
-        getgenv().raritysell = 6
-    end
-end)
-
-st:CreateToggle("Sell", function(bool)
-    getgenv().sell = bool
-
-    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().sell == true then
-            for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
-                if v.Name == "Item" then
-                    if getgenv().tiersell == "All Tier" then
-                        if v:GetAttribute("Rarity") == getgenv().raritysell then
-                            game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
-                        end
-                    elseif getgenv().tiersell ~= "All Tier" then 
-                        if v.Button.Tier.TextLabel.Text == getgenv().tiersell then
-                            if v:GetAttribute("Rarity") == getgenv().raritysell then
-                                game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
-                            end
-                        end
-                    end
-                end
-            end            
-        else
-            breh1:Disconnect()
-        end
-    end)
-end)
-
-st:CreateLabel("~~Teleports")
-
-st:CreateLabel("~City~")
-
-st:CreateButton("Mystery Shop", function()
-    plr.Character.HumanoidRootPart.CFrame = CFrame.new(343, 4, -110)
-end)
-
-st:CreateButton("Shop", function()
-    plr.Character.HumanoidRootPart.CFrame = CFrame.new(277, 4, -0)
-end)
-
-st:CreateButton("Daily Reward", function()
-    plr.Character.HumanoidRootPart.CFrame = CFrame.new(338, 4, 5)
-end)
-
-st:CreateButton("Bank", function()
-    plr.Character.HumanoidRootPart.CFrame = CFrame.new(274, 4, 131)
-end)
-
-st:CreateLabel("~Area~")
-
-tplist = st:CreateDropdown("Area List", areatpTable, 1, areatpTable[1], function(selected)
-    getgenv().areatp = selected
-
-    if selected then
-        pesan("Teleport Notification!", "Make sure the area you choose is open otherwise you will be banned", 2.5)
-    end
-end)
-
-st:CreateButton("Teleport", function()
-    for i,v in pairs(game:GetService("Workspace").RegionsAssets[getgenv().areatp].PlayerSpawner:GetChildren()) do
-        if v.ClassName == "SpawnLocation" then
-            plr.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,3,0)
-        end
-    end
-end)
-
 
 -- Misc Section
+
 sc:CreateLabel( "~~Server")
 
 sc:CreateButton("Rejoin", function()
-    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, plr)
+    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
 end)
 
-sc:CreateButton("Server Hop", function()
+sc:CreateButton( "Server Hop", function()
     shop()
 end)
 
-
 sc:CreateLabel("~~Character")
 
-sc:CreateSlider("Walk Speed", 19, 125, 16, 0, function(s)
-    getgenv().ws = s
-end)
+sc:CreateSlider("Walk Speed", 16, 125, 16, 0, function(s)
+    local __ = plr.Character
 
-sc:CreateSlider("Jump Power", 50, 125, 50, 0, function(s)
-    getgenv().jp = s
-end)
-
-sc:CreateToggle("Enabled", function(bool)
-    getgenv().wsjp =  bool
-
-    local beat2
-
-    beat2 = game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().wsjp == true then
-            plr.Character.Humanoid.WalkSpeed = getgenv().ws
-            plr.Character.Humanoid.JumpPower = getgenv().jp
-        else
-            plr.Character.Humanoid.WalkSpeed = 19
-            plr.Character.Humanoid.JumpPower = 50
-            beat2:Disconnect()  
-        end
+    if ___ and not _G.___ == true then
+        __.Humanoid.WalkSpeed = s
+        return
+    else
+        _ = hookmetamethod(__, "__index", function(self,w)
+            if w == "WalkSpeed" then
+                return 16
+            end
+            return _(self,w)
+        end)
+    end
+    
+    pcall(function()
+        getgenv().___ = true
     end)
+end)
+
+sc:CreateButton("Invisible", function()
+    if plr.Character.LowerTorso:FindFirstChild("Root", true) then
+        if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "JojoIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(5503, 69, -1127)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "DbzIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(4186, 39, 6157)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "BCIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "AlabastaIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-626, 89, 7198)
+            wait(0.3)
+            plr.Character.LowerTorso.Root:Destroy()
+        end
+    end
 end)
 
 sc:CreateLabel("~~Admin Gui")
@@ -594,8 +575,8 @@ end)
 sc:CreateLabel("~~UI Settings")
 
 sc:CreateKeybind("Toggle Ui", Enum.KeyCode.RightAlt, false, false, function()
-    local nx = nil
-            
+    local TweenService = game:GetService("TweenService")
+
     if getgenv().toggleui then
         getgenv().toggleui = false
         TweenService:Create(nameGui().Main, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 450, 0, 0)}):Play()
@@ -608,16 +589,24 @@ sc:CreateKeybind("Toggle Ui", Enum.KeyCode.RightAlt, false, false, function()
 end)
 
 sc:CreateButton("Destroy UI", function()
+    pesan(gameName, "Thx For Using My Script\n~"..plr.DisplayName.."~", 1.5)
+
+    wait(1.5)
+
     for i,v in pairs(game.CoreGui:GetDescendants()) do
         if v.Name == "UITabs" and v.Parent.Name == "Main" then
             v.Parent.Parent:Destroy()
         end
     end
-end)
+
+    for i,v in pairs(wrk.QUEST:GetDescendants()) do
+        if v.Name == "IkkyEspQuest" then
+            v:Destroy()
+        end
+    end
+end) 
 
 credits:CreateLabel("Made By : Ikky#8337")
 credits:CreateLabel("Tester : Unknown:))")
 
-pesan(gameName, "This Script Made By Ikky#8337\n".."~"..plr.DisplayName.."~ Thx For Using My Script.", 10)
-pesan("Important Notification!", "Make sure the area you choose is open otherwise you will be banned", 25)
-pesan("Notification!", "Anti Afk Activated\nIf you play in ps, you must visit area you choose to spawn the mobs!", 15)
+pesan(gameName,"This Script Made By Ikky#8337\n".."~"..plr.DisplayName.."~ Thx For Using My Script.", 10)
