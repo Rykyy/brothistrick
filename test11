@@ -1092,7 +1092,7 @@ do
                         LayoutOrder = 1,
                         RichText = true,
                         TextColor3 = themes.TextColor,
-                        Text = 
+                        Text = textlabel,
                         Visible = false,
                         MaxVisibleGraphemes = 1,
                         TextYAlignment = Enum.TextYAlignment.Center,
@@ -1143,7 +1143,7 @@ do
             utility:Tween(
                 container.Frame.Square_2,
                 { Position = UDim2.new(0.5, 0, 0, 0), AnchorPoint = Vector2.new(0.5, 0) },
-                0.2
+                0.2 
             ).Completed:Wait()
 
             utility:Tween(container.Frame.Square_1, { Rotation = 0 }, 0.3)
