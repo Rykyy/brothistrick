@@ -1030,6 +1030,7 @@ do
 		})
         if config.madebyikky == true then
             utility:Create("Frame", { -- UI
+                Parent = container,
                 Size = UDim2.new(0, 380, 0, 200),
                 BackgroundColor3 = themes.Background,
                 BackgroundTransparency = 1,
@@ -1100,7 +1101,7 @@ do
                         Font = Enum.Font.SciFi,
                     }),
                 })
-            }),
+            })
 
             utility:Tween(container.Frame.Square_1, { BackgroundTransparency = 0 }, 0.3).Completed:Wait()
             utility:Tween(container.Frame.Square_2, { BackgroundTransparency = 0.5 }, 0.3)
