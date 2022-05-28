@@ -200,6 +200,42 @@ do
 	function utility:DraggingEnded(callback)
 		table.insert(self.ended, callback)
 	end
+    function utility:colorToHex(color)
+        local int = math.floor(color.r * 255) * 256 ^ 2 + math.floor(color.g * 255) * 256 + math.floor(color.b * 255)
+        local current = int
+        local final = ""
+        local hexChar = {
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+        }
+        repeat
+            local remainder = current % 16
+            local char = tostring(remainder)
+            if remainder >= 10 then
+                char = hexChar[1 + remainder - 10]
+            end
+            current = math.floor(current / 16)
+            final = final .. char
+        until current <= 0
+        return "#" .. string.reverse(final)
+    end
+    function utility:TextEffect(TextLabel, delay)
+        TextLabel.Visible = true
+        local displayText = TextLabel.Text
+        displayText = displayText:gsub("<br%s*/>", "\n")
+        displayText:gsub("<[^<>]->", "")
+        local index = 0
+        for i, v in utf8.graphemes(displayText) do
+            index = index + 1
+            TextLabel.MaxVisibleGraphemes = index
+            task.wait(delay)
+        end
+    end
+    function
 end
 
 -- classes
@@ -849,7 +885,8 @@ local library = {
         ["zoom-in-2"] = "rbxassetid://3610253578",
         ["zoom-out"] = "rbxassetid://7743879082",
         ["zoom-out-2"] = "rbxassetid://3610253853",
-    }
+    },
+
 } -- main
 local page = {}
 local section = {}
