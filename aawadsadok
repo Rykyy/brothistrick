@@ -25,7 +25,7 @@ local mobTable = {}
 local statTable = {"Power", "Stamina", "Defence"}
 local cl1Table = {}
 local cl2Table = {}
-local tpTable = {"MainIsland", "JojoIsland", "DbzIsland", "BCIsland", "NarutoIsland"}
+local tpTable = {}
 
 for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
     insert = true
@@ -42,6 +42,13 @@ for _,v in pairs(plr.PlayerGui.Healths:GetChildren()) do
         end
     end
 end
+
+for _,v in pairs(wrk.Spawns:GetChildren()) do
+    if v.ClassName == "SpawnLocation" then
+        table.insert(tpTable, v.Name)
+    end
+end
+
 
 for _,v in pairs(reps.Assets.Class:GetChildren()) do
     insert = true
@@ -429,6 +436,10 @@ fq:Toggle("Quest", Settings.quest, function(bool)
                         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
                         wait(0.3)
                         plr.Character.LowerTorso.Root:Destroy()
+                    elseif plr.Stats:GetAttribute("SpawnPoint") == "AlabastaIsland" then
+                        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-626, 89, 7198)
+                        wait(0.3)
+                        plr.Character.LowerTorso.Root:Destroy()
                     end
                 end
             elseif not plr.Character.LowerTorso:FindFirstChild("Root") and plr.PlayerGui.Frames.Quest.Visible == false then
@@ -467,6 +478,10 @@ fq:Toggle("Enabled", Settings.enabled, function(bool)
                             plr.Character.LowerTorso.Root:Destroy()
                         elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
                             plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
+                            wait(0.3)
+                            plr.Character.LowerTorso.Root:Destroy()
+                        elseif plr.Stats:GetAttribute("SpawnPoint") == "AlabastaIsland" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-626, 89, 7198)
                             wait(0.3)
                             plr.Character.LowerTorso.Root:Destroy()
                         end
@@ -628,7 +643,7 @@ sc:Slider("Walk Speed", 16, 125, 16, function(s)
 end)
 
 sc:Button("Invisible", function()
-    if plr.Character.LowerTorso:FindFirstChild("Root") then
+    if plr.Character.LowerTorso:FindFirstChild("Root", true) then
         if plr.Stats:GetAttribute("SpawnPoint") == "MainIsland" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(-254, 62, 1784)
             wait(0.3)
@@ -645,8 +660,8 @@ sc:Button("Invisible", function()
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(1926, 47, -3648)
             wait(0.3)
             plr.Character.LowerTorso.Root:Destroy()
-        elseif plr.Stats:GetAttribute("SpawnPoint") == "NarutoIsland" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2119, 75, -1864)
+        elseif plr.Stats:GetAttribute("SpawnPoint") == "AlabastaIsland" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-626, 89, 7198)
             wait(0.3)
             plr.Character.LowerTorso.Root:Destroy()
         end
