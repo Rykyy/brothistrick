@@ -904,7 +904,7 @@ do
 
 	function library.new(config)
 		local config = config or {}
-		local title, icon, textlabel = config.Title or game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, config.icon or 7122342585, config.textlabel
+		local title, icon, textlabel = config.Title or game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, config.icon or "rbxassetid://7122342585", config.textlabel
 		local container = utility:Create("ScreenGui", {
 			Name = title,
 			Parent = game.CoreGui
@@ -1203,7 +1203,7 @@ do
 	end
 
 	function page.new(config)
-		local library, title, position, icon = config.library, config.Title or "", config.Position == Enum.VerticalAlignment.Bottom and config.library.bottompagesContainer or config.library.pagesContainer, config.icon or 7618136617
+		local library, title, position, icon = config.library, config.Title or "", config.Position == Enum.VerticalAlignment.Bottom and config.library.bottompagesContainer or config.library.pagesContainer, config.icon or "rbxassetid://7618136617"
 		local button = utility:Create("TextButton", {
 			Name = title,
 			Parent = position,
