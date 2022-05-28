@@ -901,6 +901,27 @@ do
     }
 
 	-- new classes
+    spawn(function()
+        local connection
+        connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
+            if UI then
+                pcall(function()
+                    local hue = tick() % t / t
+                    local color = Color3.fromHSV(hue, RainbowSaturation, 1)
+                    self:setTheme({Theme = "Glow", Color = color})
+                    self:setTheme({Theme = "TextColor", Color = color})
+                    self:setTheme({Theme = "Accent", Color = color})
+                    Section:updateColorPicker(ThemeGlow, "Glow", color)
+                    Section:updateColorPicker(ThemeTextColor, "TextColor", color)
+                end)
+            end
+            if not UI and connection then
+                pcall(function()
+                    connection:Disconnect()
+                end)
+            end
+        end)
+    end)
 
 	function library.new(config)
 		local config = config or {}
@@ -1589,61 +1610,8 @@ do
 		local CameraFollowSystem --= loadstring(game:HttpGet("https://snxw.ga/scripts/CameraFollowSystem.lua"))()
 
 		local Section = page:addSection()
-
-		local ThemeBackground = Section:addColorPicker({Title = "Background", Default = themes.Background, Callback = function(value)
-			self:setTheme({Theme = "Background", Color = value})
-		end})
-		local ThemeGlow = Section:addColorPicker({Title = "Glow", Default = themes.Glow, Callback = function(value)
-			self:setTheme({Theme = "Glow", Color = value})
-		end})
-		local ThemeLightContrast = Section:addColorPicker({Title = "LightContrast", Default = themes.LightContrast, Callback = function(value)
-			self:setTheme({Theme = "LightContrast", Color = value})
-		end})
-		local ThemeDarkContrast = Section:addColorPicker({Title = "DarkContrast", Default = themes.DarkContrast, Callback = function(value)
-			self:setTheme({Theme = "DarkContrast", Color = value})
-		end})
-		local ThemeTextColor = Section:addColorPicker({Title = "TextColor", Default = themes.TextColor, Callback = function(value)
-			self:setTheme({Theme = "TextColor", Color = value})
-		end})
-		local ThemeTransparency = Section:addSlider({Title = "Transparency", Default = themes.Transparency * 100, 0, 100, Callback = function(value)
-			self:setTheme({Theme = "Transparency", Color = value / 100})
-		end})
-		Section:addToggle({Title = "Rainbow Effect", Default = RainbowEffect, Callback = function(value)
-			RainbowEffect = value
-		end})
-		Section:addSlider({Title = "Rainbow Saturation", Default = RainbowSaturation * 100, Min = 0, Max = 100, Callback = function(value)
-			RainbowSaturation = value / 100
-		end})
-		Section:addButton({Title = "Reset UI", Callback = function()
-			Section:updateColorPicker(ThemeBackground, "Background", Color3.fromRGB(24, 24, 24))
-			self:setTheme({Theme = "Background", Color = Color3.fromRGB(24, 24, 24)})
-			Section:updateColorPicker(ThemeGlow, "Glow", Color3.fromRGB(0, 0, 0))
-			self:setTheme({Theme = "Glow", Color = Color3.fromRGB(0, 0, 0)})
-			Section:updateColorPicker(ThemeLightContrast, "LightContrast", Color3.fromRGB(20, 20, 20))
-			self:setTheme({Theme = "LightContrast", Color = Color3.fromRGB(20, 20, 20)})
-			Section:updateColorPicker(ThemeDarkContrast, "DarkContrast", Color3.fromRGB(14, 14, 14))
-			self:setTheme({Theme = "DarkContrast", Color = Color3.fromRGB(14, 14, 14)})
-			Section:updateColorPicker(ThemeTextColor, "TextColor", Color3.fromRGB(255, 255, 255))
-			self:setTheme({Theme = "TextColor", Color = Color3.fromRGB(255, 255, 255)})
-			Section:updateSlider(ThemeTransparency, "Transparency", 50, 0, 100)
-			self:setTheme({Theme = "Transparency", Color = .5})
-		end})
-		Section:addKeybind({Title = "Prefix", Default = Enum.KeyCode.LeftAlt, Callback = function()
+		Section:addKeybind({Title = "Toggle Ui", Default = Enum.KeyCode.LeftAlt, Callback = function()
 			self:toggle()
-		end})
-		Section:addKeybind({Title = "Camera Follow", Default = nil, Callback = function()
-			if CameraFollowSystem.IsEnabled then
-				CameraFollowSystem:Disable()
-				if game.Workspace.CurrentCamera.CameraSubject ~= player.Character.Humanoid then
-					game.Workspace.CurrentCamera.CameraSubject = player.Character.Humanoid
-				end
-			else
-				CameraFollowSystem:Enable()
-				CameraFollowSystem:SetCharacterAlignment(true)
-			end
-		end})
-		Section:addKeybind({Title = "Auto Click", Default = nil, Callback = function()
-			AutoClick = not AutoClick
 		end})
 		Section:addButton({Title = "Kill Gui", Callback = function()
 			self:toggle()
@@ -1656,43 +1624,6 @@ do
 				game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
 			end
 		end})
-		spawn(function()
-            local connection
-            connection = game:GetService("RunService").Heartbeat:Connect(function()
-				if AutoClick and UI then
-					pcall(function()
-						VirtualUser:ClickButton1(Vector2.new())
-					end)
-				end
-                if not UI then
-                    connection:Disconnect()
-                end
-			end)
-		end)
-		spawn(function()
-			local t = 5
-			local tick = tick
-			
-            local connection
-            connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
-				if UI and RainbowEffect then
-					pcall(function()
-						local hue = tick() % t / t
-						local color = Color3.fromHSV(hue, RainbowSaturation, 1)
-						self:setTheme({Theme = "Glow", Color = color})
-						self:setTheme({Theme = "TextColor", Color = color})
-						Section:updateColorPicker(ThemeGlow, "Glow", color)
-						Section:updateColorPicker(ThemeTextColor, "TextColor", color)
-					end)
-				end
-                if not UI and connection then
-					pcall(function()
-                    	connection:Disconnect()
-					end)
-                end
-			end)
-		end)
-		
 		return page
 	end
 	function library:addInfo()
