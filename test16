@@ -1166,8 +1166,6 @@ do
 
             container.Frame:Destroy()
 
-            wait(config.delay)
-
             container.Main.Visible = true
         end
 		local Menu = container.Main.Pages.Pages_Container.Menu
