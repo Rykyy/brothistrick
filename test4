@@ -62,7 +62,9 @@ do
 		return object
 	end
 	function utility:Tween(instance, properties, duration, ...)
-		tween:Create(instance, tweeninfo(duration, ...), properties):Play()
+		local Tween = tween:Create(instance, tweeninfo(duration, ...), properties)
+        Tween:Play()
+        return Tween
 	end
 	function utility:Wait()
 		run.RenderStepped:Wait()
@@ -1097,7 +1099,7 @@ do
 			})
 		})
 
-        utility:Tween(container.Frame.Square_1, { BackgroundTransparency = 0 }, 0.3)
+        utility:Tween(container.Frame.Square_1, { BackgroundTransparency = 0 }, 0.3).Completed:Wait()
         utility:Tween(container.Frame.Square_2, { BackgroundTransparency = 0.5 }, 0.3)
 
         local Tween = utility:Tween(
