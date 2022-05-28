@@ -903,83 +903,11 @@ do
 
 	function library.new(config)
 		local config = config or {}
-		local title, icon = config.Title or game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, config.icon or 7122342585
+		local title, icon, textlabel = config.Title or game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, config.icon or 7122342585, config.textlabel
 		local container = utility:Create("ScreenGui", {
 			Name = title,
 			Parent = game.CoreGui
 		}, {
-            utility:Create("Frame", { -- UI
-                Size = UDim2.new(0, 380, 0, 200),
-                BackgroundColor3 = themes.Background,
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-            }, {
-                utility:Create("ImageLabel", {
-                    Name = "SazaIcon",
-                    Image = "rbxassetid://9746302291",
-                    BackgroundTransparency = 1,
-                    Size = UDim2.new(0,50,0,50),
-                    ImageColor3 = themes.Accent,
-                    Visible = false
-                }),
-                utility:Create("UICorner", {
-                    CornerRadius = UDim.new(0, 8),
-                }),
-                utility:Create("Frame", { -- Square 1
-                    Name = "Square_1",
-                    BackgroundColor3 = themes.Background,
-                    BackgroundTransparency = 1,
-                    ZIndex = 2,
-                    Size = UDim2.new(0, 200, 0, 200),
-                    AnchorPoint = Vector2.new(0.5, 0),
-                    Position = UDim2.new(0.5, 0, 0, 0),
-                }, {
-                    utility:Create("UICorner", {
-                        CornerRadius = UDim.new(0, 8),
-                    }),
-                }),
-                utility:Create("Frame", { -- Square 2
-                    Name = "Square_2",
-                    BackgroundColor3 = themes.Accent,
-                    BackgroundTransparency = 1,
-                    ZIndex = 1,
-                    Size = UDim2.new(0, 200, 0, 200),
-                    AnchorPoint = Vector2.new(0.5, 0),
-                    Position = UDim2.new(0.5, 0, 0, 0),
-                }, {
-                    utility:Create("UICorner", {
-                        CornerRadius = UDim.new(0, 8),
-                    })
-                }),
-                utility:Create("Frame", {
-                    Size = UDim2.new(1, 0, 1, 0),
-                    BackgroundTransparency = 1,
-                }, {
-                    utility:Create("UIPadding", {
-                        PaddingTop = UDim.new(0, 15),
-                        PaddingBottom = UDim.new(0, 15),
-                        PaddingLeft = UDim.new(0, 15),
-                        PaddingRight = UDim.new(0, 15),
-                    }),
-                    utility:Create("TextLabel", {
-                        Name = "WelcomeLabel",
-                        AnchorPoint = Vector2.new(0.5, 0.5),
-                        Position = UDim2.new(0.5, 0, 0.5, 0),
-                        Size = UDim2.new(1, 0, 0, 50),
-                        BackgroundTransparency = 1,
-                        LayoutOrder = 1,
-                        RichText = true,
-                        TextColor3 = themes.TextColor,
-                        Text = "<b> Saza Hub <font color='"..utility:colorToHex(themes.Accent).."'>".."V2".."</font>!</b>\n <b> Welcome <font color='"..utility:colorToHex(themes.Accent).."'>"..player.DisplayName.."</font></b>",
-                        Visible = false,
-                        MaxVisibleGraphemes = 1,
-                        TextYAlignment = Enum.TextYAlignment.Center,
-                        TextSize = 25,
-                        Font = Enum.Font.SciFi,
-                    }),
-                })
-            }),
 			utility:Create("ImageButton", {
 				Name = "Main",
 				BackgroundTransparency = 1,
@@ -1100,73 +1028,146 @@ do
 				})
 			})
 		})
+        if config.madebyikky == true then
+            utility:Create("Frame", { -- UI
+                Size = UDim2.new(0, 380, 0, 200),
+                BackgroundColor3 = themes.Background,
+                BackgroundTransparency = 1,
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+            }, {
+                utility:Create("ImageLabel", {
+                    Name = "SazaIcon",
+                    Image = "rbxassetid://9746302291",
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(0,50,0,50),
+                    ImageColor3 = themes.Accent,
+                    Visible = false
+                }),
+                utility:Create("UICorner", {
+                    CornerRadius = UDim.new(0, 8),
+                }),
+                utility:Create("Frame", { -- Square 1
+                    Name = "Square_1",
+                    BackgroundColor3 = themes.Background,
+                    BackgroundTransparency = 1,
+                    ZIndex = 2,
+                    Size = UDim2.new(0, 200, 0, 200),
+                    AnchorPoint = Vector2.new(0.5, 0),
+                    Position = UDim2.new(0.5, 0, 0, 0),
+                }, {
+                    utility:Create("UICorner", {
+                        CornerRadius = UDim.new(0, 8),
+                    }),
+                }),
+                utility:Create("Frame", { -- Square 2
+                    Name = "Square_2",
+                    BackgroundColor3 = themes.Accent,
+                    BackgroundTransparency = 1,
+                    ZIndex = 1,
+                    Size = UDim2.new(0, 200, 0, 200),
+                    AnchorPoint = Vector2.new(0.5, 0),
+                    Position = UDim2.new(0.5, 0, 0, 0),
+                }, {
+                    utility:Create("UICorner", {
+                        CornerRadius = UDim.new(0, 8),
+                    })
+                }),
+                utility:Create("Frame", {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundTransparency = 1,
+                }, {
+                    utility:Create("UIPadding", {
+                        PaddingTop = UDim.new(0, 15),
+                        PaddingBottom = UDim.new(0, 15),
+                        PaddingLeft = UDim.new(0, 15),
+                        PaddingRight = UDim.new(0, 15),
+                    }),
+                    utility:Create("TextLabel", {
+                        Name = "WelcomeLabel",
+                        AnchorPoint = Vector2.new(0.5, 0.5),
+                        Position = UDim2.new(0.5, 0, 0.5, 0),
+                        Size = UDim2.new(1, 0, 0, 50),
+                        BackgroundTransparency = 1,
+                        LayoutOrder = 1,
+                        RichText = true,
+                        TextColor3 = themes.TextColor,
+                        Text = 
+                        Visible = false,
+                        MaxVisibleGraphemes = 1,
+                        TextYAlignment = Enum.TextYAlignment.Center,
+                        TextSize = 25,
+                        Font = Enum.Font.SciFi,
+                    }),
+                })
+            }),
 
-        utility:Tween(container.Frame.Square_1, { BackgroundTransparency = 0 }, 0.3).Completed:Wait()
-        utility:Tween(container.Frame.Square_2, { BackgroundTransparency = 0.5 }, 0.3)
+            utility:Tween(container.Frame.Square_1, { BackgroundTransparency = 0 }, 0.3).Completed:Wait()
+            utility:Tween(container.Frame.Square_2, { BackgroundTransparency = 0.5 }, 0.3)
 
-        local Tween = utility:Tween(
-            container.Frame,
-            { Rotation = 360 },
-            1,
-            Enum.EasingStyle.Linear,
-            Enum.EasingDirection.In,
-            -1
-        )
+            local Tween = utility:Tween(
+                container.Frame,
+                { Rotation = 360 },
+                1,
+                Enum.EasingStyle.Linear,
+                Enum.EasingDirection.In,
+                -1
+            )
 
 
 
-        utility:Tween(container.Frame, { Rotation = 0 }, 0.3)
-        utility:Tween(container.Frame.Square_1, { Rotation = 180 }, 0.3)
-        utility:Tween(container.Frame.Square_2, { Rotation = 180 }, 0.3).Completed:Wait()
+            utility:Tween(container.Frame, { Rotation = 0 }, 0.3)
+            utility:Tween(container.Frame.Square_1, { Rotation = 180 }, 0.3)
+            utility:Tween(container.Frame.Square_2, { Rotation = 180 }, 0.3).Completed:Wait()
 
-        utility:Tween(container.Frame.Square_1, { Rotation = 45 }, 0.8)
-        utility:Tween(container.Frame.Square_2, { Rotation = 45 }, 0.8).Completed:Wait()
+            utility:Tween(container.Frame.Square_1, { Rotation = 45 }, 0.8)
+            utility:Tween(container.Frame.Square_2, { Rotation = 45 }, 0.8).Completed:Wait()
 
-        utility:Tween(
-            container.Frame.Square_1,
-            { Position = UDim2.new(0, 0, 0, 0), AnchorPoint = Vector2.new(0, 0) },
-            0.2
-        )
-        utility:Tween(
-            container.Frame.Square_2,
-            { Position = UDim2.new(1, 0, 0, 0), AnchorPoint = Vector2.new(1, 0) },
-            0.2
-        )
-        task.wait(1)
+            utility:Tween(
+                container.Frame.Square_1,
+                { Position = UDim2.new(0, 0, 0, 0), AnchorPoint = Vector2.new(0, 0) },
+                0.2
+            )
+            utility:Tween(
+                container.Frame.Square_2,
+                { Position = UDim2.new(1, 0, 0, 0), AnchorPoint = Vector2.new(1, 0) },
+                0.2
+            )
+            task.wait(1)
 
-        utility:Tween(
-            container.Frame.Square_1,
-            { Position = UDim2.new(0.5, 0, 0, 0), AnchorPoint = Vector2.new(0.5, 0) },
-            0.2
-        )
-        utility:Tween(
-            container.Frame.Square_2,
-            { Position = UDim2.new(0.5, 0, 0, 0), AnchorPoint = Vector2.new(0.5, 0) },
-            0.2
-        ).Completed:Wait()
+            utility:Tween(
+                container.Frame.Square_1,
+                { Position = UDim2.new(0.5, 0, 0, 0), AnchorPoint = Vector2.new(0.5, 0) },
+                0.2
+            )
+            utility:Tween(
+                container.Frame.Square_2,
+                { Position = UDim2.new(0.5, 0, 0, 0), AnchorPoint = Vector2.new(0.5, 0) },
+                0.2
+            ).Completed:Wait()
 
-        utility:Tween(container.Frame.Square_1, { Rotation = 0 }, 0.3)
-        utility:Tween(container.Frame.Square_2, { Rotation = 0 }, 0.3).Completed:Wait()
+            utility:Tween(container.Frame.Square_1, { Rotation = 0 }, 0.3)
+            utility:Tween(container.Frame.Square_2, { Rotation = 0 }, 0.3).Completed:Wait()
 
-        utility:Tween(container.Frame.Square_1, { Size = UDim2.new(1, 0, 1, 0) }, 0.2)
-        utility:Tween(container.Frame.Square_2, { Size = UDim2.new(1, 0, 1, 0) }, 0.2)
+            utility:Tween(container.Frame.Square_1, { Size = UDim2.new(1, 0, 1, 0) }, 0.2)
+            utility:Tween(container.Frame.Square_2, { Size = UDim2.new(1, 0, 1, 0) }, 0.2)
 
-        utility:Tween(container.Frame, { Size = UDim2.new(0, 380, 0, 220) }, 0.2).Completed:Wait()
+            utility:Tween(container.Frame, { Size = UDim2.new(0, 380, 0, 220) }, 0.2).Completed:Wait()
 
-        container.Frame.BackgroundTransparency = 0
-        task.wait()
-        container.Frame.Square_1:Destroy()
-        container.Frame.Square_2:Destroy()
-        container.Frame.SazaIcon.Visible = true
+            container.Frame.BackgroundTransparency = 0
+            task.wait()
+            container.Frame.Square_1:Destroy()
+            container.Frame.Square_2:Destroy()
+            container.Frame.SazaIcon.Visible = true
 
-        utility:TextEffect(container.Frame.Frame.WelcomeLabel, 0.02)
+            utility:TextEffect(container.Frame.Frame.WelcomeLabel, 0.02)
 
-        container.Frame:Destroy()
+            container.Frame:Destroy()
 
-        wait(0.02)
+            wait(0.02)
 
-        container.Main.Visible = true
-
+            container.Main.Visible = true
+        end
 		local Menu = container.Main.Pages.Pages_Container.Menu
 		Menu.MouseButton1Click:Connect(function()
 			if container.Main.Pages.Size == UDim2.new(0, 40, 1, 0) then
