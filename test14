@@ -1039,7 +1039,7 @@ do
                 AnchorPoint = Vector2.new(0.5, 0.5),
             }, {
                 utility:Create("ImageLabel", {
-                    Name = "Icon",
+                    Name = "WelcomeIcon",
                     Image = config.welcomeicon,
                     BackgroundTransparency = 1,
                     Size = UDim2.new(0,50,0,50),
@@ -1160,7 +1160,7 @@ do
             task.wait()
             container.Frame.Square_1:Destroy()
             container.Frame.Square_2:Destroy()
-            container.Frame.SazaIcon.Visible = true
+            container.Frame.WelcomeIcon.Visible = true
 
             utility:TextEffect(container.Frame.Frame.WelcomeLabel, config.delay)
 
