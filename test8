@@ -10,7 +10,7 @@ game:GetService("Players").LocalPlayer.Idled:connect(function()
 end)
 
 -- Variables
-local player = game.Players.LocalPlayer
+local player = game:GetService("Players").LocalPlayer
 local mouse = player:GetMouse()
 local UserData = game:HttpGet("https://users.roblox.com/v1/users/".. player.UserId)
 
