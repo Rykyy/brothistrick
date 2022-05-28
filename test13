@@ -908,7 +908,7 @@ do
 			Name = title,
 			Parent = game.CoreGui
 		}, {
-			local qwerty = utility:Create("ImageButton", {
+			utility:Create("ImageButton", {
 				Name = "Main",
 				BackgroundTransparency = 1,
 				Position = UDim2.new(0.1, 0, .5 - (.5 / 2), 0),
@@ -1029,7 +1029,7 @@ do
 			})
 		})
         if config.madebyikky == true then
-            qwerty.Visible = false
+            container.Main.Visible = false
             utility:Create("Frame", { -- UI
                 Parent = container,
                 Size = UDim2.new(0, 380, 0, 200),
