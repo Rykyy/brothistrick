@@ -1028,7 +1028,7 @@ do
 				})
 			})
 		})
-        if config.madebyikky == true then
+        if config.welcome == true then
             container.Main.Visible = false
             utility:Create("Frame", { -- UI
                 Parent = container,
@@ -1039,8 +1039,8 @@ do
                 AnchorPoint = Vector2.new(0.5, 0.5),
             }, {
                 utility:Create("ImageLabel", {
-                    Name = "SazaIcon",
-                    Image = "rbxassetid://9746302291",
+                    Name = "Icon",
+                    Image = config.welcomeicon,
                     BackgroundTransparency = 1,
                     Size = UDim2.new(0,50,0,50),
                     ImageColor3 = themes.Accent,
@@ -1162,11 +1162,11 @@ do
             container.Frame.Square_2:Destroy()
             container.Frame.SazaIcon.Visible = true
 
-            utility:TextEffect(container.Frame.Frame.WelcomeLabel, 0.02)
+            utility:TextEffect(container.Frame.Frame.WelcomeLabel, config.delay)
 
             container.Frame:Destroy()
 
-            wait(0.02)
+            wait(config.delay)
 
             container.Main.Visible = true
         end
