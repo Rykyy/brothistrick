@@ -224,6 +224,7 @@ do
         until current <= 0
         return "#" .. string.reverse(final)
     end
+
     function utility:TextEffect(TextLabel, delay)
         TextLabel.Visible = true
         local displayText = TextLabel.Text
@@ -236,6 +237,7 @@ do
             task.wait(delay)
         end
     end
+
 end
 
 -- classes
