@@ -3983,8 +3983,7 @@ do
         local SizeRounded;
 		
 		if value then -- support negative ranges
-			percent = tostring(value and (value / max) * (max - min) + min) or 0
-            slider.TextBox.Text = percent
+			percent = (value - min) / (max - min)
 		end
 
         percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
@@ -3992,7 +3991,7 @@ do
         SizeRounded = UDim2.new((math.round(percent * ((max / Increment) * 4)) / ((max / Increment) * 4)), 0, 1, 0)
 		value = math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
 		
-		slider.TextBox.Text = value
+		slider.TextBox.Text = tostring(value)
         --UDim2.new(percent, 0, 1, 0)
 		utility:Tween(bar.Fill, {Size = SizeRounded}, 0.1)
 		
