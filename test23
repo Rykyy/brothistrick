@@ -904,18 +904,14 @@ do
     spawn(function()
         local connection
         connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
-            if UI then
-                pcall(function()
-                    local hue = tick() % t / t
-                    local color = Color3.fromHSV(hue, 0.5, 1)
-                    self:setTheme({Theme = "Glow", Color = color})
-                    self:setTheme({Theme = "TextColor", Color = color})
-                    self:setTheme({Theme = "Accent", Color = color})
-                    Section:updateColorPicker(ThemeGlow, "Glow", color)
-                    Section:updateColorPicker(ThemeTextColor, "TextColor", color)
-                end)
-            end
-            if not UI and connection then
+            pcall(function()
+                local hue = tick() % t / t
+                local color = Color3.fromHSV(hue, 0.5, 1)
+                self:setTheme({Theme = "Glow", Color = color})
+                self:setTheme({Theme = "TextColor", Color = color})
+                self:setTheme({Theme = "Accent", Color = color})
+            end)
+            if not connection then
                 pcall(function()
                     connection:Disconnect()
                 end)
