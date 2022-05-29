@@ -127,9 +127,10 @@ function nearestItem()
                 elseif getgenv().rarity ~= "All Rarity" then
                     if v:GetAttribute("Rarity") == getgenv().rarity then
                         local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                    if magnitude < dist then        
-                        dist = magnitude
-                        dekat = v
+                        if magnitude < dist then        
+                            dist = magnitude
+                            dekat = v
+                        end
                     end
                 end
             end
