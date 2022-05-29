@@ -3451,7 +3451,7 @@ do
 			end
 		end
 		
-		--self:updateSlider(slider, nil, value, min, max, inc)
+		self:updateSlider(slider, nil, nil, min, max, inc)
 		
 		utility:DraggingEnded(function()
 			dragging = false
