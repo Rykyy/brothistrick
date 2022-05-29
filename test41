@@ -3977,9 +3977,8 @@ do
 			slider.Title.Text = title
 		end
 		
-        local xxx = slider.Slider
 		local bar = slider.Slider.Bar
-		local percent = (mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X
+		local percent = UDim2.new(math.clamp((mouse.Position.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X,0,1),0,1,0)
         local ikkypre = ((percent * max) / max) * (max - min) + min
         local ikkynonpre = math.floor(((percent * max) / max) * (max - min) + min)
 		
@@ -3987,7 +3986,7 @@ do
 			percent = (value - min) / (max - min)
 		end
 		
-		percent = UDim2.new(math.clamp((percent - xxx.AbsolutePosition.X) / xxx.AbsoluteSize.X,0,1),0,1,0)
+		--percent = math.clamp(percent, 0, 1)
 		value = value or precise and ikkynonpre or ikkypre
 		
 		slider.TextBox.Text = tonumber(string.format("%.2f", value))
