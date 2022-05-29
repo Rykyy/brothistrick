@@ -1095,7 +1095,7 @@ do
                         LayoutOrder = 1,
                         RichText = true,
                         TextColor3 = themes.TextColor,
-                        Text = welcomelabel,
+                        Text = config.welcomelabel,
                         Visible = false,
                         MaxVisibleGraphemes = 1,
                         TextYAlignment = Enum.TextYAlignment.Center,
