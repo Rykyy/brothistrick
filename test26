@@ -901,19 +901,6 @@ do
     }
 
 	-- new classes
-    local t = 5
-	local tick = tick
-
-    local connection
-    connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
-        pcall(function()
-            local hue = tick() % t / t
-            local color = Color3.fromHSV(hue, 0.5, 1)
-            self:setTheme({Theme = "Glow", Color = color})
-            self:setTheme({Theme = "TextColor", Color = color})
-            self:setTheme({Theme = "Accent", Color = color})
-        end)
-    end)
 
 	function library.new(config)
 		local config = config or {}
@@ -1207,7 +1194,32 @@ do
 		utility:InitializeKeybind()
 		utility:DraggingEnabled(container.Main, container.Main)
 		UI = container
-		return setmetatable({
+
+        spawn(function()
+			local t = 5
+			local tick = tick
+			
+            local connection
+            connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
+				if UI and config.rainbow == true then
+					pcall(function()
+						local hue = tick() % t / t
+						local color = Color3.fromHSV(hue, 0.5, 1)
+						self:setTheme({Theme = "Glow", Color = color})
+						self:setTheme({Theme = "TextColor", Color = color})
+						Section:updateColorPicker(ThemeGlow, "Glow", color)
+						Section:updateColorPicker(ThemeTextColor, "TextColor", color)
+					end)
+				end
+                if not UI and connection then
+					pcall(function()
+                    	connection:Disconnect()
+					end)
+                end
+			end)
+		end)
+        
+        return setmetatable({
 			container = container,
 			pagesContainer = container.Main.Pages.Pages_Container,
 			bottompagesContainer = container.Main.Pages.Pages_BottomContainer,
