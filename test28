@@ -1195,28 +1195,6 @@ do
 		utility:DraggingEnabled(container.Main, container.Main)
 		UI = container
 
-        spawn(function()
-			local t = 5
-			local tick = tick
-			
-            local connection
-            connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
-				if config.Rainbow == true then
-					pcall(function()
-						local hue = tick() % t / t
-						local color = Color3.fromHSV(hue, 1, 1)
-						self:setTheme({Theme = "Glow", Color = color})
-						self:setTheme({Theme = "TextColor", Color = color})
-					end)
-				end
-                if not config.Rainbow and connection then
-					pcall(function()
-                    	connection:Disconnect()
-					end)
-                end
-			end)
-		end)
-
         return setmetatable({
 			container = container,
 			pagesContainer = container.Main.Pages.Pages_Container,
@@ -1596,6 +1574,30 @@ do
 		
 		return page
 	end
+    function library:addRainbow(config)
+        local config = config or {}
+		local t = 5
+		local tick = tick
+			
+        local connection
+        connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
+			if UI and config.Enabled == true then
+				pcall(function()
+					local hue = tick() % t / t
+					local color = Color3.fromHSV(hue, 0.1, 1)
+					self:setTheme({Theme = "Glow", Color = color})
+					self:setTheme({Theme = "TextColor", Color = color})
+				end)
+			end
+            if not UI and connection then
+				pcall(function()
+                    connection:Disconnect()
+				end)
+            end
+		end)
+
+        return page
+    end
 	function library:addSettings()
 	
 		local page = page.Settings({library = self})
