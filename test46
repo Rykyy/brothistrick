@@ -3301,7 +3301,7 @@ do
 
 	function section:addSlider(config)
 		local config = config or {}
-		local title, default, min, max, precise, callback, search, ToolTipText = config.Title or "Slider", config.Default or 0, config.Min or 0, config.Max or 1, config.Precise or 1, config.Callback or function()end, config.Search or false, config.ToolTipText
+		local title, default, min, max, inc, callback, search, ToolTipText = config.Title or "Slider", config.Default or 0, config.Min or 0, config.Max or 1, confing.Increment or 1, config.Callback or function()end, config.Search or false, config.ToolTipText
 		local slider = utility:Create("ImageButton", {
 			Name = "Slider",
 			Parent = self.container,
@@ -3451,7 +3451,7 @@ do
 			end
 		end
 		
-		self:updateSlider(slider, nil, value, min, max, precise)
+		self:updateSlider(slider, nil, value, min, max, inc)
 		
 		utility:DraggingEnded(function()
 			dragging = false
@@ -3463,7 +3463,7 @@ do
 			while dragging do
 				utility:Tween(circle, {ImageTransparency = 0}, 0.1)
 				
-				value = self:updateSlider(slider, nil, nil, min, max, precise, value)
+				value = self:updateSlider(slider, nil, nil, min, max, inc, value)
 				callback(value)
 				
 				utility:Wait()
@@ -3475,7 +3475,7 @@ do
 		
 		textbox.FocusLost:Connect(function()
 			if not tonumber(textbox.Text) then
-				value = self:updateSlider(slider, nil, default or min, min, max, precise)
+				value = self:updateSlider(slider, nil, default or min, min, max, inc)
 				callback(value)
 			end
 		end)
@@ -3486,7 +3486,7 @@ do
 			if not allowed[text] and not tonumber(text) then
 				textbox.Text = text:sub(1, #text - 1)
 			elseif not allowed[text] then	
-				value = self:updateSlider(slider, nil, tonumber(text) or value, min, max, precise)
+				value = self:updateSlider(slider, nil, tonumber(text) or value, min, max, inc)
 				callback(value)
 			end
 		end)
@@ -3970,29 +3970,30 @@ do
 		end
 	end
 
-	function section:updateSlider(slider, title, value, min, max, precise, lvalue)
+	function section:updateSlider(slider, title, value, min, max, inc, lvalue)
 		slider = self:getModule(slider)
 		
 		if title then
 			slider.Title.Text = title
 		end
 		
-        local xx = slider.Slider
-        
 		local bar = slider.Slider.Bar
-		local percent = UDim2.new(math.clamp((mouse.X - xx.AbsolutePosition.X) / xx.AbsoluteSize.X,0,1),0,1,0)
-        local ikkypre = ((percent.X.Scale * max) / max) * (max - min) + min
-        local ikkynonpre = math.floor(((percent.X.Scale * max) / max) * (max - min) + min)
+		local percent;
+        local Increment;
+        local SizeRounded;
 		
 		if value then -- support negative ranges
 			percent = (value - min) / (max - min)
 		end
+
+        percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
+		Increment = inc and (max / ((max - min) / (inc * 4))) or (max >= 50 and max / ((max - min) / 4)) or (max >= 25 and max / ((max - min) / 2)) or (max / (max - min))
+        SizeRounded = UDim2.new((math.round(percent * ((max / Increment) * 4)) / ((max / Increment) * 4)), 0, 1, 0)
+		value = math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
 		
-		--percent = math.clamp(percent, 0, 1)
-		value = value or precise and ikkynonpre or ikkypre
-		
-		slider.TextBox.Text = tonumber(string.format("%.2f", value))
-		utility:Tween(bar.Fill, {Size = UDim2.new(percent, 0, 1, 0)}, 0.1)
+		slider.TextBox.Text = value
+        --UDim2.new(percent, 0, 1, 0)
+		utility:Tween(bar.Fill, {Size = SizeRounded}, 0.1)
 		
 		if value ~= lvalue and slider.ImageTransparency == themes.Transparency then
 			utility:Pop(slider, 10)
