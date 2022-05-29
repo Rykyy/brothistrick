@@ -3365,7 +3365,7 @@ do
 					utility:Create("ImageLabel", {
 						Name = "Fill",
 						BackgroundTransparency = 1,
-						Size = UDim2.new(0.8, 0, 1, 0),
+						Size = UDim2.new(0, 0, 0, 0),
 						ZIndex = 3,
 						Image = "rbxassetid://5028857472",
 						ImageColor3 = themes.TextColor,
