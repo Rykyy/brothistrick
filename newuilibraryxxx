@@ -3487,14 +3487,13 @@ do
 		end)
 		
 		textbox:GetPropertyChangedSignal("Text"):Connect(function()
-			local text = textbox.Text
-			
-			if not allowed[text] and not tonumber(text) then
-				textbox.Text = text:sub(1, #text - 1)
-			elseif not allowed[text] then	
-				value = self:updateSlider(slider, nil, tonumber(text) or value, min, max, inc)
-				callback(value)
-			end
+            if textbox.Text == "" or tonumber(textbox.Text) <= min then
+                textbox.Text = Min
+                callback(tonumber(textbox.Text))
+            elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) >= max then
+                textbox.Text = Max
+                callback(tonumber(textbox.Text))
+            end
 		end)
 		
 		if search then
