@@ -907,7 +907,7 @@ do
             if UI then
                 pcall(function()
                     local hue = tick() % t / t
-                    local color = Color3.fromHSV(hue, RainbowSaturation, 1)
+                    local color = Color3.fromHSV(hue, 0.5, 1)
                     self:setTheme({Theme = "Glow", Color = color})
                     self:setTheme({Theme = "TextColor", Color = color})
                     self:setTheme({Theme = "Accent", Color = color})
@@ -1604,10 +1604,6 @@ do
 		end)
 		
 		-- variables
-		local AutoClick = false
-		local RainbowEffect = false
-		local RainbowSaturation = 0.5
-		local CameraFollowSystem --= loadstring(game:HttpGet("https://snxw.ga/scripts/CameraFollowSystem.lua"))()
 
 		local Section = page:addSection()
 		Section:addKeybind({Title = "Toggle Ui", Default = Enum.KeyCode.LeftAlt, Callback = function()
