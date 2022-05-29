@@ -3480,7 +3480,7 @@ do
             elseif textbox.Text == "" or tonumber(textbox.Text) <= min then
                 textbox.Text = min
                 callback(tonumber(textbox.Text))
-            elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) >= max then
+            elseif textbox.Textt == "" or tonumber(textbox.Text) >= max then
                 textbox.Text = max
                 callback(tonumber(textbox.Text))
 			end
@@ -3490,7 +3490,7 @@ do
             if textbox.Text == "" or tonumber(textbox.Text) <= min then
                 textbox.Text = min
                 callback(tonumber(textbox.Text))
-            elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) >= max then
+            elseif textbox.Text == "" or tonumber(textbox.Text) >= max then
                 textbox.Text = max
                 callback(tonumber(textbox.Text))
             end
