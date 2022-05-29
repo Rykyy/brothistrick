@@ -3983,7 +3983,7 @@ do
         local SizeRounded;
 		
 		if value then -- support negative ranges
-			percent = (value and (value / max) * (max - min) + min) or 0
+			percent = tostring(value and (value / max) * (max - min) + min) or 0
 		end
 
         percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
