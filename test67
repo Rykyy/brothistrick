@@ -3451,7 +3451,7 @@ do
 			end
 		end
 
-        --self:updateSlider(slider, nil, value, min, max, inc)
+        self:updateSlider(slider, nil, value, min, max, inc)
 		
 		utility:DraggingEnded(function()
 			dragging = false
@@ -3492,7 +3492,7 @@ do
 		end)
 		
 		if search then
-			config.Title, config.Default, config.Min, config.Max, config.Callback, config.Search, config.ToolTipText = title, default, min, max, callback, search, ToolTipText
+			config.Title, config.Default, config.Min, config.Max, config.Increment, config.Callback, config.Search, config.ToolTipText = title, default, min, max, inc, callback, search, ToolTipText
 			table.insert(SearchModules, {class = "addSlider", variables = config})
 		end
 		return slider
