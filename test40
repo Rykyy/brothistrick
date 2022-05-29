@@ -3987,7 +3987,7 @@ do
 			percent = (value - min) / (max - min)
 		end
 		
-		percent = UDim2.new(math.clamp((percent.Position.X - xxx.AbsolutePosition.X) / xxx.AbsoluteSize.X,0,1),0,1,0)
+		percent = UDim2.new(math.clamp((percent - xxx.AbsolutePosition.X) / xxx.AbsoluteSize.X,0,1),0,1,0)
 		value = value or precise and ikkynonpre or ikkypre
 		
 		slider.TextBox.Text = tonumber(string.format("%.2f", value))
