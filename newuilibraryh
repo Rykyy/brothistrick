@@ -3985,25 +3985,25 @@ do
 		
 		local bar = slider.Slider.Bar
 		local percent;
-        local Increment;
-        local SizeRounded;
+        local SliderIncrement;
+        local SliderNonIncrement;
         local SliderValue;
 		
-        percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
-		Increment = inc and (max / ((max - min) / (inc * 4))) or (max >= 50 and max / ((max - min) / 4)) or (max >= 25 and max / ((max - min) / 2)) or (max / (max - min))
-        SizeRounded = UDim2.new((math.round(percent * ((max / Increment) * 4)) / ((max / Increment) * 4)), 0, 1, 0)
-        SliderValue = math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
+        percent = UDim2.new(math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1),0,1,0)
+		SliderIncrement = ((percent.X.Scale * max) / max) * (max - Min) + min
+        SliderNonIncrement = math.floor(((percent.X.Scale * max) / max) * (max - min) + min)
+        SliderValue = inc and SliderNonIncrement or SliderIncrement
         
 
         if value then -- support negative ranges
-            SizeRounded = UDim2.new((value or 0) / max, 0, 1, 0)
+            SizeRounded = UDim2.new(value / max,0,1,0)
 		end
 
 		value = value or tonumber(string.format("%.2f", SliderValue))
 	
 
 		slider.TextBox.Text = value
-		utility:Tween(bar.Fill, {Size = SizeRounded}, 0.1)
+		utility:Tween(bar.Fill, {Size = percent}, 0.1)
 		
 		if value ~= lvalue and slider.ImageTransparency == themes.Transparency then
 			utility:Pop(slider, 10)
