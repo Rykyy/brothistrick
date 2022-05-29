@@ -3477,6 +3477,12 @@ do
 			if not tonumber(textbox.Text) then
 				value = self:updateSlider(slider, nil, default or min, min, max, inc)
 				callback(value)
+            elseif textbox.Text == "" or tonumber(textbox.Text) <= min then
+                textbox.Text = Min
+                callback(tonumber(textbox.Text))
+            elseif Slider.Value.Text == "" or tonumber(Slider.Value.Text) >= max then
+                textbox.Text = Max
+                callback(tonumber(textbox.Text))
 			end
 		end)
 		
@@ -3981,16 +3987,19 @@ do
 		local percent;
         local Increment;
         local SizeRounded;
+        local SliderValue;
 		
         percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
 		Increment = inc and (max / ((max - min) / (inc * 4))) or (max >= 50 and max / ((max - min) / 4)) or (max >= 25 and max / ((max - min) / 2)) or (max / (max - min))
         SizeRounded = UDim2.new((math.round(percent * ((max / Increment) * 4)) / ((max / Increment) * 4)), 0, 1, 0)
+        SliderValue = math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
+        
 
         if value then -- support negative ranges
             SizeRounded = UDim2.new((value or 0) / max, 0, 1, 0)
 		end
 
-		value = value or math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
+		value = value or tonumber(string.format("%.2f", SliderValue))
 	
 
 		slider.TextBox.Text = value
