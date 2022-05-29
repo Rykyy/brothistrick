@@ -844,12 +844,14 @@ do
 		end})
 		local ThemeTransparency = Section:addSlider({Title = "Transparency", Default = themes.Transparency * 100, 0, 100, Callback = function(value)
 			self:setTheme({Theme = "Transparency", Color = value / 100})
+            print(value / 100)
 		end})
 		Section:addToggle({Title = "Rainbow Effect", Default = RainbowEffect, Callback = function(value)
 			RainbowEffect = value
 		end})
 		Section:addSlider({Title = "Rainbow Saturation", Default = RainbowSaturation * 100, Min = 0, Max = 100, Callback = function(value)
 			RainbowSaturation = value / 100
+            print(RainbowSaturation)
 		end})
 		Section:addButton({Title = "Reset UI", Callback = function()
 			Section:updateColorPicker(ThemeBackground, "Background", Color3.fromRGB(24, 24, 24))
