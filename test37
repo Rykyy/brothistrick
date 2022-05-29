@@ -3979,7 +3979,7 @@ do
 		
 		local bar = slider.Slider.Bar
 		local percent = (mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X
-        local ikkypre = ((percent * Max) / Max) * (Max - Min) + Min
+        local ikkypre = ((percent * max) / max) * (max - min) + min
         local ikkynonpre = math.floor(((percent * max) / max) * (max - min) + min)
 		
 		if value then -- support negative ranges
