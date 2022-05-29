@@ -3480,7 +3480,7 @@ do
             elseif textbox.Text == "" or tonumber(textbox.Text) <= min then
                 textbox.Text = min
                 callback(tonumber(textbox.Text))
-            elseif textbox.Textt == "" or tonumber(textbox.Text) >= max then
+            elseif textbox.Text == "" or tonumber(textbox.Text) >= max then
                 textbox.Text = max
                 callback(tonumber(textbox.Text))
 			end
