@@ -3989,8 +3989,8 @@ do
         local SliderNonIncrement;
         local SliderValue;
 		
-        percent = UDim2.new(math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1),0,1,0)
-		SliderIncrement = ((percent.X.Scale * max) / max) * (max - Min) + min
+        percent = UDim2.new(math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1), 0, 1, 0)
+		SliderIncrement = ((percent.X.Scale * max) / max) * (max - min) + min
         SliderNonIncrement = math.floor(((percent.X.Scale * max) / max) * (max - min) + min)
         SliderValue = inc and SliderNonIncrement or SliderIncrement
         
