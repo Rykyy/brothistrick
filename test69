@@ -3984,7 +3984,7 @@ do
 
         if value then -- support negative ranges
 			percent = (value - min) / (max - min)
-            --percent = math.clamp(percent, 0, 1)
+            percent = math.clamp(percent, 0, 1)
             SizeRounded = UDim2.new(percent, 0, 1, 0)
 		end
 		
