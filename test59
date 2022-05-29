@@ -3451,7 +3451,7 @@ do
 			end
 		end
 		
-		self:updateSlider(slider, nil, value, min, max, inc)
+		--self:updateSlider(slider, nil, value, min, max, inc)
 		
 		utility:DraggingEnded(function()
 			dragging = false
@@ -3982,13 +3982,10 @@ do
         local Increment;
         local SizeRounded;
 		
-		if value ~= nil then -- support negative ranges
-			percent = (value - min) / (max - min)
-		end
-
         percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
 		Increment = inc and (max / ((max - min) / (inc * 4))) or (max >= 50 and max / ((max - min) / 4)) or (max >= 25 and max / ((max - min) / 2)) or (max / (max - min))
         SizeRounded = UDim2.new((math.round(percent * ((max / Increment) * 4)) / ((max / Increment) * 4)), 0, 1, 0)
+
 		value = math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20 or percent
 		
 		slider.TextBox.Text = value
