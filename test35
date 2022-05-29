@@ -3985,7 +3985,7 @@ do
 		end
 		
 		percent = math.clamp(percent, 0, 1)
-		value = value or math.floor(((percent.X.Scale * max) / max) * (max - min) + min)
+		value = value or math.floor(((percent * max) / max) * (max - min) + min)
 		
 		slider.TextBox.Text = value
 		utility:Tween(bar.Fill, {Size = UDim2.new(percent, 0, 1, 0)}, 0.1)
