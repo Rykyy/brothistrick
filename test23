@@ -902,6 +902,9 @@ do
 
 	-- new classes
     spawn(function()
+        local t = 5
+		local tick = tick
+
         local connection
         connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
             pcall(function()
