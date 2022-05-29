@@ -3987,7 +3987,7 @@ do
         SizeRounded = UDim2.new((math.round(percent * ((max / Increment) * 4)) / ((max / Increment) * 4)), 0, 1, 0)
 
         if value then -- support negative ranges
-            SizeRounded = UDim2.new((value or 0) / max, 0, 1, 0)
+            SizeRounded = UDim2.new(value / max,0,1,0)
 		end
 
 		value = value or math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
