@@ -1095,7 +1095,7 @@ do
                         LayoutOrder = 1,
                         RichText = true,
                         TextColor3 = themes.TextColor,
-                        Text = textlabel,
+                        Text = welcomelabel,
                         Visible = false,
                         MaxVisibleGraphemes = 1,
                         TextYAlignment = Enum.TextYAlignment.Center,
@@ -1574,11 +1574,13 @@ do
 		
 		return page
 	end
-    function library:addRainbow(config)
+    function library:nahthismadebyikky(config)
         local config = config or {}
 		local t = 5
 		local tick = tick
 			
+        self:setTheme({Theme = "Transparency", Color = 0.01})
+
         local connection
         connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
 			if UI and config.Enabled == true then
