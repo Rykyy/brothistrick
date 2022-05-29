@@ -3978,7 +3978,7 @@ do
 		end
 		
 		local bar = slider.Slider.Bar
-		local percent = UDim2.new(math.clamp((mouse.Position.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X,0,1),0,1,0)
+		local percent = UDim2.new(math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X,0,1),0,1,0)
         local ikkypre = ((percent * max) / max) * (max - min) + min
         local ikkynonpre = math.floor(((percent * max) / max) * (max - min) + min)
 		
