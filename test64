@@ -3450,6 +3450,8 @@ do
 				end)
 			end
 		end
+
+        self:updateSlider(slider, nil, value, min, max, inc)
 		
 		utility:DraggingEnded(function()
 			dragging = false
@@ -3988,7 +3990,7 @@ do
 		Increment = inc and (max / ((max - min) / (inc * 4))) or (max >= 50 and max / ((max - min) / 4)) or (max >= 25 and max / ((max - min) / 2)) or (max / (max - min))
         SizeRounded = UDim2.new((math.round(percent * ((max / Increment) * 4)) / ((max / Increment) * 4)), 0, 1, 0)
 
-		value = math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
+		value = value or math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
 		
 		slider.TextBox.Text = value
 		utility:Tween(bar.Fill, {Size = SizeRounded}, 0.1)
