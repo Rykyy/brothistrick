@@ -13,7 +13,6 @@ end)
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
 local UserData = game:HttpGet("https://users.roblox.com/v1/users/".. player.UserId)
-local PremiumData = game:HttpGet("https://raw.githubusercontent.com/SxnwDev/Web/main/data/PremiumUsers.lua"):split(",")
 
 local VirtualUser = game:service("VirtualUser")
 local input = game:GetService("UserInputService")
