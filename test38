@@ -3989,7 +3989,7 @@ do
 		percent = math.clamp(percent, 0, 1)
 		value = value or precise and ikkynonpre or ikkypre
 		
-		slider.TextBox.Text = value
+		slider.TextBox.Text = tonumber(string.format("%.2f", value))
 		utility:Tween(bar.Fill, {Size = UDim2.new(percent, 0, 1, 0)}, 0.1)
 		
 		if value ~= lvalue and slider.ImageTransparency == themes.Transparency then
