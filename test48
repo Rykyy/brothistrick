@@ -3983,7 +3983,9 @@ do
         local SizeRounded;
 		
 		if value then -- support negative ranges
-			percent = (value - min) / (max - min)
+			local a = tostring(value and (value / max) * (max - min) + min) or 0
+            slider.TextBox.Text = tostring(a)
+            bar.fill = UDim2.new((value or 0) / max, 0, 1, 0)
 		end
 
         percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
