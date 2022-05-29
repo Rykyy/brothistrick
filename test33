@@ -1065,7 +1065,7 @@ do
                 }),
                 utility:Create("Frame", { -- Square 2
                     Name = "Square_2",
-                    BackgroundColor3 = themes.Accent,
+                    BackgroundColor3 = Color3.fromRGB(255, 0, 0),
                     BackgroundTransparency = 1,
                     ZIndex = 1,
                     Size = UDim2.new(0, 200, 0, 200),
@@ -1094,7 +1094,7 @@ do
                         BackgroundTransparency = 1,
                         LayoutOrder = 1,
                         RichText = true,
-                        TextColor3 = themes.TextColor,
+                        TextColor3 = Color3.fromRGB(255, 0, 0),
                         Text = config.welcomelabel,
                         Visible = false,
                         MaxVisibleGraphemes = 1,
@@ -1589,7 +1589,6 @@ do
 					local color = Color3.fromHSV(hue, 1, 1)
 					self:setTheme({Theme = "Glow", Color = color})
 					self:setTheme({Theme = "TextColor", Color = color})
-                    self:setTheme({Theme = "Accent", Color = color})
 				end)
 			end
             if not UI and connection then
