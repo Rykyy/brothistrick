@@ -3257,7 +3257,7 @@ do
 		end
 
 		self:updateSlider(slider, {
-			Value = library.Functions.findByIndex(config, "Default"),
+			Value = value,
 			Min = library.Functions.findByIndex(config, "Min") or 0,
 			Max = library.Functions.findByIndex(config, "Max") or 0,
             Precise = library.Functions.findByIndex(config, "Precise") or 1,
