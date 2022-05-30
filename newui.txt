@@ -10,7 +10,7 @@ game:GetService("Players").LocalPlayer.Idled:connect(function()
 end)
 
 -- Variables
-local player = game.Players.LocalPlayer
+local player = game:GetService("Players").LocalPlayer
 local mouse = player:GetMouse()
 local UserData = game:HttpGet("https://users.roblox.com/v1/users/".. player.UserId)
 
@@ -24,17 +24,8 @@ local utility = {}
 
 -- Themes
 local objects = {}
-local themes = {}
+local themes
 
-themes = {
-	Background = Color3.fromRGB(24, 24, 24),
-	Glow = Color3.fromRGB(0, 0, 0),
-	Accent = Color3.fromRGB(10, 10, 10),
-	LightContrast = Color3.fromRGB(20, 20, 20),
-	DarkContrast = Color3.fromRGB(14, 14, 14),
-	TextColor = Color3.fromRGB(255, 255, 255),
-	Transparency = 0.1
-}
 
 do
 	function utility:Create(instance, properties, children)
@@ -62,7 +53,9 @@ do
 		return object
 	end
 	function utility:Tween(instance, properties, duration, ...)
-		tween:Create(instance, tweeninfo(duration, ...), properties):Play()
+		local Tween = tween:Create(instance, tweeninfo(duration, ...), properties)
+        Tween:Play()
+        return Tween
 	end
 	function utility:Wait()
 		run.RenderStepped:Wait()
@@ -222,6 +215,7 @@ do
         until current <= 0
         return "#" .. string.reverse(final)
     end
+
     function utility:TextEffect(TextLabel, delay)
         TextLabel.Visible = true
         local displayText = TextLabel.Text
@@ -234,6 +228,7 @@ do
             task.wait(delay)
         end
     end
+
 end
 
 -- classes
@@ -895,11 +890,21 @@ do
 	page.__index = page
 	section.__index = section
 
+    themes = {
+        Background = Color3.fromRGB(24, 24, 24),
+        Glow = Color3.fromRGB(0, 0, 0),
+        Accent = Color3.fromRGB(255,255,255),
+        LightContrast = Color3.fromRGB(20, 20, 20),
+        DarkContrast = Color3.fromRGB(14, 14, 14),
+        TextColor = Color3.fromRGB(255, 255, 255),
+        Transparency = 0.1
+    }
+
 	-- new classes
 
 	function library.new(config)
 		local config = config or {}
-		local title, icon = config.Title or game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, config.icon or 7122342585
+		local title, icon, textlabel = config.Title or game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name, config.icon or "rbxassetid://7122342585", config.textlabel
 		local container = utility:Create("ScreenGui", {
 			Name = title,
 			Parent = game.CoreGui
@@ -913,7 +918,8 @@ do
 				ImageColor3 = themes.Background,
                 ImageTransparency = themes.Transparency + .1,
 				ScaleType = Enum.ScaleType.Slice,
-				SliceCenter = Rect.new(4, 4, 296, 296)
+				SliceCenter = Rect.new(4, 4, 296, 296),
+                Visible = true
 			}, {
 				utility:Create("ImageLabel", {
 					Name = "Glow",
@@ -1023,7 +1029,146 @@ do
 				})
 			})
 		})
+        if config.welcome == true then
+            container.Main.Visible = false
+            utility:Create("Frame", { -- UI
+                Parent = container,
+                Size = UDim2.new(0, 380, 0, 200),
+                BackgroundColor3 = themes.Background,
+                BackgroundTransparency = 1,
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+            }, {
+                utility:Create("ImageLabel", {
+                    Name = "WelcomeIcon",
+                    Image = config.welcomeicon,
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(0,50,0,50),
+                    ImageColor3 = themes.Accent,
+                    Visible = false
+                }),
+                utility:Create("UICorner", {
+                    CornerRadius = UDim.new(0, 8),
+                }),
+                utility:Create("Frame", { -- Square 1
+                    Name = "Square_1",
+                    BackgroundColor3 = themes.Background,
+                    BackgroundTransparency = 1,
+                    ZIndex = 2,
+                    Size = UDim2.new(0, 200, 0, 200),
+                    AnchorPoint = Vector2.new(0.5, 0),
+                    Position = UDim2.new(0.5, 0, 0, 0),
+                }, {
+                    utility:Create("UICorner", {
+                        CornerRadius = UDim.new(0, 8),
+                    }),
+                }),
+                utility:Create("Frame", { -- Square 2
+                    Name = "Square_2",
+                    BackgroundColor3 = Color3.fromRGB(255, 0, 0),
+                    BackgroundTransparency = 1,
+                    ZIndex = 1,
+                    Size = UDim2.new(0, 200, 0, 200),
+                    AnchorPoint = Vector2.new(0.5, 0),
+                    Position = UDim2.new(0.5, 0, 0, 0),
+                }, {
+                    utility:Create("UICorner", {
+                        CornerRadius = UDim.new(0, 8),
+                    })
+                }),
+                utility:Create("Frame", {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundTransparency = 1,
+                }, {
+                    utility:Create("UIPadding", {
+                        PaddingTop = UDim.new(0, 15),
+                        PaddingBottom = UDim.new(0, 15),
+                        PaddingLeft = UDim.new(0, 15),
+                        PaddingRight = UDim.new(0, 15),
+                    }),
+                    utility:Create("TextLabel", {
+                        Name = "WelcomeLabel",
+                        AnchorPoint = Vector2.new(0.5, 0.5),
+                        Position = UDim2.new(0.5, 0, 0.5, 0),
+                        Size = UDim2.new(1, 0, 0, 50),
+                        BackgroundTransparency = 1,
+                        LayoutOrder = 1,
+                        RichText = true,
+                        TextColor3 = Color3.fromRGB(255, 0, 0),
+                        Text = config.welcomelabel,
+                        Visible = false,
+                        MaxVisibleGraphemes = 1,
+                        TextYAlignment = Enum.TextYAlignment.Center,
+                        TextSize = 25,
+                        Font = Enum.Font.SciFi,
+                    }),
+                })
+            })
 
+            utility:Tween(container.Frame.Square_1, { BackgroundTransparency = 0 }, 0.3).Completed:Wait()
+            utility:Tween(container.Frame.Square_2, { BackgroundTransparency = 0.5 }, 0.3)
+
+            local Tween = utility:Tween(
+                container.Frame,
+                { Rotation = 360 },
+                1,
+                Enum.EasingStyle.Linear,
+                Enum.EasingDirection.In,
+                -1
+            )
+
+
+
+            utility:Tween(container.Frame, { Rotation = 0 }, 0.3)
+            utility:Tween(container.Frame.Square_1, { Rotation = 180 }, 0.3)
+            utility:Tween(container.Frame.Square_2, { Rotation = 180 }, 0.3).Completed:Wait()
+
+            utility:Tween(container.Frame.Square_1, { Rotation = 45 }, 0.8)
+            utility:Tween(container.Frame.Square_2, { Rotation = 45 }, 0.8).Completed:Wait()
+
+            utility:Tween(
+                container.Frame.Square_1,
+                { Position = UDim2.new(0, 0, 0, 0), AnchorPoint = Vector2.new(0, 0) },
+                0.2
+            )
+            utility:Tween(
+                container.Frame.Square_2,
+                { Position = UDim2.new(1, 0, 0, 0), AnchorPoint = Vector2.new(1, 0) },
+                0.2
+            )
+            task.wait(1)
+
+            utility:Tween(
+                container.Frame.Square_1,
+                { Position = UDim2.new(0.5, 0, 0, 0), AnchorPoint = Vector2.new(0.5, 0) },
+                0.2
+            )
+            utility:Tween(
+                container.Frame.Square_2,
+                { Position = UDim2.new(0.5, 0, 0, 0), AnchorPoint = Vector2.new(0.5, 0) },
+                0.2 
+            ).Completed:Wait()
+
+            utility:Tween(container.Frame.Square_1, { Rotation = 0 }, 0.3)
+            utility:Tween(container.Frame.Square_2, { Rotation = 0 }, 0.3).Completed:Wait()
+
+            utility:Tween(container.Frame.Square_1, { Size = UDim2.new(1, 0, 1, 0) }, 0.2)
+            utility:Tween(container.Frame.Square_2, { Size = UDim2.new(1, 0, 1, 0) }, 0.2)
+
+            utility:Tween(container.Frame, { Size = UDim2.new(0, 380, 0, 220) }, 0.2).Completed:Wait()
+
+            container.Frame.BackgroundTransparency = 0
+            task.wait()
+            container.Frame.Square_1:Destroy()
+            container.Frame.Square_2:Destroy()
+            container.Frame.WelcomeIcon.Visible = true
+
+            utility:TextEffect(container.Frame.Frame.WelcomeLabel, config.delay)
+
+            container.Frame:Destroy()
+
+            container.Main.Visible = true
+        end
 		local Menu = container.Main.Pages.Pages_Container.Menu
 		Menu.MouseButton1Click:Connect(function()
 			if container.Main.Pages.Size == UDim2.new(0, 40, 1, 0) then
@@ -1049,7 +1194,8 @@ do
 		utility:InitializeKeybind()
 		utility:DraggingEnabled(container.Main, container.Main)
 		UI = container
-		return setmetatable({
+
+        return setmetatable({
 			container = container,
 			pagesContainer = container.Main.Pages.Pages_Container,
 			bottompagesContainer = container.Main.Pages.Pages_BottomContainer,
@@ -1058,7 +1204,7 @@ do
 	end
 
 	function page.new(config)
-		local library, title, position, icon = config.library, config.Title or "", config.Position == Enum.VerticalAlignment.Bottom and config.library.bottompagesContainer or config.library.pagesContainer, config.icon or 7618136617
+		local library, title, position, icon = config.library, config.Title or "", config.Position == Enum.VerticalAlignment.Bottom and config.library.bottompagesContainer or config.library.pagesContainer, config.icon or "rbxassetid://7618136617"
 		local button = utility:Create("TextButton", {
 			Name = title,
 			Parent = position,
@@ -1428,6 +1574,32 @@ do
 		
 		return page
 	end
+    function library:nahthismadebyikky(config)
+        local config = config or {}
+		local t = 5
+		local tick = tick
+			
+        self:setTheme({Theme = "Transparency", Color = 0.01})
+
+        local connection
+        connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
+			if UI and config.Enabled == true then
+				pcall(function()
+					local hue = tick() % t / t
+					local color = Color3.fromHSV(hue, 1, 1)
+					self:setTheme({Theme = "Glow", Color = color})
+					self:setTheme({Theme = "TextColor", Color = color})
+				end)
+			end
+            if not UI and connection then
+				pcall(function()
+                    connection:Disconnect()
+				end)
+            end
+		end)
+
+        return page
+    end
 	function library:addSettings()
 	
 		local page = page.Settings({library = self})
@@ -1438,67 +1610,10 @@ do
 		end)
 		
 		-- variables
-		local AutoClick = false
-		local RainbowEffect = false
-		local RainbowSaturation = 0.5
-		local CameraFollowSystem --= loadstring(game:HttpGet("https://snxw.ga/scripts/CameraFollowSystem.lua"))()
 
 		local Section = page:addSection()
-
-		local ThemeBackground = Section:addColorPicker({Title = "Background", Default = themes.Background, Callback = function(value)
-			self:setTheme({Theme = "Background", Color = value})
-		end})
-		local ThemeGlow = Section:addColorPicker({Title = "Glow", Default = themes.Glow, Callback = function(value)
-			self:setTheme({Theme = "Glow", Color = value})
-		end})
-		local ThemeLightContrast = Section:addColorPicker({Title = "LightContrast", Default = themes.LightContrast, Callback = function(value)
-			self:setTheme({Theme = "LightContrast", Color = value})
-		end})
-		local ThemeDarkContrast = Section:addColorPicker({Title = "DarkContrast", Default = themes.DarkContrast, Callback = function(value)
-			self:setTheme({Theme = "DarkContrast", Color = value})
-		end})
-		local ThemeTextColor = Section:addColorPicker({Title = "TextColor", Default = themes.TextColor, Callback = function(value)
-			self:setTheme({Theme = "TextColor", Color = value})
-		end})
-		local ThemeTransparency = Section:addSlider({Title = "Transparency", Default = themes.Transparency * 100, 0, 100, Callback = function(value)
-			self:setTheme({Theme = "Transparency", Color = value / 100})
-		end})
-		Section:addToggle({Title = "Rainbow Effect", Default = RainbowEffect, Callback = function(value)
-			RainbowEffect = value
-		end})
-		Section:addSlider({Title = "Rainbow Saturation", Default = RainbowSaturation * 100, Min = 0, Max = 100, Callback = function(value)
-			RainbowSaturation = value / 100
-		end})
-		Section:addButton({Title = "Reset UI", Callback = function()
-			Section:updateColorPicker(ThemeBackground, "Background", Color3.fromRGB(24, 24, 24))
-			self:setTheme({Theme = "Background", Color = Color3.fromRGB(24, 24, 24)})
-			Section:updateColorPicker(ThemeGlow, "Glow", Color3.fromRGB(0, 0, 0))
-			self:setTheme({Theme = "Glow", Color = Color3.fromRGB(0, 0, 0)})
-			Section:updateColorPicker(ThemeLightContrast, "LightContrast", Color3.fromRGB(20, 20, 20))
-			self:setTheme({Theme = "LightContrast", Color = Color3.fromRGB(20, 20, 20)})
-			Section:updateColorPicker(ThemeDarkContrast, "DarkContrast", Color3.fromRGB(14, 14, 14))
-			self:setTheme({Theme = "DarkContrast", Color = Color3.fromRGB(14, 14, 14)})
-			Section:updateColorPicker(ThemeTextColor, "TextColor", Color3.fromRGB(255, 255, 255))
-			self:setTheme({Theme = "TextColor", Color = Color3.fromRGB(255, 255, 255)})
-			Section:updateSlider(ThemeTransparency, "Transparency", 50, 0, 100)
-			self:setTheme({Theme = "Transparency", Color = .5})
-		end})
-		Section:addKeybind({Title = "Prefix", Default = Enum.KeyCode.LeftAlt, Callback = function()
+		Section:addKeybind({Title = "Toggle Ui", Default = Enum.KeyCode.LeftAlt, Callback = function()
 			self:toggle()
-		end})
-		Section:addKeybind({Title = "Camera Follow", Default = nil, Callback = function()
-			if CameraFollowSystem.IsEnabled then
-				CameraFollowSystem:Disable()
-				if game.Workspace.CurrentCamera.CameraSubject ~= player.Character.Humanoid then
-					game.Workspace.CurrentCamera.CameraSubject = player.Character.Humanoid
-				end
-			else
-				CameraFollowSystem:Enable()
-				CameraFollowSystem:SetCharacterAlignment(true)
-			end
-		end})
-		Section:addKeybind({Title = "Auto Click", Default = nil, Callback = function()
-			AutoClick = not AutoClick
 		end})
 		Section:addButton({Title = "Kill Gui", Callback = function()
 			self:toggle()
@@ -1511,43 +1626,6 @@ do
 				game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
 			end
 		end})
-		spawn(function()
-            local connection
-            connection = game:GetService("RunService").Heartbeat:Connect(function()
-				if AutoClick and UI then
-					pcall(function()
-						VirtualUser:ClickButton1(Vector2.new())
-					end)
-				end
-                if not UI then
-                    connection:Disconnect()
-                end
-			end)
-		end)
-		spawn(function()
-			local t = 5
-			local tick = tick
-			
-            local connection
-            connection = game:GetService("RunService"):BindToRenderStep("Rainbow", 1000, function()
-				if UI and RainbowEffect then
-					pcall(function()
-						local hue = tick() % t / t
-						local color = Color3.fromHSV(hue, RainbowSaturation, 1)
-						self:setTheme({Theme = "Glow", Color = color})
-						self:setTheme({Theme = "TextColor", Color = color})
-						Section:updateColorPicker(ThemeGlow, "Glow", color)
-						Section:updateColorPicker(ThemeTextColor, "TextColor", color)
-					end)
-				end
-                if not UI and connection then
-					pcall(function()
-                    	connection:Disconnect()
-					end)
-                end
-			end)
-		end)
-		
 		return page
 	end
 	function library:addInfo()
@@ -3223,7 +3301,7 @@ do
 
 	function section:addSlider(config)
 		local config = config or {}
-		local title, default, min, max, callback, search, ToolTipText = config.Title or "Slider", config.Default or 0, config.Min or 0, config.Max or 1, config.Callback or function()end, config.Search or false, config.ToolTipText
+		local title, default, min, max, inc, callback, search, ToolTipText = config.Title or "Slider", config.Default or 0, config.Min or 0, config.Max or 1, config.Increment or 1, config.Callback or function()end, config.Search or false, config.ToolTipText
 		local slider = utility:Create("ImageButton", {
 			Name = "Slider",
 			Parent = self.container,
@@ -3287,7 +3365,7 @@ do
 					utility:Create("ImageLabel", {
 						Name = "Fill",
 						BackgroundTransparency = 1,
-						Size = UDim2.new(0.8, 0, 1, 0),
+						Size = UDim2.new(0, 0, 0, 0),
 						ZIndex = 3,
 						Image = "rbxassetid://5028857472",
 						ImageColor3 = themes.TextColor,
@@ -3372,8 +3450,8 @@ do
 				end)
 			end
 		end
-		
-		self:updateSlider(slider, nil, value, min, max)
+
+        self:updateSlider(slider, nil, value, min, max, inc)
 		
 		utility:DraggingEnded(function()
 			dragging = false
@@ -3385,7 +3463,7 @@ do
 			while dragging do
 				utility:Tween(circle, {ImageTransparency = 0}, 0.1)
 				
-				value = self:updateSlider(slider, nil, nil, min, max, value)
+				value = self:updateSlider(slider, nil, nil, min, max, inc, value)
 				callback(value)
 				
 				utility:Wait()
@@ -3397,13 +3475,21 @@ do
 		
 		textbox.FocusLost:Connect(function()
 			if not tonumber(textbox.Text) then
-				value = self:updateSlider(slider, nil, default or min, min, max)
+				value = self:updateSlider(slider, nil, default or min, min, max, inc)
 				callback(value)
+            elseif textbox.Text == "" or tonumber(textbox.Text) <= min then
+                textbox.Text = min
+                callback(tonumber(textbox.Text))
+            elseif textbox.Text == "" or tonumber(textbox.Text) >= max then
+                textbox.Text = max
+                callback(tonumber(textbox.Text))
 			end
+
+            slider.Slider.Bar.Fill = UDim2.new((value or 0) / max, 0, 1, 0)
 		end)
 		
-		textbox:GetPropertyChangedSignal("Text"):Connect(function()
-			local text = textbox.Text
+		--[[textbox:GetPropertyChangedSignal("Text"):Connect(function()
+            local text = textbox.Text
 			
 			if not allowed[text] and not tonumber(text) then
 				textbox.Text = text:sub(1, #text - 1)
@@ -3411,10 +3497,10 @@ do
 				value = self:updateSlider(slider, nil, tonumber(text) or value, min, max)
 				callback(value)
 			end
-		end)
+		end)]]
 		
 		if search then
-			config.Title, config.Default, config.Min, config.Max, config.Callback, config.Search, config.ToolTipText = title, default, min, max, callback, search, ToolTipText
+			config.Title, config.Default, config.Min, config.Max, config.Increment, config.Callback, config.Search, config.ToolTipText = title, default, min, max, inc, callback, search, ToolTipText
 			table.insert(SearchModules, {class = "addSlider", variables = config})
 		end
 		return slider
@@ -3892,7 +3978,7 @@ do
 		end
 	end
 
-	function section:updateSlider(slider, title, value, min, max, lvalue)
+	function section:updateSlider(slider, title, value, min, max, inc, lvalue)
 		slider = self:getModule(slider)
 		
 		if title then
@@ -3900,17 +3986,26 @@ do
 		end
 		
 		local bar = slider.Slider.Bar
-		local percent = (mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X
+		local percent;
+        local Increment;
+        local SizeRounded;
+        local SliderValue;
 		
-		if value then -- support negative ranges
-			percent = (value - min) / (max - min)
+        percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
+		Increment = inc and (max / ((max - min) / (inc * 4))) or (max >= 50 and max / ((max - min) / 4)) or (max >= 25 and max / ((max - min) / 2)) or (max / (max - min))
+        SizeRounded = UDim2.new((math.round(percent * ((max / Increment) * 4)) / ((max / Increment) * 4)), 0, 1, 0)
+        SliderValue = math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
+        
+
+        if value then -- support negative ranges
+            SizeRounded = UDim2.new((value or 0) / max, 0, 1, 0)
 		end
-		
-		percent = math.clamp(percent, 0, 1)
-		value = value or math.floor(min + (max - min) * percent)
-		
+
+		value = value or tonumber(string.format("%.2f", SliderValue))
+	
+
 		slider.TextBox.Text = value
-		utility:Tween(bar.Fill, {Size = UDim2.new(percent, 0, 1, 0)}, 0.1)
+		utility:Tween(bar.Fill, {Size = SizeRounded}, 0.1)
 		
 		if value ~= lvalue and slider.ImageTransparency == themes.Transparency then
 			utility:Pop(slider, 10)
