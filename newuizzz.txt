@@ -3486,7 +3486,7 @@ do
 				callback(value)
 			end
 
-            fill.Size = UDim2.new(textbox.Text / max, 0,1,0)    
+            fill.Size = UDim2.new(math.clamp((textbox.Text - min) / (max - min)), 0, 1, 0) 
 		end)
 		
 		--[[textbox:GetPropertyChangedSignal("Text"):Connect(function()
@@ -3999,7 +3999,7 @@ do
         
 
         if value then -- support negative ranges
-            SizeRounded = UDim2.new((value or 0) / max, 0, 1, 0)
+            SizeRounded = UDim2.new(math.clamp((value - min) / (max - min)), 0, 1, 0)
 		end
 
 		value = value or tonumber(string.format("%.2f", SliderValue))
