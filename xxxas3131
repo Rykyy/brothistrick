@@ -3285,7 +3285,7 @@ do
 					value = self:updateSlider(slider, {
 						Min = library.Functions.findByIndex(config, "Min") or 0,
 						Max = library.Functions.findByIndex(config, "Max") or 0,
-                        Precise = library.Functions.findByIndex(config, "Precise") or 1
+                        Precise = library.Functions.findByIndex(config, "Precise") or 1,
 						LastValue = value,
 					})
 					callback(value)
@@ -4183,7 +4183,7 @@ do
         local SliderValue = math.round((((SizeRounded.X.Scale * library.Functions.findByIndex(config, "Max")) / library.Functions.findByIndex(config, "Max")) * (library.Functions.findByIndex(config, "Max") - library.Functions.findByIndex(config, "Min")) + library.Functions.findByIndex(config, "Min")) * 20) / 20
 
 		if library.Functions.findByIndex(config, "Value") then
-			SizeRounded = UDim2.new(math.clamp(library.Functions.findByIndex(config, "Value") - library.Functions.findByIndex(config, "Min")) / (library.Functions.findByIndex(config, "Max") - library.Functions.findByIndex(config, "Min"), 0 ,1), 0, 1, 0)
+			SizeRounded = UDim2.new(math.clamp((library.Functions.findByIndex(config, "Value") - library.Functions.findByIndex(config, "Min")) / (library.Functions.findByIndex(config, "Max") - library.Functions.findByIndex(config, "Min")), 0, 1), 0, 1, 0)
 		end
 
 		config.Value = library.Functions.findByIndex(config, "Value") or tonumber(string.format("%.2f", SliderValue))
