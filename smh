@@ -3245,9 +3245,7 @@ do
 
 		table.insert(self.modules, slider)
 
-		local value = library.Functions.findByIndex(config, "Default")
-			or library.Functions.findByIndex(config, "Min")
-			or 0
+		local value = library.Functions.findByIndex(config, "Default") or library.Functions.findByIndex(config, "Min") or 0
 		local dragging, last
 
 		local callback = function(value)
@@ -3259,7 +3257,7 @@ do
 		end
 
 		self:updateSlider(slider, {
-			Value = value,
+			Value = library.Functions.findByIndex(config, "Default"),
 			Min = library.Functions.findByIndex(config, "Min") or 0,
 			Max = library.Functions.findByIndex(config, "Max") or 0,
             Precise = library.Functions.findByIndex(config, "Precise") or 1,
