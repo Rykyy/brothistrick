@@ -1742,7 +1742,7 @@ do
 						Frame["Terms&Conditions"].ScrollingFrame.TextLabel.AbsoluteSize.Y
 					)
 					local help = {
-						["Title"] = "Description",
+						["Blox Fruit"] = "...",
 						["Title 2"] = "Description",
 						["Title 3"] = "Description",
 						["Title 4"] = "Description",
@@ -1903,12 +1903,6 @@ do
 
 		if library.Settings.NewUser then
 			library.Functions.TextEffect(ScreenGui.Frame.Frame.WelcomeLabel, 0.05)
-			library.Functions.Tween(
-				ScreenGui.Frame.Frame.WelcomeLabel,
-				{ Position = UDim2.new(0.5, 0, 0, 0), AnchorPoint = Vector2.new(0.5, 0), Size = UDim2.new(1, 0, 0, 25) },
-				0.4
-			).Completed:Wait()
-            wait(0.1)
 			library.Settings.NewUser = false
 			task.wait(0.2)
 			ScreenGui.Frame.Frame:Destroy()
