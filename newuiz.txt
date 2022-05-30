@@ -3301,6 +3301,7 @@ do
 
 	function section:addSlider(config)
 		local config = config or {}
+        local fill
 		local title, default, min, max, inc, callback, search, ToolTipText = config.Title or "Slider", config.Default or 0, config.Min or 0, config.Max or 1, config.Increment or 1, config.Callback or function()end, config.Search or false, config.ToolTipText
 		local slider = utility:Create("ImageButton", {
 			Name = "Slider",
@@ -3362,7 +3363,7 @@ do
 					ScaleType = Enum.ScaleType.Slice,
 					SliceCenter = Rect.new(2, 2, 298, 298)
 				}, {
-					utility:Create("ImageLabel", {
+					fill = utility:Create("ImageLabel", {
                         Name = "Fill",
                         BackgroundTransparency = 1,
                         Size = UDim2.new(0, 0, 0, 0),
@@ -3484,6 +3485,8 @@ do
                 value = self:updateSlider(slider, nil, max, min, max, inc)
 				callback(value)
 			end
+
+            fill.Size = UDim2.new(textbox.Text / max,0,1,0)
 		end)
 		
 		--[[textbox:GetPropertyChangedSignal("Text"):Connect(function()
