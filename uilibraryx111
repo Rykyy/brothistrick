@@ -1499,6 +1499,14 @@
 
         function library:new(config): table
             config = config or {}
+            local textTitle = {date = 1, time = 1}
+            if config.datetime == true then
+                textTitle.date = "<b>" .. os.date("%A") .. ", " .. os.date("%d") .. " " .. os.date("%b") .. "</b>"
+                textTitle.time = "<b>" .. os.date("%X") .. " " .. os.date("%p") .. "</b>"
+            elseif config.datetime == false then
+                textTitle.date = config.TextTitle1 or "Title"
+                textTitle.time = config.TextTitle2 or " "
+            end
             repeat
                 task.wait()
             until game:IsLoaded()
@@ -2029,7 +2037,7 @@
                         Name = "Time",
                         Size = UDim2.new(1, 0, 0, 18),
                         BackgroundTransparency = 1,
-                        Text = "<b>" .. os.date("%X") .. " " .. os.date("%p") .. "</b>",
+                        Text = textTitle.time,
                         RichText = true,
                         LayoutOrder = 1,
                         TextTruncate = Enum.TextTruncate.AtEnd,
@@ -2043,7 +2051,8 @@
                         Name = "Date",
                         Size = UDim2.new(1, 0, 0, 14),
                         BackgroundTransparency = 1,
-                        Text = "<b>" .. os.date("%A") .. ", " .. os.date("%d") .. " " .. os.date("%b") .. "</b>",
+                        Text = textTitle.date,
+                        Text = config.TextTitle,
                         RichText = true,
                         LayoutOrder = 2,
                         TextTruncate = Enum.TextTruncate.AtEnd,
@@ -2191,17 +2200,11 @@
                 end
             end)
             task.spawn(function()
-                while library.Enabled do
+                while library.Enabled and config.datetime do
                     task.wait()
                     pcall(function()
                         Topbar.Watch.Time.Text = "<b>" .. os.date("%X") .. " " .. os.date("%p") .. "</b>"
-                        Topbar.Watch.Date.Text = "<b>"
-                            .. os.date("%A")
-                            .. ", "
-                            .. os.date("%d")
-                            .. " "
-                            .. os.date("%b")
-                            .. "</b>"
+                        Topbar.Watch.Date.Text = "<b>".. os.date("%A").. ", ".. os.date("%d").. " ".. os.date("%b").. "</b>"
                     end)
                 end
             end)
@@ -2235,7 +2238,7 @@
                         BackgroundTransparency = 1,
                         RichText = true,
                         TextColor3 = library.Settings.theme.Accent,
-                        Text = "<b>"..library.Functions.findByIndex(config, "EhIdk").."</b>",
+                        Text = "<b>"..config.EhIdk.."</b>",
                         TextSize = 20,
                         Font = Enum.Font.SciFi,
                         ZIndex = 6,
