@@ -2235,7 +2235,7 @@
                         BackgroundTransparency = 1,
                         RichText = true,
                         TextColor3 = library.Settings.theme.Accent,
-                        Text = "<b>"..config.EhIdk.."</b>",
+                        Text = "<b>"..library.Functions.findByIndex(config, "EhIdk").."</b>",
                         TextSize = 20,
                         Font = Enum.Font.SciFi,
                         ZIndex = 6,
