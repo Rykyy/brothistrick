@@ -1504,8 +1504,8 @@
                 textTitle.date = "<b>" .. os.date("%A") .. ", " .. os.date("%d") .. " " .. os.date("%b") .. "</b>"
                 textTitle.time = "<b>" .. os.date("%X") .. " " .. os.date("%p") .. "</b>"
             elseif config.datetime == false then
-                textTitle.date = config.TextTitle1 or "Title"
-                textTitle.time = config.TextTitle2 or " "
+                textTitle.date = config.TextTitle2 or "Title"
+                textTitle.time = config.TextTitle1 or " "
             end
             repeat
                 task.wait()
@@ -2052,7 +2052,7 @@
                         Size = UDim2.new(1, 0, 0, 14),
                         BackgroundTransparency = 1,
                         Text = textTitle.date,
-                        Text = config.TextTitle,
+                        Text = textTitle.date,
                         RichText = true,
                         LayoutOrder = 2,
                         TextTruncate = Enum.TextTruncate.AtEnd,
