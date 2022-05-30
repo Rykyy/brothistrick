@@ -3486,7 +3486,7 @@ do
 				callback(value)
 			end
 
-            fill.Size = UDim2.new(math.clamp((textbox.Text - min) / (max - min)), 0, 1, 0) 
+            fill.Size = UDim2.new(math.clamp((textbox.Text - min) / (max - min), 0, 1), 0, 1, 0) 
 		end)
 		
 		--[[textbox:GetPropertyChangedSignal("Text"):Connect(function()
