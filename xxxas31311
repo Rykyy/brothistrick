@@ -4176,11 +4176,15 @@ do
 		end
 
 		local bar = slider.Slider.Bar
+        local percent;
+        local Precise;
+        local SizeRounded;
+        local SliderValue;
 
-		local percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
-        local Increment = library.Functions.findByIndex(config, "Precise") and (library.Functions.findByIndex(config, "Max")  / ((library.Functions.findByIndex(config, "Max") - library.Functions.findByIndex(config, "Min")) / (library.Functions.findByIndex(config, "Precise") * 4))) or (library.Functions.findByIndex(config, "Max") >= 50 and library.Functions.findByIndex(config, "Max") / ((library.Functions.findByIndex(config, "Max") - library.Functions.findByIndex(config, "Min")) / 4)) or (library.Functions.findByIndex(config, "Max") >= 25 and library.Functions.findByIndex(config, "Max") / ((library.Functions.findByIndex(config, "Max") - library.Functions.findByIndex(config, "Min")) / 2)) or (library.Functions.findByIndex(config, "Max") / (library.Functions.findByIndex(config, "Max") - library.Functions.findByIndex(config, "Min")))
-        local SizeRounded = UDim2.new((math.round(percent * ((library.Functions.findByIndex(config, "Max") / Increment) * 4)) / ((library.Functions.findByIndex(config, "Max") / Increment) * 4)), 0, 1, 0)
-        local SliderValue = math.round((((SizeRounded.X.Scale * library.Functions.findByIndex(config, "Max")) / library.Functions.findByIndex(config, "Max")) * (library.Functions.findByIndex(config, "Max") - library.Functions.findByIndex(config, "Min")) + library.Functions.findByIndex(config, "Min")) * 20) / 20
+		percent = math.clamp((mouse.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
+        Precise = config.Precise and (config.Max / ((config.Max - config.Min) / (config.Precise  * 4))) or (config.Max >= 50 and config.Max / ((config.Max - config.Min) / 4)) or (config.Max >= 25 and config.Max / ((config.Max - config.Min) / 2)) or (config.Max / (config.Max - config.Min))
+        SizeRounded = UDim2.new((math.round(percent * ((config.Max / Precise) * 4)) / ((config.Max / Precise) * 4)), 0, 1, 0)
+        SliderValue = math.round((((SizeRounded.X.Scale * config.Max) / config.Max) * (config.Max - config.Min) + config.Min) * 20) / 20
 
 		if library.Functions.findByIndex(config, "Value") then
 			SizeRounded = UDim2.new(math.clamp((library.Functions.findByIndex(config, "Value") - library.Functions.findByIndex(config, "Min")) / (library.Functions.findByIndex(config, "Max") - library.Functions.findByIndex(config, "Min")), 0, 1), 0, 1, 0)
