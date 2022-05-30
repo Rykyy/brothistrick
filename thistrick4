@@ -21,8 +21,8 @@ getgenv().areatp = "SunnyForest"
 getgenv().itemlist = "All Tier"
 getgenv().rarity = "All Rarity"
 getgenv().modeloot = "Bring Item"
-getgenv().itemsell = "All Tier"
-getgenv().raritysell = 1
+getgenv().itemsell = "I"
+getgenv().raritysell = "All Rarity"
 getgenv().stat = "Strength"
 getgenv().mobname = "Blob"
 getgenv().ws = 19
@@ -39,8 +39,8 @@ local itemTable = {"All Tier" ,"Copper", "Egg", "T1", "T2", "T3", "T4", "T5"}
 local rarityTable = {"All Rarity", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
 local modelootTable = {"Bring Item", "Tp To Item"}
 local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
-local itemsellTable = {"All Tier", "T1", "T2", "T3", "T4", "T5"}
-local raritysellTable = {"Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
+local itemsellTable = {"T1", "T2", "T3", "T4", "T5"}
+local raritysellTable = {"All Rarity", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
 local areatpTable = {"Tutorial","SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 
 -- Function
@@ -366,7 +366,24 @@ autofarm:CreateToggle("Enabled", function(bool)
     end)
 
     beat = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
+        --pcall(function()
+            if getgenv().sell == true then
+                for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
+                    if v.Name == "Item" then
+                        if v.Button.Tier.TextLabel.Text == getgenv().tiersell then
+                            if getgenv().rarity == "All Rarity" then
+                                plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
+                                game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
+                            elseif getgenv().rarity ~= "All Rarity" then
+                                if v:GetAttribute("Rarity") == getgenv().raritysell then
+                                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
+                                    game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
+                                end
+                            end
+                        end
+                    end
+                end            
+            end
             if getgenv().enabled == true then
                 if getgenv().area ~= nil then
                     if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
@@ -386,10 +403,10 @@ autofarm:CreateToggle("Enabled", function(bool)
                         end
                     end
                 end
-            else
+            elseif getgenv().enabled == false then
                 beat:Disconnect()
             end
-        end)
+        --end)
     end)
 end)
 
@@ -424,7 +441,6 @@ end)
 
 autofarm:CreateToggle("Loot", function(bool)
     getgenv().loot = bool
-    local lootbeat;
 
     lootbeat = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().loot == true and nearestItem() ~= nil and plr.Character ~= nil then
@@ -435,6 +451,8 @@ autofarm:CreateToggle("Loot", function(bool)
                 plr.Character.HumanoidRootPart.CFrame = nearestItem().CFrame
                 game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
             end
+        elseif getgenv().loot == false then
+            lootbeat:Disconnect()
         end
     end)
 end)
@@ -473,7 +491,7 @@ st:CreateDropdown("Items list", itemsellTable, 1, itemsellTable[1], function(sel
     end
 end)
 
-st:CreateDropdown("Rarity list", rarityTable, 1, raritysellTable[1], function(selected)
+st:CreateDropdown("Rarity list", raritysellTable, 1, raritysellTable[1], function(selected)
     getgenv().raritysell = selected
 
     if selected == "Common" then
@@ -493,28 +511,6 @@ end)
 
 st:CreateToggle("Sell", function(bool)
     getgenv().sell = bool
-
-    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().sell == true then
-            for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
-                if v.Name == "Item" then
-                    if getgenv().tiersell == "All Tier" then
-                        if v:GetAttribute("Rarity") == getgenv().raritysell then
-                            game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
-                        end
-                    elseif getgenv().tiersell ~= "All Tier" then 
-                        if v.Button.Tier.TextLabel.Text == getgenv().tiersell then
-                            if v:GetAttribute("Rarity") == getgenv().raritysell then
-                                game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
-                            end
-                        end
-                    end
-                end
-            end            
-        else
-            breh1:Disconnect()
-        end
-    end)
 end)
 
 st:CreateLabel("~~Teleports")
