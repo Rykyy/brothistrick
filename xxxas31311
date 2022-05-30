@@ -4191,7 +4191,7 @@ do
 		end
 
 		config.Value = library.Functions.findByIndex(config, "Value") or tonumber(string.format("%.2f", SliderValue))
-		library.Functions.Tween(bar.Fill, { Size = UDim2.new(SizeRounded) }, 0.1)
+		library.Functions.Tween(bar.Fill, { Size = SizeRounded}, 0.1)
 
 		slider.Count.Text = "<b>" .. library.Functions.findByIndex(config, "Value") .. "</b>"
 
