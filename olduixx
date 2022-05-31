@@ -590,7 +590,7 @@ function Library:CreateTab(name)
 			
 			Toggle.MouseButton1Down:Connect(function()
                 Toggled = not Toggled
-				SetState(Toggled)
+				toggleFunc:SetState(Toggled)
             end)
 
             table.insert(Library.LibraryColorTable, CheckboxOutline)
