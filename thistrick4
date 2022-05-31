@@ -334,12 +334,12 @@ autofarm:CreateToggle("Enabled", function(bool)
         if charID ~= nil and plr.PlayerGui.DeathScreen.Enabled == true then
             game:GetService("ReplicatedStorage").Knit.Services.CharacterHealthService.RF.Revive:InvokeServer(charID)
         end
+    else
         if not plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
             aunk = Instance.new("BodyVelocity", plr.Character.HumanoidRootPart)
             aunk.Velocity = Vector3.new(0, 0, 0)
             aunk.MaxForce = Vector3.new(9e9, 9e9, 9e9)
         end
-    else
         aunk:Destroy()
         backtosafeTp()
     end
@@ -368,27 +368,46 @@ autofarm:CreateToggle("Enabled", function(bool)
     beat = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().enabled == true then
             if getgenv().area ~= nil then
-                if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
-                    print("Revive!!!!!!!")
-                elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
-                    for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
-                        if v:FindFirstChild("HumanoidRootPart") then
-                            if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
-                                repeat
-                                    if v:FindFirstChild("HumanoidRootPart") then
-                                        plr.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode
-                                    end
-                                wait()
-                                until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
+                if getgenv().loot == false or getgenv().loot == nil or getgenv().loot == true and getgenv().modeloot == "Bring Item" then
+                    if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
+                        print("Revive!!!!!!!")
+                    elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
+                        for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
+                            if v:FindFirstChild("HumanoidRootPart") then
+                                if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
+                                    repeat
+                                        if v:FindFirstChild("HumanoidRootPart") then
+                                            plr.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode
+                                        end
+                                    wait()
+                                    until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
+                                end
+                            end
+                        end
+                    end
+                elseif getgenv().loot == true and nearestItem() == nil and getgenv().modeloot == "Tp To Item" then
+                    if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
+                        print("Revive!!!!!!!")
+                    elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
+                        for i,v in next, game:GetService("Workspace").RunTime[getgenv().area].Creatures:GetChildren() do
+                            if v:FindFirstChild("HumanoidRootPart") then
+                                if v.HumanoidRootPart.HealthGUI.HealthBar.CreatureName.Text == getgenv().mobname and getgenv().enabled == true then
+                                    repeat
+                                        if v:FindFirstChild("HumanoidRootPart") then
+                                            plr.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,getgenv().distance,0) * getgenv().mode
+                                        end
+                                    wait()
+                                    until getgenv().enabled == false or not v:FindFirstChild("HumanoidRootPart")
+                                end
                             end
                         end
                     end
                 end
             end
-        elseif getgenv().enabled == false and getgenv().sell == false and getgenv().loot == false then
+        elseif getgenv().enabled == false then
             beat:Disconnect()
         end    
-    end)    
+    end)  
 end)
 
 autofarm:CreateLabel("~~Loot Settings")
@@ -619,7 +638,8 @@ sc:CreateButton("Destroy UI", function()
             v.Parent.Parent:Destroy()
         end
     end
-end)
+end)  
+
 
 credits:CreateLabel("Made By : Ikky#8337")
 credits:CreateLabel("Tester : Unknown:))")
