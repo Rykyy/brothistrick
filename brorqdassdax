@@ -238,7 +238,7 @@ local function KeepFirstTabOpen()
     end
 end
 
-local function ToggleUI()
+function library:ToggleUI()
     Library.UIOpen = not Library.UIOpen
             
     if Library.UIOpen then
@@ -413,6 +413,7 @@ function Library:CreateTab(name)
         end)
 
         function SectionElements:CreateLabel(text)
+            labelFunc = {}
             text = text or "Label"
 
             local NameLabel = Instance.new("TextLabel")
@@ -428,7 +429,7 @@ function Library:CreateTab(name)
             NameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
             NameLabel.TextSize = 15.000
 
-            local function ChangeText(newtext)
+            function labelFunc:ChangeText(newtext)
                 NameLabel.Text = newtext
             end
 
@@ -440,9 +441,7 @@ function Library:CreateTab(name)
                 end
             end)
 
-            return {
-                ChangeText = ChangeText
-            }
+            return labelFunc
         end
 
         function SectionElements:CreateButton(name, callback)
@@ -511,6 +510,7 @@ function Library:CreateTab(name)
         end
 
         function SectionElements:CreateToggle(name, callback)
+            toggleFunc = {}
             name = name or "Toggle"
             callback = callback or function() end
 
@@ -584,7 +584,7 @@ function Library:CreateTab(name)
             TickCover.Size = UDim2.new(0, 14, 0, 14)
             TickCover.ZIndex = 5
 
-            local function SetState(state)
+            function toggleFunc:SetState(state)
                 if state then
                     TweenService:Create(Title, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
                     TweenService:Create(TickCover, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Position = UDim2.new(0.5, 0, 0.5, 0), Size = UDim2.new(0, 0, 0, 0)}):Play()
@@ -608,12 +608,11 @@ function Library:CreateTab(name)
             table.insert(Library.LibraryColorTable, CheckboxOutline)
             table.insert(Library.LibraryColorTable, CheckboxTicked)
 
-            return {
-                SetState = SetState
-            }
+            return toggleFunc
         end
 
         function SectionElements:CreateSlider(name, minimumvalue, maximumvalue, presetvalue, precisevalue, callback)
+            local sliderFunc = {}
             name = name or "Slider"
             minimumvalue = minimumvalue or 0
             maximumvalue = maximumvalue or 500
@@ -768,7 +767,7 @@ function Library:CreateTab(name)
                 end
             end)
 
-            local function SetSliderValue(value)
+            function sliderFunc:SetSliderValue(value)
                 Value.Text = value
                 TweenService:Create(SliderIndicator, TweenInfo.new(0.02, Library.Theme.EasingStyle, Enum.EasingDirection.Out), {Size = UDim2.new(((tonumber(Value.Text) or minimumvalue) - minimumvalue) / (maximumvalue - minimumvalue), 0, 1, 0)}):Play()
                 callback(tonumber(Value.Text))
@@ -777,9 +776,7 @@ function Library:CreateTab(name)
             callback(StartingValue)
             table.insert(Library.LibraryColorTable, SliderIndicator)
 
-            return {
-                SetSliderValue = SetSliderValue
-            }
+            return sliderFunc
         end
 
         function SectionElements:CreateColorPicker(name, presetcolor, callback)
