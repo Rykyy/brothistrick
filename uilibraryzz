@@ -4444,12 +4444,12 @@
             end
 
             if library.Functions.findByIndex(config, "List") then
-                table.clear(library.Functions.findByIndex(config, "Group"))
+                --[[table.clear(library.Functions.findByIndex(config, "Group"))
                 for i, button in pairs(dropdown.List.ScrollingFrame:GetChildren()) do
                     if button:IsA("ImageButton") then
                         button:Destroy()
                     end
-                end
+                end]]
                 for i, value in pairs(library.Functions.findByIndex(config, "List") or {}) do
                     local Dropdown_Item = library.Functions.newInstance("ImageButton", {
                         BackgroundTransparency = 1,
