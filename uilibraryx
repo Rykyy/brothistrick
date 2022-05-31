@@ -4450,6 +4450,9 @@
                         button:Destroy()
                     end
                 end
+                for i,v in pairs(library.Functions.findByIndex(config, "List")) do
+                    table.insert(library.Functions.findByIndex(config, "List"), v)
+                end
                 for i, value in pairs(library.Functions.findByIndex(config, "List") or {}) do
                     local Dropdown_Item = library.Functions.newInstance("ImageButton", {
                         BackgroundTransparency = 1,
