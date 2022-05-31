@@ -176,13 +176,13 @@ repeat wait() until game:IsLoaded()
     game:GetService("VirtualUser"):ClickButton2(Vector2.new())
 end)
 
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/brothistrick/main/brorqdassdax"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/brothistrick/main/olduixx"))()
 
 local window = library:CreateTab(gameName)
 local misc = library:CreateTab("Misc")
 
-local autofarm = window:CreateSection("Auto Farm & Auto Loot")
-local st = window:CreateSection("Auto Stats & Auto Sells & Teleports")
+local autofarm = window:CreateSection("Farm & Loot")
+local st = window:CreateSection("Stats & Sells & Teleports")
 local sc = misc:CreateSection("Server & Character")
 local credits = misc:CreateSection("Credits")
 
@@ -600,8 +600,6 @@ end)
 sc:CreateLabel("~~UI Settings")
 
 sc:CreateKeybind("Toggle Ui", Enum.KeyCode.RightAlt, false, false, function()
-    local nx = nil
-            
     if getgenv().toggleui then
         getgenv().toggleui = false
         TweenService:Create(nameGui().Main, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 450, 0, 0)}):Play()
