@@ -572,7 +572,7 @@ function Library:CreateTab(name)
             TickCover.Size = UDim2.new(0, 14, 0, 14)
             TickCover.ZIndex = 5
 
-            function toggleFunc:SetState(state)
+            local function SetState(state)
                 if state then
                     TweenService:Create(Title, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
                     TweenService:Create(TickCover, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Position = UDim2.new(0.5, 0, 0.5, 0), Size = UDim2.new(0, 0, 0, 0)}):Play()
@@ -590,13 +590,15 @@ function Library:CreateTab(name)
 			
 			Toggle.MouseButton1Down:Connect(function()
                 Toggled = not Toggled
-				toggleFunc.SetState(Toggled)
+				SetState(Toggled)
             end)
 
             table.insert(Library.LibraryColorTable, CheckboxOutline)
             table.insert(Library.LibraryColorTable, CheckboxTicked)
 
-            return toggleFunc
+            return {
+                SetState = SetState
+            }
         end
 
         function SectionElements:CreateSlider(name, minimumvalue, maximumvalue, presetvalue, precisevalue, callback)
