@@ -238,7 +238,7 @@ local function KeepFirstTabOpen()
     end
 end
 
-function library:ToggleUI()
+local function ToggleUI()
     Library.UIOpen = not Library.UIOpen
             
     if Library.UIOpen then
@@ -1596,6 +1596,10 @@ function Library:CreateTab(name)
                     end
                 end)
             end
+        end
+
+        function SectionElements:ToggleUi()
+            ToggleUi()
         end
 
         SectionContent.CanvasSize = UDim2.new(0, 0, 0, SectionContentLayout.AbsoluteContentSize.Y + 15)
