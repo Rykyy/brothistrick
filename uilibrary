@@ -1912,7 +1912,7 @@
 
             if library.Settings.NewUser then
                 library.Functions.TextEffect(ScreenGui.Frame.Frame.WelcomeLabel, 0.05)
-                if config.EhIdkIdk == true then
+                if config.teams == true then
                     library.Functions.Tween(
                         ScreenGui.Frame.Frame.WelcomeLabel,
                         { Position = UDim2.new(0.5, 0, 0, 0), AnchorPoint = Vector2.new(0.5, 0), Size = UDim2.new(1, 0, 0, 25) },
@@ -2238,7 +2238,7 @@
                         BackgroundTransparency = 1,
                         RichText = true,
                         TextColor3 = library.Settings.theme.Accent,
-                        Text = "<b>"..config.EhIdk.."</b>",
+                        Text = "<b>"..config.Textlabel.."</b>",
                         TextSize = 20,
                         Font = Enum.Font.SciFi,
                         ZIndex = 6,
