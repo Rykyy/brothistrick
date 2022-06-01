@@ -12,8 +12,11 @@ local a2beat;
 local a3beat;
 local aunk;
 local aunp;
+local unx
 local charIDR;
 local charID
+local idk
+
 
 -- Global
 getgenv().area = nil
@@ -216,7 +219,7 @@ autofarm:CreateSlider("Distance", -15, 15, getgenv().distance, 0.999, function(s
     getgenv().distance = s
 
     if getgenv().distance >= 0  then
-        getgenv().mode = CFrame.Angles(math.rad(-   90),0,0)
+        getgenv().mode = CFrame.Angles(math.rad(-90),0,0)
     elseif getgenv().distance <= -1 then
         getgenv().mode = CFrame.Angles(math.rad(90),0,0)
     end
@@ -327,7 +330,7 @@ end)
 
 autofarm:CreateLabel("~~Farm")
 
-autofarm:CreateToggle("Enabled", function(bool)
+autofarm:CreateToggle("Farm", function(bool)
     getgenv().enabled = bool
 
     if getgenv().enabled == true then
@@ -366,9 +369,26 @@ autofarm:CreateToggle("Enabled", function(bool)
     end)
 
     beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().sell == true then
+            for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
+                if v.Name == "Item" then
+                    if v.Button.Tier.TextLabel.Text == getgenv().tiersell then
+                        if getgenv().rarity == "All Rarity" then
+                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
+                            game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
+                        elseif getgenv().rarity ~= "All Rarity" then
+                            if v:GetAttribute("Rarity") == getgenv().raritysell then
+                                plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
+                                game:GetService("ReplicatedStorage").Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
+                            end
+                        end
+                    end
+                end
+            end
+        end   
         if getgenv().enabled == true then
             if getgenv().area ~= nil then
-                if getgenv().loot == false or getgenv().loot == nil or getgenv().loot == true and getgenv().modeloot == "Bring Item" then
+                if getgenv().loot == false or getgenv().loot == nil or getgenv().sell == false or getgenv().loot == true and getgenv().modeloot == "Bring Item" then
                     if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
                         print("Revive!!!!!!!")
                     elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
@@ -385,7 +405,7 @@ autofarm:CreateToggle("Enabled", function(bool)
                             end
                         end
                     end
-                elseif getgenv().loot == true and nearestItem() == nil and getgenv().modeloot == "Tp To Item" then
+                elseif getgenv().sell == true or getgenv().loot == true and nearestItem() == nil and getgenv().modeloot == "Tp To Item" then
                     if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
                         print("Revive!!!!!!!")
                     elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
@@ -404,7 +424,7 @@ autofarm:CreateToggle("Enabled", function(bool)
                     end
                 end
             end
-        elseif getgenv().enabled == false then
+        elseif getgenv().enabled == false and getgenv().sell == false then
             beat:Disconnect()
         end    
     end)  
@@ -443,17 +463,34 @@ autofarm:CreateToggle("Loot", function(bool)
     getgenv().loot = bool
     local lootbeat;
 
+    unx = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().loot == true then
+            for i, v in pairs(plr.Character:GetDescendants()) do
+                if v:IsA("BasePart") and v.CanCollide == true then
+                    v.CanCollide = false
+                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                end
+            end
+        elseif getgenv().loot == false then
+            unx:Disconnect()
+        end
+    end)
+
     lootbeat = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().loot == true and nearestItem() ~= nil and plr.Character ~= nil then
             if getgenv().modeloot == "Bring Item" then
                 nearestItem().CFrame = plr.Character.HumanoidRootPart.CFrame
                 game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
             elseif getgenv().modeloot == "Tp To Item" then
-                plr.Character.HumanoidRootPart.CFrame = nearestItem().CFrame
+                plr.Character.HumanoidRootPart.CFrame = nearestItem().CFrame * CFrame.new(0,-5,0) * CFrame.Angles(math.rad(90),0,0)
                 game:GetService("ReplicatedStorage").Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
             end
         end
     end)
+
+    if getgenv().loot == false and getgenv().enabled == false then
+        backtosafeTp()
+    end
 end)
 
 st:CreateLabel("~~Auto Stats")
@@ -462,7 +499,7 @@ st:CreateDropdown("Stat List", statsTable, 1, statsTable[1], function(selected)
     getgenv().stat = selected
 end)
 
-st:CreateToggle("Enabled", function(bool)
+st:CreateToggle("Add Stat", function(bool)
     getgenv().enabled1 = bool
 
     breh1 = game:GetService("RunService").Heartbeat:Connect(function()
@@ -511,7 +548,7 @@ end)
 st:CreateToggle("Sell", function(bool)
     getgenv().sell = bool
 
-    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
+    --[[breh1 = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().sell == true then
             for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
                 if v.Name == "Item" then
@@ -531,7 +568,7 @@ st:CreateToggle("Sell", function(bool)
         else
             breh1:Disconnect()
         end
-    end)
+    end)]]
 end)
 
 st:CreateLabel("~~Teleports")
@@ -595,7 +632,7 @@ sc:CreateSlider("Jump Power", 50, 125, 50, 0, function(s)
     getgenv().jp = s
 end)
 
-sc:CreateToggle("Enabled", function(bool)
+sc:CreateToggle("Increase", function(bool)
     getgenv().wsjp =  bool
 
     local beat2
