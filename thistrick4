@@ -168,7 +168,7 @@ local window = library:CreateWindow(gameName, Color3.fromRGB(123, 7, 144))
 local credits = window:CreateTab("Credits")
 local fl = window:CreateTab("Farm & Loot")
 local st = window:CreateTab("Stat & Sell & Teleport")
-local sc = window:CreateTab("Server & Character")
+local sc = window:CreateTab("Server & Player")
 
 
 
