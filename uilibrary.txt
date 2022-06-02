@@ -424,7 +424,7 @@
                 end
             )
             local tabcontent = {}
-            function tabcontent:Button(text, callback)
+            function tabcontent:CreateButton(text, callback)
                 local Button = Instance.new("TextButton")
                 local ButtonCorner = Instance.new("UICorner")
                 local ButtonTitle = Instance.new("TextLabel")
@@ -483,7 +483,7 @@
 
                 Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
             end
-            function tabcontent:Toggle(text,default, callback)
+            function tabcontent:CreateToggle(text,default, callback)
                 local toggled = false
 
                 local Toggle = Instance.new("TextButton")
@@ -681,7 +681,7 @@
 
                 Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
             end
-            function tabcontent:Slider(text, min, max, precise, start, callback)
+            function tabcontent:CreateSlider(text, min, max, precise, start, callback)
                 local dragging = false
                 local Slider = Instance.new("TextButton")
                 local SliderCorner = Instance.new("UICorner")
@@ -796,7 +796,7 @@
                 )
                 Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
             end
-            function tabcontent:Dropdown(text, list, callback)
+            function tabcontent:CreateDropdown(text, list, callback)
                 local dropFunc = {}
                 local droptog = false
                 local framesize = 0
@@ -1083,7 +1083,7 @@
                 end
                 return dropFunc
             end
-            function tabcontent:Colorpicker(text, preset, callback)
+            function tabcontent:CreateColorpicker(text, preset, callback)
                 local ColorPickerToggled = false
                 local OldToggleColor = Color3.fromRGB(0, 0, 0)
                 local OldColor = Color3.fromRGB(0, 0, 0)
@@ -1566,7 +1566,7 @@
                 )
                 Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
             end
-            function tabcontent:Label(text)
+            function tabcontent:CreateLabel(text)
                 local Label = Instance.new("TextButton")
                 local LabelCorner = Instance.new("UICorner")
                 local LabelTitle = Instance.new("TextLabel")
@@ -1599,7 +1599,7 @@
 
                 Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
             end
-            function tabcontent:Textbox(text, disapper, callback)
+            function tabcontent:CreateTextbox(text, disapper, callback)
                 local Textbox = Instance.new("Frame")
                 local TextboxCorner = Instance.new("UICorner")
                 local TextboxTitle = Instance.new("TextLabel")
@@ -1663,7 +1663,7 @@
                 )
                 Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
             end
-            function tabcontent:Bind(text, keypreset, callback)
+            function tabcontent:CreateBind(text, keypreset, callback)
                 local binding = false
                 local Key = keypreset.Name
                 local Bind = Instance.new("TextButton")
