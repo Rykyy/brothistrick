@@ -769,7 +769,7 @@
 
                     CurrentValueFrame:TweenSize(pos1, "Out", "Sine", 0.1, true)
                     SlideCircle:TweenPosition(pos, "Out", "Sine", 0.1, true)
-                    local value = math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
+                    local value = math.round((((pos1.X.Scale * max) / max) * (max - min) + min) * 20) / 20
                     SliderValue.Text = tonumber(string.format("%.2f", value))
                     pcall(callback, value)
                 end
