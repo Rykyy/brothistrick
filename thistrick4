@@ -551,28 +551,6 @@ end)
 
 st:CreateToggle("Sell", nil, function(bool)
     getgenv().sell = bool
-
-    breh1 = game:GetService("RunService").Heartbeat:Connect(function()
-        if getgenv().sell == true then
-            for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
-                if v.Name == "Item" then
-                    if v.Button.Tier.TextLabel.Text == getgenv().tiersell then
-                        if getgenv().rarity == "All Rarity" then
-                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
-                            reps.Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
-                        elseif getgenv().rarity ~= "All Rarity" then
-                            if v:GetAttribute("Rarity") == getgenv().raritysell then
-                                plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
-                                reps.Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
-                            end
-                        end
-                    end
-                end
-            end                  
-        else
-            breh1:Disconnect()
-        end
-    end)
 end)
 
 st:CreateLabel("------------------------------[Tp]------------------------------")
