@@ -681,7 +681,7 @@ function lib:Window(text, preset, closebind)
 
             Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
         end
-        function tabcontent:Slider(text, min, max, start, callback)
+        function tabcontent:Slider(text, min, max, precise, start, callback)
             local dragging = false
             local Slider = Instance.new("TextButton")
             local SliderCorner = Instance.new("UICorner")
@@ -762,24 +762,15 @@ function lib:Window(text, preset, closebind)
             )()
 
             local function move(input)
-                local pos =
-                    UDim2.new(
-                    math.clamp((input.Position.X - SlideFrame.AbsolutePosition.X) / SlideFrame.AbsoluteSize.X, 0, 1),
-                    -6,
-                    -1.30499995,
-                    0
-                )
-                local pos1 =
-                    UDim2.new(
-                    math.clamp((input.Position.X - SlideFrame.AbsolutePosition.X) / SlideFrame.AbsoluteSize.X, 0, 1),
-                    0,
-                    0,
-                    3
-                )
+                local percent = math.clamp((input.Position.X - SlideFrame.AbsolutePosition.X) / SlideFrame.AbsoluteSize.X, 0, 1)
+                local Precise = precise and (max / ((max - min) / (config.precise  * 4))) or (max >= 50 and max / ((max - min) / 4)) or (max >= 25 and max / ((max - min) / 2)) or (max / (max - min))
+                local pos1 = UDim2.new((math.round(percent * ((max / Precise) * 4)) / ((max / Precise) * 4)), 0, 1, 0)
+                local pos = UDim2.new(math.clamp((input.Position.X - SlideFrame.AbsolutePosition.X) / SlideFrame.AbsoluteSize.X, 0, 1), -6, -1.30499995, 0)
+
                 CurrentValueFrame:TweenSize(pos1, "Out", "Sine", 0.1, true)
                 SlideCircle:TweenPosition(pos, "Out", "Sine", 0.1, true)
-                local value = math.floor(((pos.X.Scale * max) / max) * (max - min) + min)
-                SliderValue.Text = tostring(value)
+                local value = math.round((((SizeRounded.X.Scale * max) / max) * (max - min) + min) * 20) / 20
+                SliderValue.Text = tonumber(string.format("%.2f", value))
                 pcall(callback, value)
             end
             SlideCircle.InputBegan:Connect(
