@@ -741,7 +741,7 @@ function lib:CreateWindow(text, preset, closebind)
             CurrentValueFrame.Parent = SlideFrame
             CurrentValueFrame.BackgroundColor3 = PresetColor
             CurrentValueFrame.BorderSizePixel = 0
-            CurrentValueFrame.Size = UDim2.new((start or 0) / max, 0, 0, 3)
+            CurrentValueFrame.Size = UDim2.new(math.clamp(start - min) / (library.Functions.findByIndex(max - min), 0, 1), 0, 1, 0)
 
             SlideCircle.Name = "SlideCircle"
             SlideCircle.Parent = SlideFrame
