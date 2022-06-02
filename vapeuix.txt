@@ -747,7 +747,7 @@ function lib:CreateWindow(text, preset, closebind)
             SlideCircle.Parent = SlideFrame
             SlideCircle.BackgroundColor3 = PresetColor
             SlideCircle.BackgroundTransparency = 1.000
-            SlideCircle.Position = UDim2.new(math.clamp((start - min) / (max - min), 0, 1), 0, 1, 0)
+            SlideCircle.Position = UDim2.new(math.clamp((start - min) / (max - min), 0, 1),  -6, -1.30499995, 0)
             SlideCircle.Size = UDim2.new(0, 11, 0, 11)
             SlideCircle.Image = "rbxassetid://3570695787"
             SlideCircle.ImageColor3 = PresetColor
