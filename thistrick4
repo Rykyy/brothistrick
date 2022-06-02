@@ -68,62 +68,66 @@ function nearestItem()
     local dist = 250
     local dekat = nil   
     for i,v in pairs(wrk.RunTime.GroundLoot:GetChildren()) do
-        if getgenv().itemlist == "All Tier" then
-            if getgenv().rarity == "All Rarity" then
-                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                if magnitude < dist then
-                    dist = magnitude
-                    dekat = v
-                end
-            elseif getgenv().rarity ~= "All Rarity" then
-                if v:GetAttribute("Rarity") == getgenv().rarity then
-                    local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                    if magnitude < dist then        
-                        dist = magnitude
-                        dekat = v
+        if plr.PlayerGui.LootLabel:FindFirstChild(v:GetAttribute("ItemID")) then
+            if plr.PlayerGui.LootLabel[v:GetAttribute("ItemID")].Input.Visible == true then
+                if getgenv().itemlist == "All Tier" then
+                    if getgenv().rarity == "All Rarity" then
+                        local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
+                        if magnitude < dist then
+                            dist = magnitude
+                            dekat = v
+                        end
+                    elseif getgenv().rarity ~= "All Rarity" then
+                        if v:GetAttribute("Rarity") == getgenv().rarity then
+                            local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
+                            if magnitude < dist then        
+                                dist = magnitude
+                                dekat = v
+                            end
+                        end
                     end
-                end
-            end
-        elseif getgenv().itemlist ~= "All Tier" and getgenv().itemlist ~= "Copper" and getgenv().itemlist ~= "Egg" then
-            if string.find(v.Name, getgenv().itemlist) or string.find(v.Name, "Gold") or string.find(v.Name, "Egg") then
-                if getgenv().rarity == "All Rarity" then
-                    local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                    if magnitude < dist then        
-                        dist = magnitude
-                        dekat = v
+                elseif getgenv().itemlist ~= "All Tier" and getgenv().itemlist ~= "Copper" and getgenv().itemlist ~= "Egg" then
+                    if string.find(v.Name, getgenv().itemlist) or string.find(v.Name, "Gold") or string.find(v.Name, "Egg") then
+                        if getgenv().rarity == "All Rarity" then
+                            local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
+                            if magnitude < dist then        
+                                dist = magnitude
+                                dekat = v
+                            end
+                        elseif getgenv().rarity ~= "All Rarity" then
+                            if v:GetAttribute("Rarity") == getgenv().rarity then
+                                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
+                                if magnitude < dist then        
+                                    dist = magnitude
+                                    dekat = v
+                                end
+                            end
+                        end
                     end
-                elseif getgenv().rarity ~= "All Rarity" then
-                    if v:GetAttribute("Rarity") == getgenv().rarity then
+                elseif getgenv().itemlist == "Copper" and getgenv().itemlist ~= "Egg" then
+                    if string.find(v.Name, "Gold") then
                         local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
                         if magnitude < dist then        
                             dist = magnitude
                             dekat = v
                         end
                     end
-                end
-            end
-        elseif getgenv().itemlist == "Copper" and getgenv().itemlist ~= "Egg" then
-            if string.find(v.Name, "Gold") then
-                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                if magnitude < dist then        
-                    dist = magnitude
-                    dekat = v
-                end
-            end
-        elseif getgenv().itemlist == "Egg" and getgenv().itemlist ~= "Copper" then
-            if string.find(v.Name, "Egg") then
-                if getgenv().rarity == "All Rarity" then
-                    local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                    if magnitude < dist then        
-                        dist = magnitude
-                        dekat = v
-                    end
-                elseif getgenv().rarity ~= "All Rarity" then
-                    if v:GetAttribute("Rarity") == getgenv().rarity then
-                        local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                        if magnitude < dist then        
-                            dist = magnitude
-                            dekat = v
+                elseif getgenv().itemlist == "Egg" and getgenv().itemlist ~= "Copper" then
+                    if string.find(v.Name, "Egg") then
+                        if getgenv().rarity == "All Rarity" then
+                            local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
+                            if magnitude < dist then        
+                                dist = magnitude
+                                dekat = v
+                            end
+                        elseif getgenv().rarity ~= "All Rarity" then
+                            if v:GetAttribute("Rarity") == getgenv().rarity then
+                                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
+                                if magnitude < dist then        
+                                    dist = magnitude
+                                    dekat = v
+                                end
+                            end
                         end
                     end
                 end
@@ -160,6 +164,8 @@ repeat wait() until game:IsLoaded()
     game:GetService("VirtualUser"):ClickButton2(Vector2.new())
 end)
 
+-- Vape ui library [Ikky = Added Refresh Dropdown + Precise Slider]
+
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/brothistrick/main/vapeuix.txt"))()
 
 
@@ -170,7 +176,20 @@ local fl = window:CreateTab("Farm & Loot")
 local st = window:CreateTab("Stat & Sell & Teleport")
 local sc = window:CreateTab("Server & Player")
 
+-- Credits Tab
 
+credits:CreateLabel("Made By : Ikky#8337")
+credits:CreateLabel("Tester : Idk LOL")
+
+credits:CreateLabel("------------------------------[Gui]------------------------------")
+
+credits:CreateLabel("~~[Press Right-Ctrl To Hide Gui]~~")
+
+credits:CreateButton("Destroy Gui", function()
+    game.CoreGui[library.Name]:Destroy()
+end)  
+
+-- Farm & Loot Tab
 
 fl:CreateLabel("------------------------------[Mob]------------------------------")
 
@@ -475,6 +494,8 @@ fl:CreateToggle("Loot", nil, function(bool)
     end
 end)
 
+-- Stat & Sell & Teleport Tab
+
 st:CreateLabel("------------------------------[Stat]------------------------------")
 
 st:CreateDropdown("Stat List", statsTable, function(selected)
@@ -593,7 +614,8 @@ st:CreateButton("Teleport", function()
 end)
 
 
--- Misc Section
+-- Server & Character Tab
+
 sc:CreateLabel("------------------------------[Server]------------------------------")
 
 sc:CreateButton("Rejoin", function()
@@ -630,14 +652,3 @@ sc:CreateToggle("Increase", nil, function(bool)
         end
     end)
 end)
-
-credits:CreateLabel("Made By : Ikky#8337")
-credits:CreateLabel("Tester : Idk LOL")
-
-credits:CreateLabel("------------------------------[Gui]------------------------------")
-
-credits:CreateLabel("~~[Press Right-Ctrl To Hide Gui]~~")
-
-credits:CreateButton("Destroy Gui", function()
-    game.CoreGui[library.Name]:Destroy()
-end)  
