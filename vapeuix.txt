@@ -1567,6 +1567,7 @@ function lib:CreateWindow(text, preset, closebind)
             Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
         end
         function tabcontent:CreateLabel(text)
+            local labelFunc = {}
             local Label = Instance.new("TextButton")
             local LabelCorner = Instance.new("UICorner")
             local LabelTitle = Instance.new("TextLabel")
@@ -1597,7 +1598,12 @@ function lib:CreateWindow(text, preset, closebind)
             LabelTitle.TextSize = 14.000
             LabelTitle.TextXAlignment = Enum.TextXAlignment.Left
 
+            function labelFunc:ChangeText(text)
+                LabelTitle.Text = text
+            end
+
             Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
+            return labelFunc
         end
         function tabcontent:CreateTextbox(text, disapper, callback)
             local Textbox = Instance.new("Frame")
