@@ -1060,40 +1060,38 @@ function lib:CreateWindow(text, preset, closebind)
     
                     DropItemHolder.CanvasSize = UDim2.new(0, 0, 0, DropLayout.AbsoluteContentSize.Y)
                 end
-                if closeopen then
-                    if droptog == false then
-                        Dropdown:TweenSize(
-                            UDim2.new(0, 363, 0, 55 + framesize),
-                            Enum.EasingDirection.Out,
-                            Enum.EasingStyle.Quart,
-                            .2,
-                            true
-                        )
-                        TweenService:Create(
-                            ArrowImg,
-                            TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                            {Rotation = 270}
-                        ):Play()
-                        wait(.2)
-                        Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
-                    else
-                        Dropdown:TweenSize(
-                            UDim2.new(0, 363, 0, 42),
-                            Enum.EasingDirection.Out,
-                            Enum.EasingStyle.Quart,
-                            .2,
-                            true
-                        )
-                        TweenService:Create(
-                            ArrowImg,
-                            TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                            {Rotation = 0}
-                        ):Play()
-                        wait(.2)
-                        Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
-                    end
-                    droptog = not droptog
+                if droptog == false then
+                    Dropdown:TweenSize(
+                        UDim2.new(0, 363, 0, 55 + framesize),
+                        Enum.EasingDirection.Out,
+                        Enum.EasingStyle.Quart,
+                        .2,
+                        true
+                    )
+                    TweenService:Create(
+                        ArrowImg,
+                        TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                        {Rotation = 270}
+                    ):Play()
+                    wait(.2)
+                    Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
+                else
+                    Dropdown:TweenSize(
+                        UDim2.new(0, 363, 0, 42),
+                        Enum.EasingDirection.Out,
+                        Enum.EasingStyle.Quart,
+                        .2,
+                        true
+                    )
+                    TweenService:Create(
+                        ArrowImg,
+                        TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                        {Rotation = 0}
+                    ):Play()
+                    wait(.2)
+                    Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
                 end
+                droptog = not droptog
             end
             return dropFunc
         end
