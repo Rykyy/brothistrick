@@ -951,7 +951,7 @@ function lib:CreateWindow(text, preset, closebind)
                     function()
                         if multi then
                             local multilist = {}
-                            if table.find(list, v) then
+                            if table.find(multilist, v) then
                                 table.remove(multilist, table.find(multilist, v))
                                 DropdownTitle.Text = text .. " - " .. table.concat(multilist, ", ") or table.concat(multilist, ", ")
                                 pcall(callback, multilist)
