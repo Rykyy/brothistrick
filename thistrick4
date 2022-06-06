@@ -193,7 +193,7 @@ end)
 
 fl:CreateLabel("------------------------------[Mob]------------------------------")
 
-fl:CreateDropdown("Area List", areaTable, function(selected)
+fl:CreateDropdown("Area List", areaTable, false, function(selected)
     getgenv().area = selected
 
     for _,v2 in pairs(mobTable) do table.remove(mobTable, _) end 
@@ -211,7 +211,7 @@ fl:CreateDropdown("Area List", areaTable, function(selected)
     library:Notification("Ikky Notification!", "Make sure the area you choose is open otherwise you will be banned", "Okay Ikky!")
 end)
 
-moblist = fl:CreateDropdown("Mob List", mobTable, function(selected)
+moblist = fl:CreateDropdown("Mob List", mobTable, false, function(selected)
     getgenv().mobname = selected
 end)
 
@@ -433,11 +433,11 @@ end)
 
 fl:CreateLabel("------------------------------[Loot]------------------------------")
 
-fl:CreateDropdown("Items list", itemTable, function(selected)
+fl:CreateDropdown("Items list", itemTable, false, function(selected)
     getgenv().itemlist = selected
 end)
 
-fl:CreateDropdown("Rarity list", rarityTable, function(selected)
+fl:CreateDropdown("Rarity list", rarityTable, false, function(selected)
     getgenv().rarity = selected
 
     if selected == "Common" then
@@ -455,7 +455,7 @@ fl:CreateDropdown("Rarity list", rarityTable, function(selected)
     end
 end)
 
-fl:CreateDropdown("Mode List", modelootTable, function(selected)
+fl:CreateDropdown("Mode List", modelootTable, false, function(selected)
     getgenv().modeloot = selected
 end)
 
@@ -498,7 +498,7 @@ end)
 
 st:CreateLabel("------------------------------[Stat]------------------------------")
 
-st:CreateDropdown("Stat List", statsTable, function(selected)
+st:CreateDropdown("Stat List", statsTable, false, function(selected)
     getgenv().stat = selected
 end)
 
@@ -517,7 +517,7 @@ end)
 st:CreateLabel("------------------------------[Sell]------------------------------")
 
 
-st:CreateDropdown("Items list", itemsellTable, function(selected)
+st:CreateDropdown("Items list", itemsellTable, false, function(selected)
     if selected == "T1" then
         getgenv().tiersell = "I"
     elseif selected == "T2" then
@@ -531,7 +531,7 @@ st:CreateDropdown("Items list", itemsellTable, function(selected)
     end
 end)
 
-st:CreateDropdown("Rarity list", raritysellTable, function(selected)
+st:CreateDropdown("Rarity list", raritysellTable, false, function(selected)
     getgenv().raritysell = selected
 
     if selected == "Common" then
@@ -575,7 +575,7 @@ end)
 
 st:CreateLabel("                              ~[Area]~")
 
-tplist = st:CreateDropdown("Area List", areatpTable, function(selected)
+tplist = st:CreateDropdown("Area List", areatpTable, false, function(selected)
     getgenv().areatp = selected
 
     if selected then
