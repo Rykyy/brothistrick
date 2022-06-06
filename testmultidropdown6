@@ -801,6 +801,7 @@ function lib:CreateWindow(text, preset, closebind)
             local droptog = false
             local framesize = 0
             local itemcount = 0
+            local multilist = {}
 
             local Dropdown = Instance.new("Frame")
             local DropdownCorner = Instance.new("UICorner")
@@ -950,16 +951,14 @@ function lib:CreateWindow(text, preset, closebind)
                 Item.MouseButton1Click:Connect(
                     function()
                         if multi then
-                            local multilist = {}
                             if table.find(multilist, v) then
                                 table.remove(multilist, table.find(multilist, v))
                                 DropdownTitle.Text = text .. " - " .. table.concat(multilist, ", ") or table.concat(multilist, ", ")
-                                pcall(callback, multilist)
                             else
                                 table.insert(multilist, v)
                                 DropdownTitle.Text = text .. " - " .. table.concat(multilist, ", ") or table.concat(multilist, ", ")
-                                pcall(callback, multilist)
                             end
+                            pcall(callback, multilist)
                         else
                             droptog = not droptog
                             DropdownTitle.Text = text .. " - " .. v
