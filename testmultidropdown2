@@ -950,18 +950,18 @@ function lib:CreateWindow(text, preset, closebind)
                 Item.MouseButton1Click:Connect(
                     function()
                         if multi then
-                            droptog = not droptog
                             local multilist = {}
                             for i,v in pairs(multilist) do
                                 if table.find(multilist, v) then
                                     table.remove(multilist, table.find(multilist, v))
-                                    DropdownTitle.Text = table.concat(multilist, ", ")
+                                    DropdownTitle.Text = table.concat(multilist, ", ") or "not working"
+                                    pcall(callback, multilist)
                                 else
                                     table.insert(multilist, v)
-                                    DropdownTitle.Text = table.concat(multilist, ", ")
+                                    DropdownTitle.Text = table.concat(multilist, ", ") or "not working"
+                                    pcall(callback, multilist)
                                 end
                             end
-                            pcall(callback, multilist)
                         else
                             droptog = not droptog
                             DropdownTitle.Text = text .. " - " .. v
