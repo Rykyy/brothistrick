@@ -951,16 +951,14 @@ function lib:CreateWindow(text, preset, closebind)
                     function()
                         if multi then
                             local multilist = {}
-                            for _,x in pairs(multilist) do
-                                if table.find(multilist, v) then
-                                    table.remove(multilist, table.find(multilist, v))
-                                    DropdownTitle.Text = table.concat(multilist, ", ") or "not working"
-                                    pcall(callback, multilist)
-                                else
-                                    table.insert(multilist, v)
-                                    DropdownTitle.Text = text .. " - " .. table.concat(multilist, ", ") or table.concat(multilist, ", ")
-                                    pcall(callback, multilist)
-                                end
+                            if table.find(list, v) then
+                                table.remove(multilist, table.find(multilist, v))
+                                DropdownTitle.Text = text .. " - " .. table.concat(multilist, ", ") or table.concat(multilist, ", ")
+                                pcall(callback, multilist)
+                            else
+                                table.insert(multilist, v)
+                                DropdownTitle.Text = text .. " - " .. table.concat(multilist, ", ") or table.concat(multilist, ", ")
+                                pcall(callback, multilist)
                             end
                         else
                             droptog = not droptog
