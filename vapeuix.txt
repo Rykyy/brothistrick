@@ -796,8 +796,7 @@ function lib:CreateWindow(text, preset, closebind)
             )
             Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
         end
-        function tabcontent:CreateDropdown(text, list, multi, tololajg, callback)
-            tololajg = tololajg or {}
+        function tabcontent:CreateDropdown(text, list, multi, callback)
             local dropFunc = {}
             local droptog = false
             local framesize = 0
@@ -1036,7 +1035,7 @@ function lib:CreateWindow(text, preset, closebind)
                             ):Play()
                         end
                     )
-    
+
                     Item.MouseButton1Click:Connect(
                         function()
                             if multi then
@@ -1069,9 +1068,10 @@ function lib:CreateWindow(text, preset, closebind)
                             end
                         end
                     )
-    
+
                     DropItemHolder.CanvasSize = UDim2.new(0, 0, 0, DropLayout.AbsoluteContentSize.Y)
                 end
+                
                 if droptog == false then
                     Dropdown:TweenSize(
                         UDim2.new(0, 363, 0, 55 + framesize),
