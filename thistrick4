@@ -552,6 +552,10 @@ st:CreateButton("Shop", function()
     plr.Character.HumanoidRootPart.CFrame = CFrame.new(277, 4, -0)
 end)
 
+st:CreateButton("Fish Shop", function()
+    plr.Character.HumanoidRootPart.CFrame = CFrame.new(331, 4, 127)
+end)
+
 st:CreateButton("Daily Reward", function()
     plr.Character.HumanoidRootPart.CFrame = CFrame.new(338, 4, 5)
 end)
