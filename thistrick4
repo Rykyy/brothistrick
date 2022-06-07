@@ -17,6 +17,10 @@ local unx
 local charIDR;
 local charID
 local idk
+local itemMulti;
+local rarityMulti;
+local itemsellMulti;
+local raritysellMulti;
 
 
 -- Global
@@ -24,7 +28,6 @@ getgenv().area = nil
 getgenv().areatp = nil
 getgenv().itemlist = nil
 getgenv().rarity = nil
-getgenv().modeloot = nil
 getgenv().tiersell = nil
 getgenv().raritysell = nil
 getgenv().stat = nil
@@ -38,12 +41,10 @@ getgenv().mode = -90
 -- Table
 local areaTable = {"Tutorial", "SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 local mobTable = {}
-local itemTable = {"All Tier" ,"Copper", "Egg", "T1", "T2", "T3", "T4", "T5"}
-local rarityTable = {"All Rarity", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
+local itemTable = {"T1", "T2", "T3", "T4", "T5"}
+local rarityTable = {"Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
 local modelootTable = {"Bring Item", "Tp To Item"}
 local statsTable = {"Strength", "Dexterity", "Vitality", "Intelligence"}
-local itemsellTable = {"T1", "T2", "T3", "T4", "T5"}
-local raritysellTable = {"All Rarity", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"}
 local areatpTable = {"Tutorial","SunnyForest", "DenseForest", "ToadstoolGorge", "BullfrogMarsh", "AridDesert"}
 
 -- Function
@@ -70,65 +71,19 @@ function nearestItem()
     for i,v in pairs(wrk.RunTime.GroundLoot:GetChildren()) do
         if plr.PlayerGui.LootLabel:FindFirstChild(v:GetAttribute("ItemID")) then
             if plr.PlayerGui.LootLabel[v:GetAttribute("ItemID")].Input.Visible == true then
-                if getgenv().itemlist == "All Tier" then
-                    if getgenv().rarity == "All Rarity" then
+                if table.find(itemMulti, string.split(v.Name, "_")[2]) or string.find(v.Name, "Egg")then
+                    if table.find(rarityMulti, tostring(v:GetAttribute("MadeByIkky"))) then
                         local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
                         if magnitude < dist then
                             dist = magnitude
                             dekat = v
                         end
-                    elseif getgenv().rarity ~= "All Rarity" then
-                        if v:GetAttribute("Rarity") == getgenv().rarity then
-                            local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                            if magnitude < dist then        
-                                dist = magnitude
-                                dekat = v
-                            end
-                        end
                     end
-                elseif getgenv().itemlist ~= "All Tier" and getgenv().itemlist ~= "Copper" and getgenv().itemlist ~= "Egg" then
-                    if string.find(v.Name, getgenv().itemlist) or string.find(v.Name, "Gold") or string.find(v.Name, "Egg") then
-                        if getgenv().rarity == "All Rarity" then
-                            local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                            if magnitude < dist then        
-                                dist = magnitude
-                                dekat = v
-                            end
-                        elseif getgenv().rarity ~= "All Rarity" then
-                            if v:GetAttribute("Rarity") == getgenv().rarity then
-                                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                                if magnitude < dist then        
-                                    dist = magnitude
-                                    dekat = v
-                                end
-                            end
-                        end
-                    end
-                elseif getgenv().itemlist == "Copper" and getgenv().itemlist ~= "Egg" then
-                    if string.find(v.Name, "Gold") then
-                        local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                        if magnitude < dist then        
-                            dist = magnitude
-                            dekat = v
-                        end
-                    end
-                elseif getgenv().itemlist == "Egg" and getgenv().itemlist ~= "Copper" then
-                    if string.find(v.Name, "Egg") then
-                        if getgenv().rarity == "All Rarity" then
-                            local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                            if magnitude < dist then        
-                                dist = magnitude
-                                dekat = v
-                            end
-                        elseif getgenv().rarity ~= "All Rarity" then
-                            if v:GetAttribute("Rarity") == getgenv().rarity then
-                                local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
-                                if magnitude < dist then        
-                                    dist = magnitude
-                                    dekat = v
-                                end
-                            end
-                        end
+                elseif string.find(v.Name, "Gold") then
+                    local magnitude = (plr.Character.HumanoidRootPart.Position - v.Position).magnitude
+                    if magnitude < dist then
+                        dist = magnitude
+                        dekat = v
                     end
                 end
             end
@@ -157,6 +112,51 @@ end
 game:GetService("RunService").Heartbeat:Connect(function()
     charIDR = require(plr.PlayerScripts.FrameworkClient.Controllers.GameLogic.GameLoopController)
     charID = charIDR:GetCharInfo().ID
+    for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
+        if v.ClassName == "TextLabel" and v.Parent.Name == "Tier" then
+            if v.Text == "I" then
+                v.Name = "T1"
+            elseif v.Text == "II" then
+                v.Name = "T2"
+            elseif v.Text == "III" then
+                v.Name = "T3"
+            elseif v.Text == "IV" then
+                v.Name = "T4"
+            elseif v.Text == "V" then
+                v.Name = "T5"
+            end
+        end
+        if v.Name == "Item" then
+            if v:GetAttribute("Rarity") == 1 then
+                v:SetAttribute("MadeByIkky", "Common")
+            elseif v:GetAttribute("Rarity") == 2 then
+                v:SetAttribute("MadeByIkky", "Uncommon")
+            elseif v:GetAttribute("Rarity") == 3 then
+                v:SetAttribute("MadeByIkky", "Rare")
+            elseif v:GetAttribute("Rarity") == 4 then
+                v:SetAttribute("MadeByIkky", "Epic")
+            elseif v:GetAttribute("Rarity") == 5 then
+                v:SetAttribute("MadeByIkky", "Legendary")
+            elseif v:GetAttribute("Rarity") == 6 then
+                v:SetAttribute("MadeByIkky", "Mythic")
+            end
+        end
+    end
+    for i,v in pairs(wrk.RunTime.GroundLoot:GetChildren()) do
+        if v:GetAttribute("Rarity") == 1 then
+            v:SetAttribute("MadeByIkky", "Common")
+        elseif v:GetAttribute("Rarity") == 2 then
+            v:SetAttribute("MadeByIkky", "Uncommon")
+        elseif v:GetAttribute("Rarity") == 3 then
+            v:SetAttribute("MadeByIkky", "Rare")
+        elseif v:GetAttribute("Rarity") == 4 then
+            v:SetAttribute("MadeByIkky", "Epic")
+        elseif v:GetAttribute("Rarity") == 5 then
+            v:SetAttribute("MadeByIkky", "Legendary")
+        elseif v:GetAttribute("Rarity") == 6 then
+            v:SetAttribute("MadeByIkky", "Mythic")
+        end
+    end
 end)
 
 repeat wait() until game:IsLoaded() 
@@ -164,30 +164,31 @@ repeat wait() until game:IsLoaded()
     game:GetService("VirtualUser"):ClickButton2(Vector2.new())
 end)
 
--- Vape ui library [Ikky = Added Refresh Dropdown + Precise Slider]
+-- Vape ui library [Ikky = Added Refresh Dropdown, Multi Dropdown + Precise Slider]
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/brothistrick/main/vapeuix.txt"))()
 
 
 local window = library:CreateWindow(gameName, Color3.fromRGB(123, 7, 144))
 
-local credits = window:CreateTab("Credits")
+local info = window:CreateTab("Info")
 local fl = window:CreateTab("Farm & Loot")
 local st = window:CreateTab("Stat & Sell & Teleport")
 local sc = window:CreateTab("Server & Player")
 
--- Credits Tab
+-- info Tab
+info:CreateLabel("------------------------------[Credits]--------------------------")
 
-credits:CreateLabel("Made By : Ikky#8337")
-credits:CreateLabel("Tester : Idk LOL")
+info:CreateLabel("Made By : Ikky#8337")
+info:CreateLabel("Tester : Idk LOL")
 
-credits:CreateLabel("------------------------------[Gui]------------------------------")
+info:CreateLabel("------------------------------[Gui]------------------------------")
 
-credits:CreateLabel("~~[Press Right-Ctrl To Hide Gui]~~")
+info:CreateLabel("~~[Press Right-Ctrl To Hide Gui]~~")
 
-credits:CreateButton("Destroy Gui", function()
+info:CreateButton("Destroy Gui", function()
     game.CoreGui[library.Name]:Destroy()
-end)  
+end) 
 
 -- Farm & Loot Tab
 
@@ -372,15 +373,14 @@ fl:CreateToggle("Farm", nil, function(bool)
     beat = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().sell == true then
             for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
-                if v.Name == "Item" then
-                    if v.Button.Tier.TextLabel.Text == getgenv().tiersell then
-                        if getgenv().rarity == "All Rarity" then
-                            plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
-                            reps.Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
-                        elseif getgenv().rarity ~= "All Rarity" then
-                            if v:GetAttribute("Rarity") == getgenv().raritysell then
-                                plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
-                                reps.Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
+                if v.Name == "Item" and v:FindFirstChild("Button") then
+                    for i,x in pairs(v:GetDescendants()) do
+                        if x.ClassName == "TextLabel" and x.Parent.Name == "Tier" then
+                            if table.find(itemsellMulti, x.Name) then
+                                if table.find(raritysellMulti, tostring(v:GetAttribute("MadeByIkky"))) then
+                                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
+                                    reps.Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
+                                end
                             end
                         end
                     end
@@ -389,7 +389,7 @@ fl:CreateToggle("Farm", nil, function(bool)
         end   
         if getgenv().enabled == true then
             if getgenv().area ~= nil then
-                if getgenv().loot == false or getgenv().loot == nil or getgenv().sell == false or getgenv().loot == true and getgenv().modeloot == "Bring Item" then
+                if getgenv().loot == false or getgenv().loot == nil or getgenv().sell == false or getgenv().sell == nil then
                     if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
                         print("Revive!!!!!!!")
                     elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
@@ -406,7 +406,7 @@ fl:CreateToggle("Farm", nil, function(bool)
                             end
                         end
                     end
-                elseif getgenv().sell == true or getgenv().loot == true and nearestItem() == nil and getgenv().modeloot == "Tp To Item" then
+                elseif getgenv().sell == true or getgenv().loot == true and nearestItem() == nil then
                     if plr.PlayerGui.DeathScreen.Enabled == true and charID ~= nil then
                         print("Revive!!!!!!!")
                     elseif plr.PlayerGui.DeathScreen.Enabled == false and charID ~= nil then
@@ -433,36 +433,20 @@ end)
 
 fl:CreateLabel("------------------------------[Loot]------------------------------")
 
-fl:CreateDropdown("Items list", itemTable, false, function(selected)
-    getgenv().itemlist = selected
+fl:CreateDropdown("Items list", itemTable, true, function(selected)
+    itemMulti = selected
 end)
 
-fl:CreateDropdown("Rarity list", rarityTable, false, function(selected)
-    getgenv().rarity = selected
-
-    if selected == "Common" then
-        getgenv().rarity = 1
-    elseif selected == "Uncommon" then
-        getgenv().rarity = 2
-    elseif selected == "Rare" then
-        getgenv().rarity = 3
-    elseif selected == "Epic" then
-        getgenv().rarity = 4
-    elseif selected == "Legendary" then
-        getgenv().rarity = 5
-    elseif selected == "Mythic" then
-        getgenv().rarity = 6
-    end
-end)
-
-fl:CreateDropdown("Mode List", modelootTable, false, function(selected)
-    getgenv().modeloot = selected
+fl:CreateDropdown("Rarity list", rarityTable, true, function(selected)
+    rarityMulti = selected
 end)
 
 
 fl:CreateToggle("Loot", nil, function(bool)
     getgenv().loot = bool
     local lootbeat;
+
+    print(nearestItem())
 
     unx = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().loot == true then
@@ -472,19 +456,25 @@ fl:CreateToggle("Loot", nil, function(bool)
                     plr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
                 end
             end
-        elseif getgenv().loot == false then
+        elseif getgenv().loot == false then 
             unx:Disconnect()
         end
     end)
 
     lootbeat = game:GetService("RunService").Heartbeat:Connect(function()
         if getgenv().loot == true and nearestItem() ~= nil and plr.Character ~= nil then
-            if getgenv().modeloot == "Bring Item" then
-                nearestItem().CFrame = plr.Character.HumanoidRootPart.CFrame
-                reps.Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
-            elseif getgenv().modeloot == "Tp To Item" then
-                plr.Character.HumanoidRootPart.CFrame = nearestItem().CFrame * CFrame.new(0,-5,0) * CFrame.Angles(math.rad(90),0,0)
-                reps.Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
+            for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetChildren()) do
+                if v.ClassName == "Frame" then
+                    if not v:FindFirstChild("Item") then
+                        plr.Character.HumanoidRootPart.CFrame = nearestItem().CFrame * CFrame.new(0,1,0)
+                        reps.Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
+                    elseif v:FindFirstChild("Item") then
+                        if string.find(nearestItem().Name, "Gold") then
+                            plr.Character.HumanoidRootPart.CFrame = nearestItem().CFrame * CFrame.new(0,1,0)
+                            reps.Knit.Services.GroundItemService.RF.PickUpItem:InvokeServer(nearestItem():GetAttribute("ItemID"))
+                        end
+                    end
+                end
             end
         end
     end)
@@ -517,40 +507,37 @@ end)
 st:CreateLabel("------------------------------[Sell]------------------------------")
 
 
-st:CreateDropdown("Items list", itemsellTable, false, function(selected)
-    if selected == "T1" then
-        getgenv().tiersell = "I"
-    elseif selected == "T2" then
-        getgenv().tiersell = "II"
-    elseif selected == "T3" then
-        getgenv().tiersell = "III"
-    elseif selected == "T4" then
-        getgenv().tiersell = "IV"
-    elseif selected == "T5" then
-        getgenv().tiersell = "V"
-    end
+st:CreateDropdown("Items list", itemTable, true, function(selected)
+    itemsellMulti = selected
 end)
 
-st:CreateDropdown("Rarity list", raritysellTable, false, function(selected)
-    getgenv().raritysell = selected
-
-    if selected == "Common" then
-        getgenv().raritysell = 1
-    elseif selected == "Uncommon" then
-        getgenv().raritysell = 2
-    elseif selected == "Rare" then
-        getgenv().raritysell = 3
-    elseif selected == "Epic" then
-        getgenv().raritysell = 4
-    elseif selected == "Legendary" then
-        getgenv().raritysell = 5
-    elseif selected == "Mythic" then
-        getgenv().raritysell = 6
-    end
+st:CreateDropdown("Rarity list", rarityTable, true, function(selected)
+    raritysellMulti = selected
 end)
 
 st:CreateToggle("Sell", nil, function(bool)
     getgenv().sell = bool
+
+    beat = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().sell == true then
+            for i,v in pairs(plr.PlayerGui.ScreenGui.Inventory.Slots:GetDescendants()) do
+                if v.Name == "Item" and v:FindFirstChild("Button") then
+                    for i,x in pairs(v:GetDescendants()) do
+                        if x.ClassName == "TextLabel" and x.Parent.Name == "Tier" then
+                            if table.find(itemsellMulti, x.Name) then
+                                if table.find(raritysellMulti, tostring(v:GetAttribute("MadeByIkky"))) then
+                                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(431, 13, -138)
+                                    reps.Knit.Services.ShopSellService.RF.SellingItems:InvokeServer({[v:GetAttribute("ItemID")] = v.Parent.Name})
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        else
+            beat:Disconnect()
+        end
+    end) 
 end)
 
 st:CreateLabel("------------------------------[Tp]------------------------------")
