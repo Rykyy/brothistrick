@@ -796,7 +796,8 @@ function lib:CreateWindow(text, preset, closebind)
             )
             Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
         end
-        function tabcontent:CreateDropdown(text, list, multi, callback)
+        function tabcontent:CreateDropdown(text, list, multi, tololajg, callback)
+            tololajg = tololajg or {}
             local dropFunc = {}
             local droptog = false
             local framesize = 0
@@ -1038,23 +1039,34 @@ function lib:CreateWindow(text, preset, closebind)
     
                     Item.MouseButton1Click:Connect(
                         function()
-                            droptog = not droptog
-                            DropdownTitle.Text = text .. " - " .. v
-                            pcall(callback, v)
-                            Dropdown:TweenSize(
-                                UDim2.new(0, 363, 0, 42),
-                                Enum.EasingDirection.Out,
-                                Enum.EasingStyle.Quart,
-                                .2,
-                                true
-                            )
-                            TweenService:Create(
-                                ArrowImg,
-                                TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                                {Rotation = 0}
-                            ):Play()
-                            wait(.2)
-                            Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
+                            if multi then
+                                if table.find(multilist, v) then
+                                    table.remove(multilist, table.find(multilist, v))
+                                    DropdownTitle.Text = text .. " - " .. table.concat(multilist, ", ") or table.concat(multilist, ", ")
+                                else
+                                    table.insert(multilist, v)
+                                    DropdownTitle.Text = text .. " - " .. table.concat(multilist, ", ") or table.concat(multilist, ", ")
+                                end
+                                pcall(callback, multilist)
+                            else
+                                droptog = not droptog
+                                DropdownTitle.Text = text .. " - " .. v
+                                pcall(callback, v)
+                                Dropdown:TweenSize(
+                                    UDim2.new(0, 363, 0, 42),
+                                    Enum.EasingDirection.Out,
+                                    Enum.EasingStyle.Quart,
+                                    .2,
+                                    true
+                                )
+                                TweenService:Create(
+                                    ArrowImg,
+                                    TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                                    {Rotation = 0}
+                                ):Play()
+                                wait(.2)
+                                Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
+                            end
                         end
                     )
     
