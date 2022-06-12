@@ -1,0 +1,587 @@
+repeat wait() until game:IsLoaded()
+repeat wait() until game.Players
+repeat wait() until game.Players.LocalPlayer
+repeat wait() until game.ReplicatedStorage        
+repeat wait() until game.Players.LocalPlayer:FindFirstChild("PlayerGui");
+
+-- Variable
+local nextTeleport = queue_on_teleport or syn.queue_on_teleport
+local TweenService = game:GetService("TweenService")
+local plr = game:GetService("Players").LocalPlayer
+local reps = game:GetService("ReplicatedStorage")
+local wrk = game:GetService("Workspace")
+local gameName = "⛏️Mining Simulator 2"
+local mousemode = require(reps.ClientModules.MineSelection)
+local touchmode = require(reps.SharedModules.ChunkUtil)
+local rebirthlabel;
+local dangermeterlabel;
+local antifall = true
+local noclipchest = nil
+local noclipegg = nil
+local dtext
+local rtext
+
+
+
+-- Tables
+local sellTable = {}
+local eggTable = {}
+local chestTable = {"Wood", "Silver", "Gold", "Epic", "Legendary"}
+local codeTable = {"Release", "FreeEgg", "Gems", "RareCrate", "FreeGems", "Trading"}
+local areaTable = {}
+
+for _, v in next, game:GetService("Workspace").Checkpoints:GetChildren() do
+    table.insert(areaTable, v.Name)
+end
+
+for i,v in pairs(wrk.Teleports:GetChildren()) do
+    if string.find(v.Name, "Sell") then
+        local newname = string.split(v.Name, "Sell")[1]
+        table.insert(sellTable, newname)
+    end
+end
+
+for i,v in next, wrk.Eggs:GetChildren() do
+    table.insert(eggTable, v.Name.."-Price : $"..v.Price.SurfaceGui.Label.Text)
+end
+
+getgenv().chesthop = nil
+getgenv().chestfarm = nil       
+-- Functions
+
+function ChestHopServer()
+    local PlaceID = game.PlaceId
+    local AllIDs = {}
+    local foundAnything = ""
+    local actualHour = os.date("!*t").hour
+    local Deleted = false
+     --[[
+     local File = pcall(function()
+       AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
+     end)
+     if not File then
+       table.insert(AllIDs, actualHour)
+       writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+     end
+     ]]
+    function TPReturner()
+       local Site;
+       if foundAnything == "" then
+          Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+       else
+          Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+       end
+       local ID = ""
+       if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+          foundAnything = Site.nextPageCursor
+       end
+       local num = 0;
+       for i,v in pairs(Site.data) do
+          local Possible = true
+          ID = tostring(v.id)
+          if tonumber(v.maxPlayers) > tonumber(v.playing) then
+             for _,Existing in pairs(AllIDs) do
+                if num ~= 0 then
+                   if ID == tostring(Existing) then
+                      Possible = false
+                   end
+                else
+                   if tonumber(actualHour) ~= tonumber(Existing) then
+                      local delFile = pcall(function()
+                         -- delfile("NotSameServers.json")
+                         AllIDs = {}
+                         table.insert(AllIDs, actualHour)
+                      end)
+                   end
+                end
+                num = num + 1
+             end
+             if Possible == true then
+                table.insert(AllIDs, ID)
+                wait()
+                pcall(function()
+                   -- writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+                   wait()
+                   game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                end)
+                wait(4)
+             end
+          end
+       end
+    end
+ 
+    function Teleport()
+        nextTeleport([[
+            print("BRUH!")
+            repeat wait()
+            until game:IsLoaded()
+            getgenv().chestname = "Wood"
+            getgenv().chestfarm = true
+            getgenv().chesthop = true
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/QwertyzSZ/SazaSoftware/main/DonateMe/MiningSimulator2.saza"))()
+        ]])
+        while wait() do
+            if getgenv().chesthop == true and getgenv().chestfarm == true and not wrk.Chests:FindFirstChild(getgenv().chestname) then
+                pcall(function()
+                    TPReturner()
+                    if foundAnything ~= "" then
+                        TPReturner()
+                        print("Teleporting to another server please wait.")
+                    end
+                end)
+            end
+        end
+    end
+ 
+    Teleport()
+    wait(1)
+ end
+
+ function HopServer()
+    local PlaceID = game.PlaceId
+    local AllIDs = {}
+    local foundAnything = ""
+    local actualHour = os.date("!*t").hour
+    local Deleted = false
+     --[[
+     local File = pcall(function()  
+       AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
+     end)
+     if not File then
+       table.insert(AllIDs, actualHour)
+       writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+     end
+     ]]
+    function TPReturner()
+       local Site;
+       if foundAnything == "" then
+          Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+       else
+          Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+       end
+       local ID = ""
+       if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+          foundAnything = Site.nextPageCursor
+       end
+       local num = 0;
+       for i,v in pairs(Site.data) do
+          local Possible = true
+          ID = tostring(v.id)
+          if tonumber(v.maxPlayers) > tonumber(v.playing) then
+             for _,Existing in pairs(AllIDs) do
+                if num ~= 0 then
+                   if ID == tostring(Existing) then
+                      Possible = false
+                   end
+                else
+                   if tonumber(actualHour) ~= tonumber(Existing) then
+                      local delFile = pcall(function()
+                         -- delfile("NotSameServers.json")
+                         AllIDs = {}
+                         table.insert(AllIDs, actualHour)
+                      end)
+                   end
+                end
+                num = num + 1
+             end
+             if Possible == true then
+                table.insert(AllIDs, ID)
+                wait()
+                pcall(function()
+                   -- writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+                   wait()
+                   game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                end)
+                wait(4)
+             end
+          end
+       end
+    end
+ 
+    function Teleport()
+       while wait() do
+          pcall(function()
+             TPReturner()
+             if foundAnything ~= "" then
+                TPReturner()
+                print("Teleporting to another server please wait.")
+             end
+          end)
+       end
+    end
+ 
+    Teleport()
+    wait(1)
+ end
+
+function redeemcodes()
+    for i = 1, #codeTable do
+        reps.Functions.RedeemCode:InvokeServer(codeTable[i])
+    end
+end
+
+function buyback()
+    for i = 1, 100 do
+        reps.Events.PurchaseShopItem:FireServer("SurfaceBackpacks", i)
+    end
+end
+
+function buypick()
+    for i = 1, 100 do
+        reps.Events.PurchaseShopItem:FireServer("SurfaceTools", i)
+    end
+end
+
+function tp1(part,speed,location)
+    local ts
+    local tic_k = tick()
+    local cframe = location
+    local tween,err = pcall(function()
+        ts = TweenService:Create(plr.Character.HumanoidRootPart,TweenInfo.new((plr.Character.HumanoidRootPart.Position - part.Position).magnitude / speed),{CFrame=cframe})
+        ts:Play()
+    end)
+    if not tween then return err end
+end
+
+function tp2(speed,...)
+    local ts2
+    local tic_k = tick()
+    local x = {...}
+    local cframe = CFrame.new(x[1],x[2],x[3])
+    local tween,err = pcall(function()
+        ts2 = TweenService:Create(plr.Character.HumanoidRootPart,TweenInfo.new(speed),{CFrame=cframe})
+        ts2:Play()
+    end)
+    if not tween then return err end
+end
+
+
+-- Library
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SxnwDev/UI/main/LiteUI.lua"))()
+local Notification = loadstring(game:HttpGet(("https://raw.githubusercontent.com/shlexware/Orion/main/source")))()
+
+
+library.Name = "Saza Hub v2"
+library.Version = 'v. 1.0.0'
+library.Icon = library.Icons['library']
+library.Parent = game.CoreGui
+
+library.Settings.AntiAFK = true
+library.Settings.prefix = Enum.KeyCode.RightShift
+library.Settings.Elements_Font = Enum.Font.SourceSans
+
+library:setTheme("Background", Color3.fromRGB(17, 14, 24)) 
+library:setTheme("Contrast", Color3.fromRGB(12, 2, 15)) 
+library:setTheme("DarkContrast", Color3.fromRGB(8, 0, 12)) 
+library:setTheme("Accent", Color3.fromRGB(255, 255, 255))
+
+
+local window = library:new({title = gameName.." [Saza Hub v2]", version = library.Version, icon = "http://www.roblox.com/asset/?id=9712403855"})
+
+local tab1 = window:addPage({icon = library.Icons["axe"], title = "Main"})
+
+
+local fsb = tab1:addSection({Divisions = 2})
+local tg  = tab1:addSection({Divisions = 1})
+
+
+-- Farming & Sell & Buy Section
+fsb:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Farming</b></font>', textxalignment = Enum.TextXAlignment.Center})
+
+fsb:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Mine</b></font>'})
+
+fsb:addToggle({Section = 1, title = "Auto Mine", default = false, callback = function(bool)
+    getgenv().automine = bool
+
+    while getgenv().automine do
+        task.wait()
+        Depth = plr.PlayerGui.ScreenGui.HUD.Top.Bar.Inner.Arrow.Depth.Text
+        local Depth1 = string.gsub(Depth, ",", "")
+        local Depth2 = string.gsub(Depth1, "m", "")
+        Depth3 = tonumber(Depth2)
+        Depth4 = tonumber(Depth3 + 1)
+        if Depth3 < 100 then
+            local a = math.random(0, 12)
+            local b = math.random(Depth3, Depth4)
+            local c = math.random(0, 12)
+            reps.Events.MineBlock:FireServer(Vector3.new(a, b, c))
+        elseif Depth3 > 100 then
+            local a = math.random(4, 9)
+            local b = math.random(Depth3, Depth4)
+            local c = math.random(4, 9)
+            reps.Events.MineBlock:FireServer(Vector3.new(a, b, c))
+        elseif plr.PlayerGui.ScreenGui.HUD.Top.Bar.Visible == false then
+            local a = math.random(0, 12)
+            local b = math.random(1, 2)
+            local c = math.random(0, 12)
+            reps.Events.MineBlock:FireServer(Vector3.new(a, b, c))
+        end
+    end
+end})
+
+fsb:addToggle({Section = 1, title = "Auto Nuke", default = false, callback = function(bool)
+    getgenv().nuke = bool
+
+    while getgenv().nuke do
+        reps.Events.ThrowExplosive:FireServer(plr.Character.HumanoidRootPart.Position, Vector3.new(-0.8517764210700989, -0.5142312049865723, 0.100215382874012))
+        task.wait(0.5)
+    end
+end})
+
+fsb:addToggle({Section = 1, title = "Auto Rebirth", default = false, callback = function(bool)
+    getgenv().rebirth = bool
+
+    while getgenv().rebirth do
+        task.wait() 
+        reps.Events.Rebirth:FireServer()
+    end
+end})
+
+fsb:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Chest</b></font>'})
+
+fsb:addDropdown({Section = 1, title = "Chests List", list = chestTable, callback = function(selected)
+    getgenv().chestname = selected
+end})
+
+fsb:addToggle({Section = 1, title = "Chest Hop [Server Hop]", default = getgenv().chesthop, callback = function(bool)
+    getgenv().chesthop = bool
+
+    if bool then
+        ChestHopServer()
+    end 
+end})
+
+fsb:addToggle({Section = 1, title = "Tp To Chest", default = getgenv().chestfarm, callback = function(bool)
+    getgenv().chestfarm = bool
+
+    noclipchest = game:GetService('RunService').Stepped:Connect(function()
+        if getgenv().chestfarm == true then
+            for i, v in pairs(plr.Character:GetDescendants()) do
+                if v:IsA("BasePart") and v.CanCollide == true then
+                    v.CanCollide = false
+                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                end
+            end
+        else
+            noclipchest:Disconnect()
+        end
+    end)
+
+    tpchest = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().chestfarm == true then
+            if not plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+                antifall = Instance.new("BodyVelocity", plr.Character.HumanoidRootPart)
+                antifall.Velocity = Vector3.new(0, 0, 0)
+            elseif plr.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+                if wrk.Chests:FindFirstChild(getgenv().chestname) then
+                    if wrk.Chests[getgenv().chestname].Part.CFrame.X > 7600 then
+                        if plr.Character.HumanoidRootPart.CFrame.X < 7600 then
+                            reps.Events.Teleport:FireServer("Cyber SewersSell")
+                        elseif plr.Character.HumanoidRootPart.CFrame.X > 7600 then
+                            plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,wrk.Chests[getgenv().chestname].Part.CFrame.Y - plr.Character.HumanoidRootPart.CFrame.Y, 0)
+                            tp1(wrk.Chests[getgenv().chestname].Part,12,wrk.Chests[getgenv().chestname].Part.CFrame)
+                        end
+                    elseif wrk.Chests[getgenv().chestname].Part.CFrame.X < 7600 then
+                        if plr.Character.HumanoidRootPart.CFrame.X > 7600 then
+                            reps.Events.Teleport:FireServer("Hidden TreasureSell")
+                        elseif plr.Character.HumanoidRootPart.CFrame.X < 7600 then
+                            plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,wrk.Chests[getgenv().chestname].Part.CFrame.Y - plr.Character.HumanoidRootPart.CFrame.Y, 0)
+                            tp1(wrk.Chests[getgenv().chestname].Part,12,wrk.Chests[getgenv().chestname].Part.CFrame)
+                        end
+                    end
+                end
+            end
+        elseif getgenv().chestfarm == false then 
+            tpchest:Disconnect()
+            antifall:Destroy()
+        end
+    end)
+end})
+
+fsb:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Sell</b></font>'})
+
+fsb:addDropdown({Section = 1, title = "Areas List", list = sellTable, callback = function(selected)
+    getgenv().sellname = selected
+end})
+
+fsb:addToggle({Section = 1, title = "Auto Sell [Max]", default = false, callback = function(bool)
+    getgenv().sell = bool
+
+    while getgenv().sell do
+        task.wait()
+        if string.split(plr.Character.Backpack.Storage.StorageGui.Storage.Text, " / ")[1] == string.split(plr.Character.Backpack.Storage.StorageGui.Storage.Text, " / ")[2] then
+            reps.Events.Teleport:FireServer(getgenv().sellname.."Sell")
+        end
+    end
+end})
+
+fsb:addLabel({Section = 2, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Buy</b></font>', textxalignment = Enum.TextXAlignment.Center})
+
+fsb:addLabel({Section = 2, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Tools & Backpacks</b></font>'})
+
+
+fsb:addToggle({Section = 2, title = "Auto Buy Tools", default = nil, callback = function(bool)
+    getgenv().buytools = bool
+
+    while getgenv().buytools do
+        task.wait(1)
+        buypick()
+    end
+end})
+
+fsb:addToggle({Section = 2, title = "Auto Buy Backpacks", default = nil, callback = function(bool)
+    getgenv().buyback = bool
+
+    while getgenv().buyback do
+        task.wait(1)
+        buyback()
+    end
+end})
+
+fsb:addLabel({Section = 2, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Egg</b></font>'})
+
+fsb:addDropdown({Section = 2, title = "Eggs List", list = eggTable, callback = function(selected)
+    getgenv().eggname = string.split(selected, "-")[1]
+end})
+
+fsb:addDropdown({section = 2, title = "Egg Amount", list = {"Single", "Triple"}, callback = function(selected)
+    if selected == "Single" then
+        getgenv().eggamount = false
+    elseif selected == "Triple" then
+        getgenv().eggamount = true
+    end
+end})
+
+fsb:addToggle({Section = 2, title = "Auto Buy Egg", default = nil, callback = function(bool)
+    getgenv().buyegg = bool
+
+    noclipegg = game:GetService('RunService').Stepped:Connect(function()
+        if getgenv().buyegg == true then
+            for i, v in pairs(plr.Character:GetDescendants()) do
+                if v:IsA("BasePart") and v.CanCollide == true then
+                    v.CanCollide = false
+                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                end
+            end
+        else
+            noclipegg:Disconnect()
+        end
+    end)
+
+    tpegg = game:GetService("RunService").Heartbeat:Connect(function()
+        if getgenv().buyegg == true then
+            if getgenv().eggamount == true then
+                reps.Events.OpenEgg:FireServer(getgenv().eggname, true)
+            else
+                reps.Events.OpenEgg:FireServer(getgenv().eggname, false)
+            end
+            if wrk.Eggs[getgenv().eggname].EggName.CFrame.X > 7600 then
+                if plr.Character.HumanoidRootPart.CFrame.X < 7600 then
+                    reps.Events.Teleport:FireServer("Cyber SewersSell")
+                elseif plr.Character.HumanoidRootPart.CFrame.X > 7600 then
+                    plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0, wrk.Eggs[getgenv().eggname].EggName.CFrame.Y - plr.Character.HumanoidRootPart.CFrame.Y, 0)
+                    tp1(wrk.Eggs[getgenv().eggname].EggName, 12, wrk.Eggs[getgenv().eggname].EggName.CFrame)
+                end
+            elseif wrk.Eggs[getgenv().eggname].EggName.CFrame.X < 7600 then
+                if plr.Character.HumanoidRootPart.CFrame.X > 7600 then
+                    reps.Events.Teleport:FireServer("Hidden TreasureSell")
+                elseif plr.Character.HumanoidRootPart.CFrame.X < 7600 then
+                    plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame * CFrame.new(0, wrk.Eggs[getgenv().eggname].EggName.CFrame.Y - plr.Character.HumanoidRootPart.CFrame.Y, 0)
+                    tp1(wrk.Eggs[getgenv().eggname].EggName, 12, wrk.Eggs[getgenv().eggname].EggName.CFrame)
+                end
+            end
+        elseif getgenv().buyegg == false then
+            tpegg:Disconnect()
+        end
+    end)
+end})
+
+fsb:addLabel({Section = 2, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Zones</b></font>', textxalignment = Enum.TextXAlignment.Center})
+
+fsb:addButton({Section = 2, title = "Unlock All Zones", callback = function()
+    for i = 1, #areaTable do
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(areaTable[i] .. "Sell")
+        task.wait(1)
+    end
+end})
+
+fsb:addDropdown({Section = 2, title = "Zones List", list = areaTable, callback = function(selected)
+    getgenv().areaname = selected
+end})
+
+fsb:addButton({Section = 2, title = "Tp To Zone", callback = function()
+    reps.Events.Teleport:FireServer(getgenv().areaname)
+end})
+
+
+tg:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Misc</b></font>', textxalignment = Enum.TextXAlignment.Center})
+tg:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Crate</b></font>'})
+
+tg:addDropdown({Section = 1, title = "Crates List", list = {"Basic Crate", "Rare Crate", "Exotic Create"}, callback = function(selected)
+    getgenv().cratename = selected
+end})
+
+tg:addToggle({Section = 1, title = "Auto Open Crate", default = nil, callback = function(bool)
+    getgenv().crate = bool
+
+    while getgenv().crate do
+        task.wait(0.3)
+        reps.Events.OpenCrate:FireServer(getgenv().cratename)
+    end
+end})
+
+
+tg:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Game</b></font>'})
+
+tg:addButton({Section = 1, title = "Load Ores", callback = function()
+    tp2(6, 142.5, -11532, 202.5)
+end})
+
+
+tg:addButton({Section = 1, title = "Redeem All Codes", callback = function()
+    redeemcodes()
+end})
+
+tg:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Server</b></font>'})
+
+tg:addButton({Section = 1, title = "Rejoin", callback = function()
+    game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, plr)
+end})
+
+tg:addButton({Section = 1, title = "Server Hop", callback = function()
+    HopServer()
+end})
+
+tg:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b>Game Info</b></font>', textxalignment = Enum.TextXAlignment.Center})
+
+tg:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b> Danger Meter :</b></font>'})
+
+dtext = tg:addLabel({Section = 1, text = wrk.Worlds["The Overworld"].Sign.Display.SurfaceGui.Info.Text})
+
+tg:addLabel({Section = 1, text = '<font color="#' .. library.Settings.theme.Accent:ToHex() .. '"><b> Next Rebirth Cost :</b></font>'})
+
+rtext = tg:addLabel({Section = 1, text =  "Cost : "..plr.PlayerGui.ScreenGui.Rebirth.Frame.Buy.Frame.Container.Label.Text})
+
+Notification:MakeNotification(
+    {
+        Name = "Credits :",
+        Content = "----------------------------------------\n-Ui Made By : Premier X\n-Made By : ~Saza Software~\n -Founder : Zaaa 愛#1831\n -Onwer : Saskai#2799\n -Developer : Ikky#8337\n -Staff : Fath#2767\n -Manager : Linest#9286",
+        Image = "http://www.roblox.com/asset/?id=9712403855",
+        Time = 10
+    }
+)
+
+-- Another Function
+
+task.spawn(
+    function()
+        while true do
+            dtext.Update({text = wrk.Worlds["The Overworld"].Sign.Display.SurfaceGui.Info.Text})
+            rtext.Update({text = "Cost : "..plr.PlayerGui.ScreenGui.Rebirth.Frame.Buy.Frame.Container.Label.Text})
+            plr.Character.Head.PlayerTitle.Username.Text = "Saza Hub V2 [Mining Simulator 2]"
+            task.wait()
+        end
+    end
+)        
+print("Passed")
