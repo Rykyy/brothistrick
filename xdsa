@@ -101,14 +101,10 @@ function ChestHopServer()
     function Teleport()
         nextTeleport([[
             repeat wait() until game:IsLoaded()
-            repeat wait() until game.Players
-            repeat wait() until game.Players.LocalPlayer
-            repeat wait() until game.ReplicatedStorage        
-            repeat wait() until game.Players.LocalPlayer:FindFirstChild("PlayerGui")
             getgenv().chestname = "Wood"
             getgenv().chestfarm = true
             getgenv().chesthop = true
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/QwertyzSZ/SazaSoftware/main/DonateMe/MiningSimulator2.saza"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Rykyy/brothistrick/main/xdsa"))()
         ]]
         )
         while wait() do
@@ -335,7 +331,7 @@ fsb:addDropdown({Section = 1, title = "Chest List", list = chestTable, callback 
     getgenv().chestname = selected
 end})
 
-fsb:addToggle({Section = 1, title = "Tp To Chest", Default = getgenv().chesthop, callback = function(bool)
+fsb:addToggle({Section = 1, title = "Chest Hop [ Server Hop ]", Default = getgenv().chesthop, callback = function(bool)
     getgenv().chesthop = bool
 
     if bool then
